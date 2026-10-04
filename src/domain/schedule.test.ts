@@ -15,7 +15,7 @@ const src = [{ label: 'test' }]
 function attraction(id: string, fields: Partial<Attraction>): Attraction {
   return {
     id: `dlp.${id}`, type: 'attraction', name: id, parkId: 'dlp', areaId: 'main-street', description: 'x', rating: 3,
-    ratingReason: 'x', sources: src, review: 'draft', durationMin: 5, minHeightCm: null, thrill: 1, scare: 0,
+    ratingReason: 'x', sources: src, review: 'draft', durationMin: 5, minHeightCm: null, heightSource: 'draft', thrill: 1, scare: 0,
     fixedWaitMin: 0, location: ENTRANCE, ...fields,
   }
 }

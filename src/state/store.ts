@@ -1,10 +1,12 @@
 import { createStore, type StoreApi } from 'zustand/vanilla'
-import type { Catalog } from '../domain/catalog'
+import type { Catalog, ParkId } from '../domain/catalog'
 import { DEFAULT_FILTERS, type CatalogFilters } from '../domain/filters'
 import type { GroupProfile } from '../domain/suitability'
 import { monthOf } from '../domain/time'
 import { MAX_TRIP_DAYS, addDays, newId, type Day, type PlanItem, type Trip } from '../domain/trip'
 import { loadState, saveState, type KeyValueStorage, type LoadResult, type SavedState } from './persistence'
+
+export type CatalogView = 'list' | 'map'
 
 export type AddResult = { ok: true; key: string } | { ok: false; reason: 'unknown-item' | 'no-day' }
 
@@ -12,6 +14,10 @@ export interface PlannerState extends SavedState {
   filters: CatalogFilters
   lastRemoved?: { tripId: string; dayId: string; entry: PlanItem; index: number }
   storage: LoadResult['status'] | 'ok'
+  /** Session only, not saved (design Decision 6). */
+  catalogView: CatalogView
+  /** The park chosen on the map while the filter lists both parks. */
+  mapParkId?: ParkId
 
   /** `dayCount` defaults to 1. */
   createTrip(name: string, startDate: string, dayCount?: number): string
@@ -31,6 +37,9 @@ export interface PlannerState extends SavedState {
   setFilters(filters: Partial<CatalogFilters>): void
   /** Resets park (back to both parks), area, type and search. Keeps the profile, sort and hide setting. */
   clearFilters(): void
+  setCatalogView(view: CatalogView): void
+  /** Shows `parkId` on the map; a single-park filter follows it. */
+  setMapPark(parkId: ParkId): void
 }
 
 export type PlannerStore = StoreApi<PlannerState>
@@ -65,6 +74,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
     return {
       ...saved,
       filters: DEFAULT_FILTERS,
+      catalogView: 'list',
       storage: loaded.status === 'loaded' || loaded.status === 'empty' ? 'ok' : loaded.status,
 
       createTrip(name, startDate, dayCount = 1) {
@@ -165,6 +175,16 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       clearFilters() {
         set((s) => ({ filters: { ...DEFAULT_FILTERS, sort: s.filters.sort, hideUnsuitable: s.filters.hideUnsuitable } }))
       },
+      setCatalogView(view) {
+        set({ catalogView: view })
+      },
+      setMapPark(parkId) {
+        set((s) => {
+          if (s.filters.parkId === 'all') return { mapParkId: parkId }
+          // Area filters belong to one park, so they go with the old park.
+          return { mapParkId: parkId, filters: { ...s.filters, parkId, areaIds: [] } }
+        })
+      },
     }
   })
 
@@ -188,4 +208,16 @@ export function selectedTrip(s: PlannerState): Trip | undefined {
 export function selectedDay(s: PlannerState): Day | undefined {
   const trip = selectedTrip(s)
   return trip?.days.find((d) => d.id === s.selectedDayId) ?? trip?.days[0]
+}
+
+/**
+ * The park the map shows: the single-park filter, else the park chosen on the map, else the park of
+ * the selected day's last item, else Disneyland Park.
+ */
+export function mapPark(s: PlannerState, catalog: Catalog): ParkId {
+  if (s.filters.parkId !== 'all') return s.filters.parkId
+  if (s.mapParkId) return s.mapParkId
+  const parks = new Map(catalog.items.map((i) => [i.id, i.parkId]))
+  const last = [...(selectedDay(s)?.items ?? [])].reverse().find((e) => parks.has(e.itemId))
+  return (last && parks.get(last.itemId)) ?? 'dlp'
 }

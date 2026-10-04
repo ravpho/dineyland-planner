@@ -20,6 +20,8 @@ park:
     - { open: "09:30", close: "21:00" }
   hoursSources:
     - { label: Test fixture }
+  officialMapUrl: 'https://www.disneylandparis.com/en-int/destinations/test'
+  officialMapLabel: Test map
 items:
   - id: dlp.big-thunder-mountain
     type: attraction
@@ -27,6 +29,7 @@ items:
     areaId: frontierland
     themeparksId: 852d957c-382e-4afb-bb74-70c9a79055df
     queueTimesId: 25
+    officialGuideNumber: 9
     description: Runaway mine train.
     rating: 5
     ratingReason: Classic.

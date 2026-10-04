@@ -1,7 +1,8 @@
 # Hand-reviewed catalog data for Disneyland Park.
 # `npm run data` merges this file with data/raw/ into src/data/catalog.json.
 # The build never writes to this file. See data/README.md for the field reference.
-# heightSource: wikipedia = height taken from the cited article; draft = drafted, check park signage.
+# heightSource: official = stated in an official Disneyland Paris document; corroborated = independent
+# sources agree; draft = not yet verified, check park signage.
 park:
   id: dlp
   name: Disneyland Park
@@ -29,33 +30,43 @@ park:
   hoursSources:
   - {label: ThemeParks.wiki schedule (October–November 2026), url: 'https://api.themeparks.wiki/v1/entity/dae968d5-630d-4719-8b06-3d107e944401/schedule'}
   - {label: 'Other months: planner estimate'}
+  officialMapUrl: https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf
+  officialMapLabel: Official Disneyland Park map (accessibility guide, PDF)
 items:
 - id: dlp.its-a-small-world
   type: attraction
   name: '"it''s a small world"'
   areaId: fantasyland
   themeparksId: ce87a0fe-c644-475e-abb6-9727e05cebff
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/its-a-small-world
   queueTimesId: 19
+  officialGuideNumber: 32
   description: Indoor boat cruise past hundreds of singing dolls in scenes from around the world. Calm, colourful and suitable
     for every age.
   rating: 4
   ratingReason: Gentle classic everyone can enjoy; queues move quickly.
-  durationMin: 11
+  durationMin: 10
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 0
   sources:
   - {label: 'Wikipedia: It''s a Small World', url: 'https://en.wikipedia.org/wiki/It''s_a_Small_World'}
-  - &id003 {label: 'Queue-Times statistics, Disneyland Park', url: 'https://queue-times.com/parks/4/stats'}
+  - &id004 {label: 'Queue-Times statistics, Disneyland Park', url: 'https://queue-times.com/parks/4/stats'}
   - &id001 {label: ThemeParks.wiki entity list, url: 'https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children'}
-  - &id002 {label: 'Rating, thrill and scariness: planner editorial judgement'}
+  - &id002 {label: Official Disneyland Park accessibility guide (August 2026), url: 'https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf'}
+  - &id005 {label: 'Height cross-check: dlptips.com ride restrictions (2026)', url: 'https://dlptips.com/advice/ride-restrictions/'}
+  - &id006 {label: 'Height cross-check: The Better Vacation height requirements', url: 'https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/'}
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/its-a-small-world'}
+  - &id003 {label: 'Rating, thrill and scariness: planner editorial judgement'}
   review: draft
 - id: dlp.adventure-isle
   type: attraction
   name: Adventure Isle
   areaId: adventureland
   themeparksId: 63dfcdab-86c2-4185-99b1-5a353d81bb52
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/adventure-isle
+  officialGuideNumber: 17
   description: Island of caves, rope bridges and a suspension bridge to explore on foot beside the pirate ship. No queue;
     go at your own pace.
   rating: 3
@@ -70,13 +81,17 @@ items:
   - {label: 'Wikipedia: Adventure Isle', url: 'https://en.wikipedia.org/wiki/Adventure_Isle_(Disneyland_Paris)'}
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/adventure-isle'}
+  - *id003
   review: draft
 - id: dlp.alices-curious-labyrinth
   type: attraction
   name: Alice's Curious Labyrinth
   areaId: fantasyland
   themeparksId: 252b9b03-f770-4979-b3b2-f4ffecc3894d
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/alices-curious-labyrinth
   queueTimesId: 14
+  officialGuideNumber: 28
   description: Hedge maze based on Alice in Wonderland, ending at the Queen of Hearts' castle with a view over Fantasyland.
   rating: 3
   ratingReason: Fun for young children; rarely busy.
@@ -87,166 +102,208 @@ items:
   scare: 1
   sources:
   - {label: 'Wikipedia: Alice''s Curious Labyrinth', url: 'https://en.wikipedia.org/wiki/Alice''s_Curious_Labyrinth'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/alices-curious-labyrinth'}
+  - *id003
   review: draft
 - id: dlp.autopia
   type: attraction
   name: Autopia
   areaId: discoveryland
   themeparksId: 3a1cd3f7-9c42-4f9b-90fa-dab7ba113862
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/autopia
   queueTimesId: 4
+  officialGuideNumber: 44
   description: Drive a petrol-powered car along a guided track through a retro-futuristic landscape. Children love being at
     the wheel.
   rating: 3
   ratingReason: Children love driving, but the queue moves slowly.
-  durationMin: 5
+  durationMin: 7
   minHeightCm: 81
-  heightSource: draft
-  ageRule: Guests under 132 cm must ride with an adult driver.
+  heightSource: official
+  ageRule: Minimum 1.32 m to drive unaccompanied; 81 cm to ride with an adult driver.
   thrill: 2
   scare: 0
   sources:
   - {label: 'Wikipedia: Autopia', url: 'https://en.wikipedia.org/wiki/Autopia'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - &id007 {label: 'Height cross-check: Mouse Hacking rides guide', url: 'https://www.mousehacking.com/blog/disneyland-paris-rides-and-attractions'}
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/autopia'}
+  - *id003
   review: draft
 - id: dlp.big-thunder-mountain
   type: attraction
   name: Big Thunder Mountain
   areaId: frontierland
   themeparksId: 852d957c-382e-4afb-bb74-70c9a79055df
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/big-thunder-mountain
   queueTimesId: 25
+  officialGuideNumber: 9
   description: Runaway mine train racing around and under an island in the Rivers of the Far West, with tunnels and drops.
     Fast but no upside-down sections.
   rating: 5
   ratingReason: 'The park''s best-loved coaster: fast, long and scenic.'
-  durationMin: 4
+  durationMin: 5
   minHeightCm: 102
-  heightSource: wikipedia
+  heightSource: corroborated
   thrill: 4
   scare: 1
   sources:
   - {label: 'Wikipedia: Big Thunder Mountain Railroad', url: 'https://en.wikipedia.org/wiki/Big_Thunder_Mountain_Railroad'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id005
+  - *id006
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/big-thunder-mountain'}
+  - *id003
   review: draft
 - id: dlp.snow-white-and-the-seven-dwarfs
   type: attraction
   name: Blanche-Neige et les Sept Nains (Snow White)
   areaId: fantasyland
   themeparksId: 8ed1472a-4d2e-47f1-b848-353de0bc3670
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/blanche-neige-et-les-sept-nains
   queueTimesId: 15
+  officialGuideNumber: 21
   description: Short dark ride through Snow White's story. The Evil Queen and witch scenes can scare young children.
   rating: 3
   ratingReason: Short and dated, with frightening witch scenes.
-  durationMin: 3
+  durationMin: 5
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 2
   sources:
   - {label: 'Wikipedia: Snow White''s Enchanted Wish (all versions)', url: 'https://en.wikipedia.org/wiki/Snow_White''s_Enchanted_Wish'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - &id008 {label: 'Height cross-check: Picniq attractions for younger ones', url: 'https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/'}
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/blanche-neige-et-les-sept-nains'}
+  - *id003
   review: draft
 - id: dlp.buzz-lightyear-laser-blast
   type: attraction
   name: Buzz Lightyear Laser Blast
   areaId: discoveryland
   themeparksId: 03992704-698d-474b-a721-a5ac3498edb9
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/buzz-lightyear-laser-blast
   queueTimesId: 5
+  officialGuideNumber: 35
   description: Ride through Zurg's world shooting targets with a laser blaster to score points. Interactive and a family favourite.
   rating: 4
   ratingReason: Competitive fun for all ages.
   durationMin: 5
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 1
   sources:
   - {label: 'Wikipedia: Buzz Lightyear attractions', url: 'https://en.wikipedia.org/wiki/Buzz_Lightyear''s_Space_Ranger_Spin'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id007
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/buzz-lightyear-laser-blast'}
+  - *id003
   review: draft
 - id: dlp.casey-jr
   type: attraction
   name: Casey Jr. – le Petit Train du Cirque
   areaId: fantasyland
   themeparksId: 7ff5d512-aed5-479a-8b3d-9bd1efb4177b
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/casey-jr-le-petit-train-du-cirque
   queueTimesId: 17
+  officialGuideNumber: 30
   description: Little circus train that winds and dips past miniature fairy-tale scenes. A gentle first coaster for young
     children.
   rating: 3
   ratingReason: Good first coaster for small children.
   durationMin: 3
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 2
   scare: 0
   sources:
   - {label: 'Wikipedia: Casey Jr. Circus Train', url: 'https://en.wikipedia.org/wiki/Casey_Jr._Circus_Train'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id007
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/casey-jr-le-petit-train-du-cirque'}
+  - *id003
   review: draft
 - id: dlp.disneyland-railroad
   type: attraction
   name: Disneyland Railroad (Main Street Station)
   areaId: main-street
   themeparksId: 0d9296c0-a76c-4578-b0f9-2ff4b4e385b5
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/disneyland-railroad
   queueTimesId: 11
+  officialGuideNumber: 1
   description: Steam train circling the park with stations in Frontierland, Fantasyland and Discoveryland. A relaxing way
     to rest your feet and see the park.
   rating: 3
   ratingReason: Restful grand circle; also handy transport.
-  durationMin: 25
+  durationMin: 30
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 0
   sources:
   - {label: 'Wikipedia: Disneyland Railroad (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Railroad_(Paris)'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/disneyland-railroad'}
+  - *id003
   review: draft
 - id: dlp.dumbo-the-flying-elephant
   type: attraction
   name: Dumbo the Flying Elephant
   areaId: fantasyland
   themeparksId: 46406e4a-4a02-4d30-89bc-ef1ed63c1ff9
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/dumbo-the-flying-elephant
   queueTimesId: 18
+  officialGuideNumber: 27
   description: Classic spinning ride on flying elephants that you raise and lower yourself.
   rating: 3
   ratingReason: Iconic for little ones, but the queue loads slowly.
-  durationMin: 2
+  durationMin: 3
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 0
   sources:
   - {label: 'Wikipedia: Dumbo the Flying Elephant', url: 'https://en.wikipedia.org/wiki/Dumbo_the_Flying_Elephant'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/dumbo-the-flying-elephant'}
+  - *id003
   review: draft
 - id: dlp.frontierland-playground
   type: attraction
   name: Frontierland Playground
   areaId: frontierland
   themeparksId: 03871aa6-a0b5-41ee-8fd3-b2f4b8dccc79
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/frontierland-playground
+  officialGuideNumber: 10
   description: Outdoor play area for young children in Frontierland.
   rating: 2
   ratingReason: A place for small children to let off steam.
   durationMin: 20
   minHeightCm: null
   heightSource: draft
+  ageRule: Play area for children aged 4-8.
   thrill: 1
   scare: 0
   fixedWaitMin: 0
@@ -254,16 +311,20 @@ items:
   - {label: 'Wikipedia: Disneyland Park (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)'}
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/frontierland-playground'}
+  - *id003
   review: draft
 - id: dlp.horse-drawn-streetcars
   type: attraction
   name: Horse-Drawn Streetcars
   areaId: main-street
   themeparksId: 6bb88973-80d0-45cf-bffe-433f1c551362
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/horse-drawn-streetcars
+  officialGuideNumber: 2
   description: Horse-drawn tram running along Main Street, U.S.A. between Town Square and Central Plaza.
   rating: 2
   ratingReason: Charming short ride along Main Street.
-  durationMin: 5
+  durationMin: 7
   minHeightCm: null
   heightSource: draft
   thrill: 1
@@ -273,34 +334,44 @@ items:
   - {label: 'Wikipedia: Disneyland Park (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)'}
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/horse-drawn-streetcars'}
+  - *id003
   review: draft
 - id: dlp.indiana-jones-temple-of-peril
   type: attraction
   name: Indiana Jones and the Temple of Peril
   areaId: adventureland
   themeparksId: 5d0ce227-7ad0-4402-a95b-6cf56f25a8ec
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/indiana-jones-and-the-temple-of-peril
   queueTimesId: 2
+  officialGuideNumber: 16
   description: Mine-cart roller coaster with a vertical loop through jungle temple ruins. Short, jerky and intense, with one
     of the highest height limits in the park.
   rating: 3
   ratingReason: Short and rough; skip it if the queue is long.
-  durationMin: 2
+  durationMin: 5
   minHeightCm: 140
-  heightSource: wikipedia
+  heightSource: corroborated
   thrill: 5
   scare: 1
   sources:
   - {label: 'Wikipedia: Indiana Jones and the Temple of Peril', url: 'https://en.wikipedia.org/wiki/Indiana_Jones_and_the_Temple_of_Peril'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id005
+  - *id006
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/indiana-jones-and-the-temple-of-peril'}
+  - *id003
   review: draft
 - id: dlp.la-cabane-des-robinson
   type: attraction
   name: La Cabane des Robinson (Swiss Family Treehouse)
   areaId: adventureland
   themeparksId: 7e426533-7727-47e5-8c8e-0dcd46198e57
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/la-cabane-des-robinson
   queueTimesId: 1
+  officialGuideNumber: 13
   description: Climb the stairs of the Swiss Family Robinson's giant treehouse for views over Adventureland. Not suitable
     for pushchairs.
   rating: 2
@@ -312,15 +383,19 @@ items:
   scare: 0
   sources:
   - {label: 'Wikipedia: Swiss Family Treehouse', url: 'https://en.wikipedia.org/wiki/Swiss_Family_Treehouse'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/la-cabane-des-robinson'}
+  - *id003
   review: draft
 - id: dlp.sleeping-beauty-castle-gallery
   type: attraction
   name: La Galerie de la Belle au Bois Dormant
   areaId: fantasyland
   themeparksId: 38bafc85-cb48-488e-aa68-3e2d01ae6a10
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-galerie-de-la-belle-au-bois-dormant
+  officialGuideNumber: 19
   description: Gallery inside Sleeping Beauty Castle with tapestries, stained-glass windows and a balcony view down Main Street.
   rating: 3
   ratingReason: Quick, free of queues and lovely inside the castle.
@@ -334,12 +409,16 @@ items:
   - {label: 'Wikipedia: Le Château de la Belle au Bois Dormant', url: 'https://en.wikipedia.org/wiki/Le_Château_de_la_Belle_au_Bois_Dormant'}
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-galerie-de-la-belle-au-bois-dormant'}
+  - *id003
   review: draft
 - id: dlp.la-taniere-du-dragon
   type: attraction
   name: La Tanière du Dragon
   areaId: fantasyland
   themeparksId: 83fa9e7f-4a25-4bee-8e61-4fb8c59cd350
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-taniere-du-dragon
+  officialGuideNumber: 20
   description: Dark cave under Sleeping Beauty Castle where a huge animatronic dragon sleeps, wakes and roars.
   rating: 3
   ratingReason: Short and memorable; may scare toddlers.
@@ -353,36 +432,45 @@ items:
   - {label: 'Wikipedia: La Tanière du Dragon', url: 'https://en.wikipedia.org/wiki/La_Tanière_du_Dragon'}
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-taniere-du-dragon'}
+  - *id003
   review: draft
 - id: dlp.le-carrousel-de-lancelot
   type: attraction
   name: Le Carrousel de Lancelot
   areaId: fantasyland
   themeparksId: ced30c44-9b79-45de-a8c9-6347298756c1
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/le-carrousel-de-lancelot
   queueTimesId: 16
+  officialGuideNumber: 23
   description: Classic carousel of knights' horses behind Sleeping Beauty Castle.
   rating: 2
   ratingReason: A simple carousel; fine for small children.
   durationMin: 3
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 0
   sources:
   - {label: 'Wikipedia: Le Carrousel de Lancelot', url: 'https://en.wikipedia.org/wiki/Le_Carrousel_de_Lancelot'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/le-carrousel-de-lancelot'}
+  - *id003
   review: draft
 - id: dlp.le-passage-enchante-daladdin
   type: attraction
   name: Le Passage Enchanté d'Aladdin
   areaId: adventureland
   themeparksId: 07782089-5e83-4bee-8a39-735818551844
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-passage-enchante-daladdin
+  officialGuideNumber: 15
   description: Walk-through of illuminated scenes from Aladdin inside an Arabian bazaar building.
   rating: 2
   ratingReason: Short walk-through; quick to see.
-  durationMin: 10
+  durationMin: 3
   minHeightCm: null
   heightSource: draft
   thrill: 1
@@ -392,95 +480,119 @@ items:
   - {label: 'Wikipedia: Le Passage Enchanté d''Aladdin', url: 'https://en.wikipedia.org/wiki/Le_Passage_Enchanté_d''Aladdin'}
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-passage-enchante-daladdin'}
+  - *id003
   review: draft
 - id: dlp.le-pays-des-contes-de-fees
   type: attraction
   name: Le Pays des Contes de Fées (Storybook Land)
   areaId: fantasyland
   themeparksId: 9056906c-0030-4951-be5e-44ac1f273491
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-pays-des-contes-de-fees
   queueTimesId: 21
+  officialGuideNumber: 31
   description: Slow boat ride past miniature fairy-tale villages and castles, entering through Monstro the whale.
   rating: 3
   ratingReason: Peaceful boat ride; nice for small children.
-  durationMin: 10
+  durationMin: 5
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 0
   sources:
   - {label: 'Wikipedia: Storybook Land Canal Boats', url: 'https://en.wikipedia.org/wiki/Storybook_Land_Canal_Boats'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-pays-des-contes-de-fees'}
+  - *id003
   review: draft
 - id: dlp.les-mysteres-du-nautilus
   type: attraction
   name: Les Mystères du Nautilus
   areaId: discoveryland
   themeparksId: d8d9f62a-9fa3-4aae-a568-4225afc35924
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-mysteres-du-nautilus
   queueTimesId: 6
+  officialGuideNumber: 42
   description: Walk-through of Captain Nemo's submarine from Jules Verne's Twenty Thousand Leagues Under the Seas, with a
     giant squid surprise.
   rating: 3
   ratingReason: Detailed walk-through with almost no queue.
-  durationMin: 10
+  durationMin: 5
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 2
   sources:
   - {label: 'Wikipedia: Les Mystères du Nautilus', url: 'https://en.wikipedia.org/wiki/Les_Mystères_du_Nautilus'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-mysteres-du-nautilus'}
+  - *id003
   review: draft
 - id: dlp.les-voyages-de-pinocchio
   type: attraction
   name: Les Voyages de Pinocchio
   areaId: fantasyland
   themeparksId: 594dabd8-ddc1-4835-aafa-f654e10ed2db
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-voyages-de-pinocchio
   queueTimesId: 23
+  officialGuideNumber: 22
   description: Dark ride through Pinocchio's adventures. Scenes such as Pleasure Island and Monstro the whale can frighten
     young children.
   rating: 3
   ratingReason: Short dark ride with a few scary moments.
-  durationMin: 3
+  durationMin: 5
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 2
   sources:
   - {label: 'Wikipedia: Pinocchio''s Daring Journey', url: 'https://en.wikipedia.org/wiki/Pinocchio''s_Daring_Journey'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-voyages-de-pinocchio'}
+  - *id003
   review: draft
 - id: dlp.mad-hatters-tea-cups
   type: attraction
   name: Mad Hatter's Tea Cups
   areaId: fantasyland
   themeparksId: bcc5567f-f00b-4a7d-8ee6-526cc8d3d5de
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/mad-hatters-tea-cups
   queueTimesId: 20
+  officialGuideNumber: 29
   description: Spinning teacups under a lantern-lit canopy; you control how fast your cup spins.
   rating: 3
   ratingReason: Classic spinner; as wild as you make it.
-  durationMin: 2
+  durationMin: 3
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 2
   scare: 0
   sources:
   - {label: 'Wikipedia: Mad Tea Party', url: 'https://en.wikipedia.org/wiki/Mad_Tea_Party'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id007
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/mad-hatters-tea-cups'}
+  - *id003
   review: draft
 - id: dlp.main-street-vehicles
   type: attraction
   name: Main Street Vehicles
   areaId: main-street
   themeparksId: d6c61231-8f9b-40fa-943a-fe1454e185e7
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/main-street-vehicles
   queueTimesId: 12
+  officialGuideNumber: 3
   description: Vintage cars, a fire engine and an omnibus making one-way trips along Main Street, U.S.A.
   rating: 2
   ratingReason: Short, charming ride along Main Street.
@@ -491,98 +603,123 @@ items:
   scare: 0
   sources:
   - {label: 'Wikipedia: Disneyland Park (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/main-street-vehicles'}
+  - *id003
   review: draft
 - id: dlp.mickeys-philharmagic
   type: attraction
   name: Mickey's PhilharMagic
   areaId: discoveryland
   themeparksId: a970c245-4924-48bd-bced-efc14850b116
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/discoveryland-theatre
   queueTimesId: 2707
+  officialGuideNumber: 41
   description: 3D film in which Donald chases Mickey's magic hat through famous Disney songs, with in-theatre effects. A good
     seated break.
   rating: 4
   ratingReason: Great 3D film and a welcome seated break.
   durationMin: 12
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 1
   sources:
   - {label: 'Wikipedia: Mickey''s PhilharMagic', url: 'https://en.wikipedia.org/wiki/Mickey''s_PhilharMagic'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/discoveryland-theatre'}
+  - *id003
   review: draft
 - id: dlp.orbitron
   type: attraction
   name: Orbitron
   areaId: discoveryland
   themeparksId: f0525c25-4ea2-49b7-aab5-150b27658fb6
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/orbitron
   queueTimesId: 7
+  officialGuideNumber: 36
   description: Spinning rockets that you pilot up and down around a giant planetary sculpture at the entrance to Discoveryland.
   rating: 3
   ratingReason: Fun views, but slow-loading queue.
-  durationMin: 2
+  durationMin: 3
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 2
   scare: 0
   sources:
   - {label: 'Wikipedia: Astro Orbiter (Orbitron)', url: 'https://en.wikipedia.org/wiki/Astro_Orbiter'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id007
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/orbitron'}
+  - *id003
   review: draft
 - id: dlp.peter-pans-flight
   type: attraction
   name: Peter Pan's Flight
   areaId: fantasyland
   themeparksId: 7c5b2c2d-1082-4e5c-b155-dc492db16e6e
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/peter-pans-flight
   queueTimesId: 22
+  officialGuideNumber: 24
   description: Fly in a pirate galleon over moonlit London and on to Neverland. A short, beautiful dark ride with famously
     long queues.
   rating: 4
   ratingReason: Magical classic, but its queues are among the longest.
-  durationMin: 3
+  durationMin: 5
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 1
   sources:
   - {label: 'Wikipedia: Peter Pan''s Flight', url: 'https://en.wikipedia.org/wiki/Peter_Pan''s_Flight'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id005
+  - *id006
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/peter-pans-flight'}
+  - *id003
   review: draft
 - id: dlp.phantom-manor
   type: attraction
   name: Phantom Manor
   areaId: frontierland
   themeparksId: 14f756d6-d6fa-4200-8b41-db84ba294fa6
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/phantom-manor
   queueTimesId: 26
+  officialGuideNumber: 6
   description: Slow dark ride through a haunted mansion on Boot Hill, telling the story of a ghostly bride. Often too frightening
     for young children.
   rating: 5
   ratingReason: One of the best-themed rides in any Disney park.
-  durationMin: 6
+  durationMin: 7
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 2
   scare: 3
   sources:
   - {label: 'Wikipedia: Phantom Manor', url: 'https://en.wikipedia.org/wiki/Phantom_Manor'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id007
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/phantom-manor'}
+  - *id003
   review: draft
 - id: dlp.pirate-galleon
   type: attraction
   name: Pirate Galleon
   areaId: adventureland
   themeparksId: 76e9e917-fe07-49d5-b604-f65d831210fa
+  officialUrl: https://www.disneylandparis.com/en-gb/attractions/disneyland-park/pirate-galleon
   description: Life-size pirate ship to climb aboard and explore beside Adventure Isle.
   rating: 2
   ratingReason: Quick stop for young pirates.
@@ -595,39 +732,49 @@ items:
   sources:
   - {label: 'Wikipedia: Disneyland Park (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)'}
   - *id001
-  - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-gb/attractions/disneyland-park/pirate-galleon'}
+  - *id003
   review: draft
 - id: dlp.pirates-of-the-caribbean
   type: attraction
   name: Pirates of the Caribbean
   areaId: adventureland
   themeparksId: 0d822af0-bf02-47a7-bc29-672d2fa4f7ab
+  officialUrl: https://www.disneylandparis.com/en-int/attractions/disneyland-park/pirates-of-the-caribbean
   queueTimesId: 3
+  officialGuideNumber: 18
   description: Boat ride through pirate raids, sunken treasure and a fortress battle, including two short drops in the dark.
   rating: 5
   ratingReason: Long, detailed and fun for most ages.
   durationMin: 10
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 2
   scare: 2
   sources:
   - {label: 'Wikipedia: Pirates of the Caribbean (attraction)', url: 'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean_(attraction)'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id005
+  - *id006
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/pirates-of-the-caribbean'}
+  - *id003
   review: draft
 - id: dlp.pirates-beach
   type: attraction
   name: Pirates' Beach
   areaId: adventureland
   themeparksId: 2aa73e46-8dcf-4201-b334-db31e6e6ca06
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/pirates-beach
+  officialGuideNumber: 14
   description: Pirate-themed play area for young children in Adventureland.
   rating: 2
   ratingReason: A place for small children to let off steam.
   durationMin: 20
   minHeightCm: null
   heightSource: draft
+  ageRule: Two play areas for children aged 3-6 and 7-9; maximum height 1.40 m.
   thrill: 1
   scare: 0
   fixedWaitMin: 0
@@ -635,74 +782,97 @@ items:
   - {label: 'Wikipedia: Disneyland Park (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)'}
   - *id001
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/pirates-beach'}
+  - *id003
   review: draft
 - id: dlp.star-tours
   type: attraction
   name: 'Star Tours: The Adventures Continue'
   areaId: discoveryland
   themeparksId: 5d10b8b2-7d34-4794-8857-76688e5864bc
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/star-tours-the-aventures-continue
   queueTimesId: 9
+  officialGuideNumber: 39
   description: Motion-simulator flight through Star Wars locations, with random story segments so each ride is different.
     Can cause motion sickness.
   rating: 4
   ratingReason: Different story each time; fun for Star Wars fans.
-  durationMin: 5
+  durationMin: 7
   minHeightCm: 102
-  heightSource: wikipedia
+  heightSource: corroborated
   thrill: 3
   scare: 1
   sources:
   - {label: 'Wikipedia: Star Tours – The Adventures Continue', url: 'https://en.wikipedia.org/wiki/Star_Tours_–_The_Adventures_Continue'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id005
+  - *id006
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/star-tours-the-aventures-continue'}
+  - *id003
   review: draft
 - id: dlp.star-wars-hyperspace-mountain
   type: attraction
   name: Star Wars Hyperspace Mountain
   areaId: discoveryland
   themeparksId: ddca340c-7ba1-4f23-89eb-0d3d52c84bda
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/hyper-space-mountain
   queueTimesId: 8
+  officialGuideNumber: 43
   description: Launched roller coaster with inversions, in the dark, through a Star Wars space battle. Intense and loud.
   rating: 4
   ratingReason: Intense headliner coaster for thrill seekers.
-  durationMin: 2
+  durationMin: 5
   minHeightCm: 120
-  heightSource: wikipedia
+  heightSource: corroborated
   thrill: 5
   scare: 2
   sources:
   - {label: 'Wikipedia: Star Wars Hyperspace Mountain', url: 'https://en.wikipedia.org/wiki/Star_Wars_Hyperspace_Mountain'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id005
+  - *id006
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/hyper-space-mountain'}
+  - *id003
   review: draft
 - id: dlp.thunder-mesa-riverboat
   type: attraction
   name: Thunder Mesa Riverboat Landing
   areaId: frontierland
   themeparksId: 323bec06-fef7-4a60-989d-e3fcf9d3db7e
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/thunder-mesa-riverboat-landing
   queueTimesId: 28
+  officialGuideNumber: 7
   description: Paddle-steamer cruise around Big Thunder Mountain's island on the Rivers of the Far West.
   rating: 3
   ratingReason: Relaxing cruise with good views.
   durationMin: 15
   minHeightCm: null
-  heightSource: draft
+  heightSource: corroborated
   thrill: 1
   scare: 0
   sources:
   - {label: 'Wikipedia: Disney riverboats', url: 'https://en.wikipedia.org/wiki/Disney_riverboats'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id008
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/thunder-mesa-riverboat-landing'}
+  - *id003
   review: draft
 - id: dlp.meet-mickey-mouse
   type: attraction
   name: Meet Mickey Mouse
   areaId: fantasyland
   themeparksId: 44eff9fa-cd05-4a00-89b3-e6cec4682636
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/meet-mickey/
   queueTimesId: 13
+  officialGuideNumber: 26
+  location: {lat: 48.8748, lng: 2.7744}
+  locationApproximate: true
   description: Meet Mickey Mouse in his theatre dressing room for photos and autographs.
   rating: 4
   ratingReason: Guaranteed Mickey photo, but a long queue.
@@ -713,16 +883,23 @@ items:
   scare: 0
   sources:
   - {label: 'Wikipedia: Disneyland Park (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - &id009 {label: 'Position: placed by hand near neighbouring attractions on the official map (approximate)'}
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/meet-mickey/'}
+  - *id003
   review: draft
 - id: dlp.princess-pavilion
   type: attraction
   name: Princess Pavilion
   areaId: fantasyland
   themeparksId: 14924bd7-ffbf-47ee-a96e-2d5bd3fb5f25
+  officialUrl: https://www.disneylandparis.com/en-usd/attractions/disneyland-park/princess-pavilion/
   queueTimesId: 24
+  officialGuideNumber: 33
+  location: {lat: 48.87355, lng: 2.7747}
+  locationApproximate: true
   description: Meet a Disney princess in a royal pavilion for a photo and a chat. It has the longest average queue in the
     park.
   rating: 3
@@ -734,15 +911,22 @@ items:
   scare: 0
   sources:
   - {label: 'Wikipedia: Disneyland Park (Paris)', url: 'https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)'}
-  - *id003
+  - *id004
   - *id001
   - *id002
+  - *id009
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/attractions/disneyland-park/princess-pavilion/'}
+  - *id003
   review: draft
 - id: dlp.welcome-to-starport
   type: attraction
   name: 'Welcome to Starport: A Star Wars Encounter'
   areaId: discoveryland
+  officialUrl: https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/starport
   queueTimesId: 4573
+  officialGuideNumber: 40
+  location: {lat: 48.87455, lng: 2.77895}
+  locationApproximate: true
   description: Meet Star Wars characters in Discoveryland's Starport hangar.
   rating: 3
   ratingReason: Good for Star Wars fans.
@@ -752,14 +936,18 @@ items:
   thrill: 1
   scare: 1
   sources:
-  - *id003
+  - *id004
   - *id002
+  - *id009
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/starport'}
+  - *id003
   review: draft
 - id: dlp.disney-stars-on-parade
   type: show
   name: Disney Stars on Parade
   areaId: main-street
   themeparksId: 777518c2-1c65-48ba-94a1-e19583c44bf5
+  officialUrl: https://www.disneylandparis.com/en-usd/entertainment/disney-stars-on-parade
   description: Daily parade of floats and characters travelling from Fantasyland to Town Square.
   rating: 4
   ratingReason: Big, colourful parade with many characters.
@@ -770,14 +958,16 @@ items:
   location: {lat: 48.8717, lng: 2.7782}
   sources:
   - *id001
-  - &id004 {label: ThemeParks.wiki show times (4 Oct 2026), url: 'https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live'}
-  - *id002
+  - &id010 {label: ThemeParks.wiki show times (4 Oct 2026), url: 'https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live'}
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/entertainment/disney-stars-on-parade'}
+  - *id003
   review: draft
 - id: dlp.disney-tales-of-magic
   type: show
   name: Disney Tales of Magic
   areaId: main-street
   themeparksId: 7d0660a9-cc08-45c0-9ab7-2699f5369771
+  officialUrl: https://www.disneylandparis.com/en-int/entertainment/nighttime-spectacular
   description: Night-time show of projections, fireworks and music on Sleeping Beauty Castle at park closing. The start time
     changes with the season.
   rating: 5
@@ -788,14 +978,17 @@ items:
   arriveEarlyMin: 45
   sources:
   - *id001
-  - *id004
-  - *id002
+  - *id010
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/entertainment/nighttime-spectacular'}
+  - *id003
   review: draft
 - id: dlp.the-lion-king-rhythms-of-the-pride-lands
   type: show
   name: 'The Lion King: Rhythms of the Pride Lands'
   areaId: frontierland
   themeparksId: 78abb817-4564-41e2-b0de-fa0df34664c1
+  officialUrl: https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/lion-king-show
+  officialGuideNumber: 11
   description: Stage musical with songs from The Lion King, acrobats and dancers in the Frontierland Theater.
   rating: 5
   ratingReason: High-energy stage show and a seated break.
@@ -808,14 +1001,17 @@ items:
   arriveEarlyMin: 20
   sources:
   - *id001
-  - *id004
+  - *id010
   - *id002
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/lion-king-show'}
+  - *id003
   review: draft
 - id: dlp.agrabah-cafe
   type: restaurant
   name: Agrabah Café Restaurant
   areaId: adventureland
   themeparksId: 3a91b818-cb5f-4900-b93e-c67e25f5956d
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/agrabah-cafe
   service: table
   description: Buffet restaurant with Mediterranean and North African dishes in an Arabian bazaar setting.
   rating: 3
@@ -823,6 +1019,7 @@ items:
   mealMin: 60
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/agrabah-cafe'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.au-chalet-de-la-marionnette
@@ -830,12 +1027,14 @@ items:
   name: Au Chalet de la Marionnette
   areaId: fantasyland
   themeparksId: e9124220-9699-4014-8e65-06cad9814a5b
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/au-chalet-de-la-marionnette
   service: counter
   description: Counter-service restaurant in an Alpine chalet themed to Pinocchio.
   rating: 3
   ratingReason: Reliable quick meal in Fantasyland.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/au-chalet-de-la-marionnette'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.auberge-de-cendrillon
@@ -843,6 +1042,7 @@ items:
   name: Auberge de Cendrillon
   areaId: fantasyland
   themeparksId: 616bc6d6-5a14-4d39-90c3-88f6d61e5fd6
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/auberge-de-cendrillon
   service: table
   description: Table-service restaurant themed to Cinderella where princesses visit the tables during the meal.
   rating: 4
@@ -850,6 +1050,7 @@ items:
   mealMin: 90
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/auberge-de-cendrillon'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.cable-car-bake-shop
@@ -857,12 +1058,14 @@ items:
   name: Cable Car Bake Shop
   areaId: main-street
   themeparksId: 98e395e6-4a32-4995-98f2-ff766d86c368
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/cable-car-bake-shop
   service: snack
   description: Bakery and coffee shop on Main Street, U.S.A.
   rating: 3
   ratingReason: Good coffee and pastries.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/cable-car-bake-shop'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.cafe-hyperion
@@ -870,12 +1073,14 @@ items:
   name: Café Hyperion
   areaId: discoveryland
   themeparksId: 2683a803-03c4-48b6-9bbd-a7298400a675
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/cafe-hyperion
   service: counter
   description: Large counter-service burger restaurant under the airship Hyperion in Discoveryland.
   rating: 3
   ratingReason: Big and quick; easy to find a seat.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/cafe-hyperion'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.cafe-de-la-brousse
@@ -883,12 +1088,14 @@ items:
   name: Café de la Brousse
   areaId: adventureland
   themeparksId: dd0f02c0-3714-47e2-b761-086cd752b207
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/cafe-de-la-brousse
   service: snack
   description: Snack kiosk in Adventureland.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/cafe-de-la-brousse'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.captain-jacks
@@ -896,6 +1103,7 @@ items:
   name: Captain Jack's – Restaurant des Pirates
   areaId: adventureland
   themeparksId: 8598d1c9-9693-4b10-a7a8-50077ba62a3f
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/captain-jacks-restaurant-pirates
   service: table
   description: Table-service restaurant inside Pirates of the Caribbean, overlooking the moonlit lagoon.
   rating: 4
@@ -903,6 +1111,7 @@ items:
   mealMin: 75
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/captain-jacks-restaurant-pirates'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.casa-de-coco
@@ -910,6 +1119,7 @@ items:
   name: Casa de Coco – Restaurante de Familia
   areaId: frontierland
   themeparksId: e133de74-a086-4991-9ad9-6b72368447bd
+  officialUrl: https://www.disneylandparis.com/en-gb/dining/disneyland-park/casa-de-coco-restaurante-de-familia
   service: table
   description: Restaurant themed to the film Coco, serving Mexican family-style dishes.
   rating: 3
@@ -917,6 +1127,7 @@ items:
   mealMin: 75
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-gb/dining/disneyland-park/casa-de-coco-restaurante-de-familia'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.caseys-corner
@@ -924,12 +1135,14 @@ items:
   name: Casey's Corner
   areaId: main-street
   themeparksId: d5c26c67-691b-4250-985f-fdda5e5ac233
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/caseys-corner
   service: counter
   description: Hot dog restaurant with a baseball theme on Main Street, U.S.A.
   rating: 3
   ratingReason: Quick hot dogs near the entrance.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/caseys-corner'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.plaza-gardens-character-dining
@@ -937,6 +1150,7 @@ items:
   name: Character Dining at Plaza Gardens Restaurant
   areaId: main-street
   themeparksId: e7e211f7-c1c5-466b-934a-d9891ba6547e
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/character-dining-at-plaza-gardens
   service: table
   description: Buffet meal at Plaza Gardens where Disney characters visit the tables.
   rating: 3
@@ -944,6 +1158,7 @@ items:
   mealMin: 90
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/character-dining-at-plaza-gardens'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.colonel-hathis-outpost
@@ -951,12 +1166,14 @@ items:
   name: Colonel Hathi's Outpost Restaurant
   areaId: adventureland
   themeparksId: c8e304bd-876d-46e2-a412-7f8bc1e73a09
+  officialUrl: https://www.disneylandparis.com/en-gb/dining/disneyland-park/colonel-hathis-pizza-outpost
   service: counter
   description: Colonial-style restaurant in Adventureland themed to The Jungle Book.
   rating: 3
   ratingReason: Quieter option in Adventureland.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-gb/dining/disneyland-park/colonel-hathis-pizza-outpost'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.cookie-kitchen
@@ -964,12 +1181,14 @@ items:
   name: Cookie Kitchen
   areaId: main-street
   themeparksId: b1d843de-80b6-4ee1-bfd4-54d40f6026e7
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/cookie-kitchen
   service: snack
   description: Bakery on Main Street, U.S.A. selling cookies, muffins and sandwiches.
   rating: 3
   ratingReason: Good for a quick breakfast.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/cookie-kitchen'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.cool-post
@@ -977,12 +1196,14 @@ items:
   name: Cool Post
   areaId: adventureland
   themeparksId: 3954d4fe-3420-4df8-926c-aa2b0cc89853
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-post
   service: snack
   description: Snack and drinks kiosk in Adventureland.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-post'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.cool-station
@@ -990,12 +1211,14 @@ items:
   name: Cool Station
   areaId: discoveryland
   themeparksId: ef54a7f3-8276-4879-a431-0b9f9219ac78
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-station
   service: snack
   description: Snack and drinks kiosk in Discoveryland.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-station'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.cowboy-cookout-barbecue
@@ -1003,12 +1226,14 @@ items:
   name: Cowboy Cookout Barbecue
   areaId: frontierland
   themeparksId: 4b2f71bd-332b-478c-8cd0-8627b3ec13fc
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/cowboy-cookout-barbecue
   service: counter
   description: Large barn-style counter-service restaurant in Frontierland serving burgers and barbecue.
   rating: 3
   ratingReason: Big, roomy and quick.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/cowboy-cookout-barbecue'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.critter-corral
@@ -1016,12 +1241,14 @@ items:
   name: Critter Corral
   areaId: frontierland
   themeparksId: 2060c5ac-2ca2-48d0-9772-8f1b5fd3a702
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/critter-corral
   service: snack
   description: Snack kiosk in Frontierland.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/critter-corral'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.larbre-enchante
@@ -1029,12 +1256,14 @@ items:
   name: L'Arbre Enchanté
   areaId: fantasyland
   themeparksId: 5bd7aa6a-69f5-443a-8c8a-e007678336d8
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/l-arbre-enchante
   service: snack
   description: Snack kiosk in Fantasyland.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/l-arbre-enchante'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.last-chance-cafe
@@ -1042,12 +1271,14 @@ items:
   name: Last Chance Cafe
   areaId: frontierland
   themeparksId: ac95f062-776b-48d9-bc77-869a9307dac7
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/last-chance-cafe
   service: snack
   description: Snack stop in Frontierland near Big Thunder Mountain.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/last-chance-cafe'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.march-hare-refreshments
@@ -1055,12 +1286,14 @@ items:
   name: March Hare Refreshments
   areaId: fantasyland
   themeparksId: c7773e1f-c75d-4ab8-b6e6-a797abfa82d9
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/march-hare-refreshments
   service: snack
   description: Snack kiosk in Fantasyland near Alice's Curious Labyrinth.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/march-hare-refreshments'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.market-house-deli
@@ -1068,12 +1301,14 @@ items:
   name: Market House Deli
   areaId: main-street
   themeparksId: 5b3c8ce8-e773-4f4c-a508-cadde75188ce
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/market-house-deli
   service: counter
   description: Deli on Main Street, U.S.A. serving sandwiches and salads.
   rating: 3
   ratingReason: Quick and light.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/market-house-deli'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.overland-trail-cafe
@@ -1081,12 +1316,14 @@ items:
   name: Overland Trail Cafe
   areaId: frontierland
   themeparksId: ee25803b-51b1-4c67-86c3-eb4121c2ca8c
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/overland-trail-cafe
   service: snack
   description: Snack stop in Frontierland.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/overland-trail-cafe'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.pizzeria-bella-notte
@@ -1094,12 +1331,14 @@ items:
   name: Pizzeria Bella Notte
   areaId: fantasyland
   themeparksId: 4a0db383-6bb7-49e2-bc1e-06997e65325f
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/pizzeria-bella-notte
   service: counter
   description: Counter-service pizza and pasta restaurant themed to Lady and the Tramp.
   rating: 3
   ratingReason: Family-friendly pizza and pasta.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/pizzeria-bella-notte'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.plaza-gardens
@@ -1107,6 +1346,7 @@ items:
   name: Plaza Gardens Restaurant
   areaId: main-street
   themeparksId: 5b492a0f-7c9f-4c82-b6dc-4d1be20f7b1e
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/plaza-gardens-restaurant
   service: table
   description: Buffet restaurant in a Victorian building at the end of Main Street, U.S.A.
   rating: 3
@@ -1114,6 +1354,7 @@ items:
   mealMin: 60
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/plaza-gardens-restaurant'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.restaurant-hakuna-matata
@@ -1121,12 +1362,14 @@ items:
   name: Restaurant Hakuna Matata
   areaId: adventureland
   themeparksId: 98e16089-4a95-4565-830a-faf5f730272d
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/restaurant-hakuna-matata
   service: counter
   description: Counter-service restaurant themed to The Lion King in Adventureland.
   rating: 3
   ratingReason: Quick meal in Adventureland.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/restaurant-hakuna-matata'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.rocket-cafe
@@ -1134,12 +1377,14 @@ items:
   name: Rocket Café
   areaId: discoveryland
   themeparksId: 69ab4a1d-725e-4bdc-8284-7c076001b523
+  officialUrl: https://www.disneylandparis.com/en-gb/dining/disneyland-park/rocket-cafe
   service: snack
   description: Coffee and snack stop in Discoveryland.
   rating: 3
   ratingReason: Good coffee break.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-gb/dining/disneyland-park/rocket-cafe'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.silver-spur-steakhouse
@@ -1147,6 +1392,7 @@ items:
   name: Silver Spur Steakhouse
   areaId: frontierland
   themeparksId: 222aa656-ac33-457c-8193-7c625949f40e
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/silver-spur-steakhouse
   service: table
   description: Western-style table-service steakhouse in Frontierland.
   rating: 4
@@ -1154,6 +1400,7 @@ items:
   mealMin: 75
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/silver-spur-steakhouse'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.gibson-girl-ice-cream-parlour
@@ -1161,12 +1408,14 @@ items:
   name: The Gibson Girl Ice Cream Parlour
   areaId: main-street
   themeparksId: 5ae7196f-3096-478b-b602-b8fe49d964ea
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/gibson-girl-ice-cream-parlour
   service: snack
   description: Ice-cream parlour on Main Street, U.S.A.
   rating: 3
   ratingReason: Classic ice-cream stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/gibson-girl-ice-cream-parlour'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.the-ice-cream-company
@@ -1174,12 +1423,14 @@ items:
   name: The Ice Cream Company
   areaId: main-street
   themeparksId: 678d76cf-6b24-40ec-a536-26c3667745e8
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/ice-cream-company
   service: snack
   description: Ice-cream shop on Main Street, U.S.A.
   rating: 3
   ratingReason: Classic ice-cream stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/ice-cream-company'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.the-lucky-nugget-saloon
@@ -1187,12 +1438,14 @@ items:
   name: The Lucky Nugget Saloon
   areaId: frontierland
   themeparksId: 04123960-2968-4bea-ac47-c9aeba4ed581
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/lucky-nugget-saloon
   service: counter
   description: Wild West saloon restaurant in Frontierland.
   rating: 3
   ratingReason: Fun saloon setting.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/lucky-nugget-saloon'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.the-old-mill
@@ -1200,12 +1453,14 @@ items:
   name: The Old Mill
   areaId: fantasyland
   themeparksId: 4459f001-9dfe-4ddc-844a-6ae0e7bc36d5
+  officialUrl: https://www.disneylandparis.com/en-usd/dining/disneyland-park/the-old-mill
   service: snack
   description: Snack stop in a windmill in Fantasyland.
   rating: 2
   ratingReason: Handy snack stop.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-usd/dining/disneyland-park/the-old-mill'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.toad-hall-restaurant
@@ -1213,12 +1468,14 @@ items:
   name: Toad Hall Restaurant
   areaId: fantasyland
   themeparksId: d0f981f2-9813-45a4-a623-a34380247b62
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/toad-hall-restaurant
   service: counter
   description: Counter-service restaurant in an English manor house, serving fish and chips.
   rating: 3
   ratingReason: Quick meal in Fantasyland.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/toad-hall-restaurant'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.victorias-home-style-restaurant
@@ -1226,12 +1483,14 @@ items:
   name: Victoria's Home-Style Restaurant
   areaId: main-street
   themeparksId: f47b8d8b-a5a7-4f8c-a1ef-759621a5ee81
+  officialUrl: https://www.disneylandparis.com/en-gb/dining/disneyland-park/victorias-home-style-restaurant
   service: counter
   description: Counter-service restaurant on Main Street, U.S.A.
   rating: 3
   ratingReason: Quick meal near the entrance.
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-gb/dining/disneyland-park/victorias-home-style-restaurant'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 - id: dlp.walts
@@ -1239,6 +1498,7 @@ items:
   name: Walt's – An American Restaurant
   areaId: main-street
   themeparksId: ca17a056-3f23-41d2-babb-af6b178a9456
+  officialUrl: https://www.disneylandparis.com/en-int/dining/disneyland-park/walts-american-restaurant
   service: table
   description: Elegant table-service restaurant on Main Street, U.S.A., with rooms themed to the lands of the park.
   rating: 4
@@ -1246,6 +1506,7 @@ items:
   mealMin: 75
   sources:
   - *id001
+  - {label: Official Disneyland Paris page, url: 'https://www.disneylandparis.com/en-int/dining/disneyland-park/walts-american-restaurant'}
   - {label: 'Service type and rating: planner editorial judgement'}
   review: draft
 excluded:
@@ -1299,7 +1560,8 @@ excluded:
   - {id: 91dcdddf-7d7b-4429-a144-2ffb61d6c3ed, name: An Encounter with the Queen of Hearts or with your friends from Wonderland,
     reason: Character meet without queue statistics; not modelled yet.}
   queueTimes:
-  - {id: 2708, name: Disneyland Railroad Main Street Station (second entry), reason: Duplicate entry for the same station in the 2026 statistics.}
+  - {id: 2708, name: Disneyland Railroad Main Street Station (second entry), reason: Duplicate entry for the same station
+      in the 2026 statistics.}
   - {id: 2706, name: Disneyland Railroad Discoveryland Station, reason: Same train as Main Street Station.}
   - {id: 2711, name: Disneyland Railroad Fantasyland Station, reason: Same train as Main Street Station.}
   - {id: 2714, name: Disneyland Railroad Frontierland Depot, reason: Same train as Main Street Station.}

@@ -54,11 +54,15 @@ Each show SHALL show its name, a short description, duration, one or more typica
 - **THEN** its typical start times, duration and recommended early-arrival minutes are visible
 
 ### Requirement: Catalog list summary
-Each row in the catalog list SHALL show the item's name, type, rating and duration. Attraction rows SHALL also show the height rule, thrill level and the typical wait range for the month being planned.
+Each row in the catalog list SHALL show the item's name, park, area, type, rating and duration. Attraction rows SHALL also show the height rule, thrill level and the typical wait range for the month being planned.
 
 #### Scenario: Scan the list
 - **WHEN** the user scrolls the attraction list while planning a day in August
 - **THEN** each attraction row shows its typical lowest and highest wait for August next to its rating and height rule
+
+#### Scenario: Park and area label
+- **WHEN** the catalog lists items from both parks
+- **THEN** each row shows a label with its park and area, such as "Disneyland Park · Frontierland" or "Disney Adventure World · World of Frozen"
 
 ### Requirement: Search by name
 The catalog SHALL let the user find items by typing part of a name. Matching SHALL ignore letter case and accents.

@@ -108,7 +108,9 @@
         {
           "label": "Other months: planner estimate"
         }
-      ]
+      ],
+      "officialMapUrl": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf",
+      "officialMapLabel": "Official Disneyland Park map (accessibility guide, PDF)"
     },
     {
       "id": "daw",
@@ -211,7 +213,9 @@
         {
           "label": "Other months: planner estimate"
         }
-      ]
+      ],
+      "officialMapUrl": "https://www.disneylandparis.com/en-usd/destinations/disney-adventure-world",
+      "officialMapLabel": "Official Disney Adventure World page"
     }
   ],
   "items": [
@@ -227,6 +231,7 @@
         "lat": 48.86544789048844,
         "lng": 2.7794149518013
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/avengers-assemble-flight-force",
       "sources": [
         {
           "label": "Wikipedia: Avengers Assemble: Flight Force",
@@ -241,6 +246,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: tickets-disneyland.co height chart (2026)",
+          "url": "https://tickets-disneyland.co/height-restrictions/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/avengers-assemble-flight-force"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -249,6 +262,7 @@
       "type": "attraction",
       "durationMin": 2,
       "minHeightCm": 120,
+      "heightSource": "corroborated",
       "thrill": 5,
       "scare": 1,
       "waitStats": {
@@ -273,6 +287,7 @@
         "lat": 48.867726,
         "lng": 2.777854
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/cars-quatre-roues-rallye",
       "sources": [
         {
           "label": "Wikipedia: Cars Quatre Roues Rallye",
@@ -287,6 +302,10 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/cars-quatre-roues-rallye"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -295,6 +314,7 @@
       "type": "attraction",
       "durationMin": 2,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 2,
       "scare": 0,
       "waitStats": {
@@ -319,6 +339,7 @@
         "lat": 48.86651889190989,
         "lng": 2.775024175643921
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/cars-road-trip",
       "sources": [
         {
           "label": "Wikipedia: Cars: Road Trip",
@@ -333,6 +354,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: tickets-disneyland.co height chart (2026)",
+          "url": "https://tickets-disneyland.co/height-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation Disneyland Paris guide",
+          "url": "https://thebettervacation.com/paris/disneyland-paris/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/cars-road-trip"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -341,6 +374,7 @@
       "type": "attraction",
       "durationMin": 7,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 1,
       "waitStats": {
@@ -365,6 +399,7 @@
         "lat": 48.868041,
         "lng": 2.778142
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/crushs-coaster",
       "sources": [
         {
           "label": "Wikipedia: Crush's Coaster",
@@ -379,6 +414,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/crushs-coaster"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -387,6 +434,7 @@
       "type": "attraction",
       "durationMin": 2,
       "minHeightCm": 107,
+      "heightSource": "corroborated",
       "thrill": 4,
       "scare": 1,
       "waitStats": {
@@ -411,6 +459,7 @@
         "lat": 48.864108,
         "lng": 2.773508
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disney-adventure-world/frozen-ever-after",
       "sources": [
         {
           "label": "Wikipedia: Frozen Ever After",
@@ -425,6 +474,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation Disneyland Paris guide",
+          "url": "https://thebettervacation.com/paris/disneyland-paris/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disney-adventure-world/frozen-ever-after"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -433,6 +494,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 2,
       "scare": 1,
       "waitStats": {
@@ -455,6 +517,7 @@
         "lat": 48.868288,
         "lng": 2.778352
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disney-adventure-world/flying-carpets-over-agrabah",
       "sources": [
         {
           "label": "Wikipedia: The Magic Carpets of Aladdin",
@@ -469,6 +532,10 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disney-adventure-world/flying-carpets-over-agrabah"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -477,6 +544,7 @@
       "type": "attraction",
       "durationMin": 2,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -501,6 +569,7 @@
         "lat": 48.866903,
         "lng": 2.776651
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/rc-racer",
       "sources": [
         {
           "label": "Wikipedia: RC Racer",
@@ -515,6 +584,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/rc-racer"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -523,6 +604,7 @@
       "type": "attraction",
       "durationMin": 1,
       "minHeightCm": 120,
+      "heightSource": "corroborated",
       "thrill": 4,
       "scare": 0,
       "waitStats": {
@@ -547,6 +629,7 @@
         "lat": 48.866153,
         "lng": 2.77663
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/raiponce-tangled-spin",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -561,6 +644,10 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/raiponce-tangled-spin"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -569,6 +656,7 @@
       "type": "attraction",
       "durationMin": 2,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 2,
       "scare": 0,
       "waitStats": {
@@ -591,6 +679,7 @@
         "lat": 48.86757046243673,
         "lng": 2.7762224525213237
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/ratatouille-the-adventure",
       "sources": [
         {
           "label": "Wikipedia: Remy's Ratatouille Adventure",
@@ -605,6 +694,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: tickets-disneyland.co height chart (2026)",
+          "url": "https://tickets-disneyland.co/height-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation Disneyland Paris guide",
+          "url": "https://thebettervacation.com/paris/disneyland-paris/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/ratatouille-the-adventure"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -613,6 +714,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 2,
       "scare": 1,
       "waitStats": {
@@ -637,6 +739,7 @@
         "lat": 48.867136,
         "lng": 2.776959
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/slinky-dog-zigzag-spin",
       "sources": [
         {
           "label": "Wikipedia: Slinky Dog Zigzag Spin",
@@ -651,6 +754,10 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/slinky-dog-zigzag-spin"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -659,6 +766,7 @@
       "type": "attraction",
       "durationMin": 2,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -683,6 +791,7 @@
         "lat": 48.86611484299536,
         "lng": 2.779369354248047
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/spider-man-web-adventure",
       "sources": [
         {
           "label": "Wikipedia: Web Slingers: A Spider-Man Adventure",
@@ -697,6 +806,10 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/spider-man-web-adventure"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -705,6 +818,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 1,
       "waitStats": {
@@ -729,6 +843,7 @@
         "lat": 48.866753,
         "lng": 2.778767
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disney-adventure-world/twilight-zone-tower-of-terror",
       "sources": [
         {
           "label": "Wikipedia: The Twilight Zone Tower of Terror",
@@ -743,6 +858,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disney-adventure-world/twilight-zone-tower-of-terror"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -751,6 +878,7 @@
       "type": "attraction",
       "durationMin": 4,
       "minHeightCm": 102,
+      "heightSource": "corroborated",
       "thrill": 5,
       "scare": 3,
       "waitStats": {
@@ -775,6 +903,7 @@
         "lat": 48.867188,
         "lng": 2.777234
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/toy-soldiers-parachute-drop",
       "sources": [
         {
           "label": "Wikipedia: Toy Soldiers Parachute Drop",
@@ -789,6 +918,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: tickets-disneyland.co height chart (2026)",
+          "url": "https://tickets-disneyland.co/height-restrictions/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disney-adventure-world/toy-soldiers-parachute-drop"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -797,6 +938,7 @@
       "type": "attraction",
       "durationMin": 2,
       "minHeightCm": 81,
+      "heightSource": "corroborated",
       "thrill": 3,
       "scare": 0,
       "waitStats": {
@@ -821,6 +963,7 @@
         "lat": 48.86815769739524,
         "lng": 2.7791735529899597
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/mickey-and-the-magician-show",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -833,6 +976,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/mickey-and-the-magician-show"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -863,6 +1010,7 @@
         "lat": 48.867309630452866,
         "lng": 2.780265212059021
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/walt-disney-studios-park/pixar-show",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -875,6 +1023,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/walt-disney-studios-park/pixar-show"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -905,6 +1057,7 @@
         "lat": 48.86661211095515,
         "lng": 2.780080139636994
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/stitch-live",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -917,6 +1070,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/stitch-live"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -966,6 +1123,7 @@
         "lat": 48.86742740189942,
         "lng": 2.7783317864486885
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/animation-academy",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
@@ -974,6 +1132,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/animation-academy"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -1013,6 +1175,7 @@
         "lat": 48.865138230945824,
         "lng": 2.7749919891357426
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/disney-cascade-of-lights",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
@@ -1021,6 +1184,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/disney-adventure-world/disney-cascade-of-lights"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -1047,6 +1214,7 @@
         "lat": 48.8643,
         "lng": 2.774
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/entertainment/disney-adventure-world/a-celebration-in-arendelle",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -1059,6 +1227,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/entertainment/disney-adventure-world/a-celebration-in-arendelle"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -1089,6 +1261,7 @@
         "lat": 48.867463,
         "lng": 2.775793
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/bistrot-chez-remy",
       "sources": [
         {
           "label": "Wikipedia: Bistrot Chez Rémy",
@@ -1097,6 +1270,10 @@
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/bistrot-chez-remy"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1120,10 +1297,15 @@
         "lat": 48.865352,
         "lng": 2.776632
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/cafe-luminosity",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/cafe-luminosity"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1224,10 +1406,15 @@
         "lat": 48.86570196868203,
         "lng": 2.778419852256775
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/fan-tastic",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/fan-tastic"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1250,10 +1437,15 @@
         "lat": 48.867224,
         "lng": 2.779329
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/dining/walt-disney-studios-park/ice-cream-creations",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/dining/walt-disney-studios-park/ice-cream-creations"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1276,10 +1468,15 @@
         "lat": 48.865765,
         "lng": 2.773667
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/la-terrasse-panoramique",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/la-terrasse-panoramique"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1302,6 +1499,7 @@
         "lat": 48.866625,
         "lng": 2.775209
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/laugh-n-go",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -1310,6 +1508,10 @@
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/laugh-n-go"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1332,6 +1534,7 @@
         "lat": 48.864162,
         "lng": 2.773907
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/nordic-crowns-tavern",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -1340,6 +1543,10 @@
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/nordic-crowns-tavern"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1362,6 +1569,7 @@
         "lat": 48.866,
         "lng": 2.7796389
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/pym-kitchen",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -1370,6 +1578,10 @@
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/pym-kitchen"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1393,10 +1605,15 @@
         "lat": 48.867534,
         "lng": 2.779616
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/dining/disney-adventure-world/searchlight",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/dining/disney-adventure-world/searchlight"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1445,10 +1662,15 @@
         "lat": 48.8656667,
         "lng": 2.7800833333333332
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/stark-factory",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/walt-disney-studios-park/stark-factory"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1471,6 +1693,7 @@
         "lat": 48.86589278028716,
         "lng": 2.778520018942506
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/super-diner",
       "sources": [
         {
           "label": "Wikipedia: Disney Adventure World",
@@ -1479,6 +1702,10 @@
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/super-diner"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1502,10 +1729,15 @@
         "lat": 48.867756,
         "lng": 2.779479
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/dining/walt-disney-studios-park/the-hollywood-gardens-restaurant",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/dining/walt-disney-studios-park/the-hollywood-gardens-restaurant"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1528,10 +1760,15 @@
         "lat": 48.865837,
         "lng": 2.775951
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/the-regal-view-lounge",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/the-regal-view-lounge"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1554,10 +1791,15 @@
         "lat": 48.8659,
         "lng": 2.776125
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/the-regal-view-restaurant-and-lounge",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disney-adventure-world/the-regal-view-restaurant-and-lounge"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1581,10 +1823,15 @@
         "lat": 48.86552376119522,
         "lng": 2.778975069522857
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disney-adventure-world/web-food-truck",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disney-adventure-world/web-food-truck"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -1607,6 +1854,7 @@
         "lat": 48.87469,
         "lng": 2.776084
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/its-a-small-world",
       "sources": [
         {
           "label": "Wikipedia: It's a Small World",
@@ -1621,14 +1869,31 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/its-a-small-world"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "ce87a0fe-c644-475e-abb6-9727e05cebff",
       "type": "attraction",
-      "durationMin": 11,
+      "durationMin": 10,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -1653,6 +1918,7 @@
         "lat": 48.872736,
         "lng": 2.77316
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/adventure-isle",
       "sources": [
         {
           "label": "Wikipedia: Adventure Isle",
@@ -1663,6 +1929,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/adventure-isle"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -1671,6 +1945,7 @@
       "type": "attraction",
       "durationMin": 20,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 1,
       "fixedWaitMin": 0
@@ -1687,6 +1962,7 @@
         "lat": 48.874461,
         "lng": 2.774518
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/alices-curious-labyrinth",
       "sources": [
         {
           "label": "Wikipedia: Alice's Curious Labyrinth",
@@ -1701,6 +1977,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/alices-curious-labyrinth"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -1709,6 +1993,7 @@
       "type": "attraction",
       "durationMin": 15,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 1,
       "waitStats": {
@@ -1733,6 +2018,7 @@
         "lat": 48.873417,
         "lng": 2.778797
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/autopia",
       "sources": [
         {
           "label": "Wikipedia: Autopia",
@@ -1747,15 +2033,28 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Mouse Hacking rides guide",
+          "url": "https://www.mousehacking.com/blog/disneyland-paris-rides-and-attractions"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/autopia"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "3a1cd3f7-9c42-4f9b-90fa-dab7ba113862",
       "type": "attraction",
-      "durationMin": 5,
+      "durationMin": 7,
       "minHeightCm": 81,
-      "ageRule": "Guests under 132 cm must ride with an adult driver.",
+      "heightSource": "official",
+      "ageRule": "Minimum 1.32 m to drive unaccompanied; 81 cm to ride with an adult driver.",
       "thrill": 2,
       "scare": 0,
       "waitStats": {
@@ -1780,6 +2079,7 @@
         "lat": 48.871528,
         "lng": 2.774787
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/big-thunder-mountain",
       "sources": [
         {
           "label": "Wikipedia: Big Thunder Mountain Railroad",
@@ -1794,14 +2094,31 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/big-thunder-mountain"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "852d957c-382e-4afb-bb74-70c9a79055df",
       "type": "attraction",
-      "durationMin": 4,
+      "durationMin": 5,
       "minHeightCm": 102,
+      "heightSource": "corroborated",
       "thrill": 4,
       "scare": 1,
       "waitStats": {
@@ -1826,6 +2143,7 @@
         "lat": 48.873445,
         "lng": 2.775298
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/blanche-neige-et-les-sept-nains",
       "sources": [
         {
           "label": "Wikipedia: Snow White's Enchanted Wish (all versions)",
@@ -1840,14 +2158,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/blanche-neige-et-les-sept-nains"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "8ed1472a-4d2e-47f1-b848-353de0bc3670",
       "type": "attraction",
-      "durationMin": 3,
+      "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 2,
       "waitStats": {
@@ -1872,6 +2203,7 @@
         "lat": 48.87343,
         "lng": 2.777947
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/buzz-lightyear-laser-blast",
       "sources": [
         {
           "label": "Wikipedia: Buzz Lightyear attractions",
@@ -1886,6 +2218,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Mouse Hacking rides guide",
+          "url": "https://www.mousehacking.com/blog/disneyland-paris-rides-and-attractions"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/buzz-lightyear-laser-blast"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -1894,6 +2238,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 1,
       "waitStats": {
@@ -1918,6 +2263,7 @@
         "lat": 48.875176,
         "lng": 2.774151
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/casey-jr-le-petit-train-du-cirque",
       "sources": [
         {
           "label": "Wikipedia: Casey Jr. Circus Train",
@@ -1932,6 +2278,22 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Mouse Hacking rides guide",
+          "url": "https://www.mousehacking.com/blog/disneyland-paris-rides-and-attractions"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/casey-jr-le-petit-train-du-cirque"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -1940,6 +2302,7 @@
       "type": "attraction",
       "durationMin": 3,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 2,
       "scare": 0,
       "waitStats": {
@@ -1964,6 +2327,7 @@
         "lat": 48.870821,
         "lng": 2.779071
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/disneyland-railroad",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Railroad (Paris)",
@@ -1978,14 +2342,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/disneyland-railroad"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "0d9296c0-a76c-4578-b0f9-2ff4b4e385b5",
       "type": "attraction",
-      "durationMin": 25,
+      "durationMin": 30,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -2010,6 +2387,7 @@
         "lat": 48.874152,
         "lng": 2.774606
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/dumbo-the-flying-elephant",
       "sources": [
         {
           "label": "Wikipedia: Dumbo the Flying Elephant",
@@ -2024,14 +2402,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/dumbo-the-flying-elephant"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "46406e4a-4a02-4d30-89bc-ef1ed63c1ff9",
       "type": "attraction",
-      "durationMin": 2,
+      "durationMin": 3,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -2056,6 +2447,7 @@
         "lat": 48.870336,
         "lng": 2.774223
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/frontierland-playground",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Park (Paris)",
@@ -2066,6 +2458,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/frontierland-playground"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2074,6 +2474,8 @@
       "type": "attraction",
       "durationMin": 20,
       "minHeightCm": null,
+      "heightSource": "draft",
+      "ageRule": "Play area for children aged 4-8.",
       "thrill": 1,
       "scare": 0,
       "fixedWaitMin": 0
@@ -2090,6 +2492,7 @@
         "lat": 48.871058,
         "lng": 2.778806
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/horse-drawn-streetcars",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Park (Paris)",
@@ -2100,14 +2503,23 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/horse-drawn-streetcars"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "6bb88973-80d0-45cf-bffe-433f1c551362",
       "type": "attraction",
-      "durationMin": 5,
+      "durationMin": 7,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "fixedWaitMin": 5
@@ -2124,6 +2536,7 @@
         "lat": 48.872429,
         "lng": 2.772029
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/indiana-jones-and-the-temple-of-peril",
       "sources": [
         {
           "label": "Wikipedia: Indiana Jones and the Temple of Peril",
@@ -2138,14 +2551,31 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/indiana-jones-and-the-temple-of-peril"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "5d0ce227-7ad0-4402-a95b-6cf56f25a8ec",
       "type": "attraction",
-      "durationMin": 2,
+      "durationMin": 5,
       "minHeightCm": 140,
+      "heightSource": "corroborated",
       "thrill": 5,
       "scare": 1,
       "waitStats": {
@@ -2170,6 +2600,7 @@
         "lat": 48.872336,
         "lng": 2.773744
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/la-cabane-des-robinson",
       "sources": [
         {
           "label": "Wikipedia: Swiss Family Treehouse",
@@ -2184,6 +2615,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/la-cabane-des-robinson"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2192,6 +2631,7 @@
       "type": "attraction",
       "durationMin": 15,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -2216,6 +2656,7 @@
         "lat": 48.873101,
         "lng": 2.776212
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-galerie-de-la-belle-au-bois-dormant",
       "sources": [
         {
           "label": "Wikipedia: Le Château de la Belle au Bois Dormant",
@@ -2226,6 +2667,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-galerie-de-la-belle-au-bois-dormant"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2234,6 +2683,7 @@
       "type": "attraction",
       "durationMin": 10,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "fixedWaitMin": 0
@@ -2250,6 +2700,7 @@
         "lat": 48.87308,
         "lng": 2.775918
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-taniere-du-dragon",
       "sources": [
         {
           "label": "Wikipedia: La Tanière du Dragon",
@@ -2260,6 +2711,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/la-taniere-du-dragon"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2268,6 +2727,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 2,
       "fixedWaitMin": 0
@@ -2284,6 +2744,7 @@
         "lat": 48.873908,
         "lng": 2.775168
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/le-carrousel-de-lancelot",
       "sources": [
         {
           "label": "Wikipedia: Le Carrousel de Lancelot",
@@ -2298,6 +2759,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/le-carrousel-de-lancelot"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2306,6 +2779,7 @@
       "type": "attraction",
       "durationMin": 3,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -2330,6 +2804,7 @@
         "lat": 48.872441,
         "lng": 2.775416
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-passage-enchante-daladdin",
       "sources": [
         {
           "label": "Wikipedia: Le Passage Enchanté d'Aladdin",
@@ -2340,14 +2815,23 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-passage-enchante-daladdin"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "07782089-5e83-4bee-8a39-735818551844",
       "type": "attraction",
-      "durationMin": 10,
+      "durationMin": 3,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 1,
       "fixedWaitMin": 0
@@ -2364,6 +2848,7 @@
         "lat": 48.87519,
         "lng": 2.774483
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-pays-des-contes-de-fees",
       "sources": [
         {
           "label": "Wikipedia: Storybook Land Canal Boats",
@@ -2378,14 +2863,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/le-pays-des-contes-de-fees"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "9056906c-0030-4951-be5e-44ac1f273491",
       "type": "attraction",
-      "durationMin": 10,
+      "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -2410,6 +2908,7 @@
         "lat": 48.873432,
         "lng": 2.779553
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-mysteres-du-nautilus",
       "sources": [
         {
           "label": "Wikipedia: Les Mystères du Nautilus",
@@ -2424,14 +2923,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-mysteres-du-nautilus"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "d8d9f62a-9fa3-4aae-a568-4225afc35924",
       "type": "attraction",
-      "durationMin": 10,
+      "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 2,
       "waitStats": {
@@ -2456,6 +2968,7 @@
         "lat": 48.873545,
         "lng": 2.775157
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-voyages-de-pinocchio",
       "sources": [
         {
           "label": "Wikipedia: Pinocchio's Daring Journey",
@@ -2470,14 +2983,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/les-voyages-de-pinocchio"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "594dabd8-ddc1-4835-aafa-f654e10ed2db",
       "type": "attraction",
-      "durationMin": 3,
+      "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 2,
       "waitStats": {
@@ -2502,6 +3028,7 @@
         "lat": 48.874365,
         "lng": 2.775025
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/mad-hatters-tea-cups",
       "sources": [
         {
           "label": "Wikipedia: Mad Tea Party",
@@ -2516,14 +3043,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Mouse Hacking rides guide",
+          "url": "https://www.mousehacking.com/blog/disneyland-paris-rides-and-attractions"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/mad-hatters-tea-cups"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "bcc5567f-f00b-4a7d-8ee6-526cc8d3d5de",
       "type": "attraction",
-      "durationMin": 2,
+      "durationMin": 3,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 2,
       "scare": 0,
       "waitStats": {
@@ -2548,6 +3088,7 @@
         "lat": 48.871327,
         "lng": 2.778946
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/main-street-vehicles",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Park (Paris)",
@@ -2562,6 +3103,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/main-street-vehicles"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2570,6 +3119,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -2594,6 +3144,7 @@
         "lat": 48.87445952598315,
         "lng": 2.7798494696617126
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/discoveryland-theatre",
       "sources": [
         {
           "label": "Wikipedia: Mickey's PhilharMagic",
@@ -2608,6 +3159,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/discoveryland-theatre"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2616,6 +3179,7 @@
       "type": "attraction",
       "durationMin": 12,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 1,
       "waitStats": {
@@ -2640,6 +3204,7 @@
         "lat": 48.873486,
         "lng": 2.778457
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/orbitron",
       "sources": [
         {
           "label": "Wikipedia: Astro Orbiter (Orbitron)",
@@ -2654,14 +3219,27 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Mouse Hacking rides guide",
+          "url": "https://www.mousehacking.com/blog/disneyland-paris-rides-and-attractions"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/orbitron"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "f0525c25-4ea2-49b7-aab5-150b27658fb6",
       "type": "attraction",
-      "durationMin": 2,
+      "durationMin": 3,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 2,
       "scare": 0,
       "waitStats": {
@@ -2686,6 +3264,7 @@
         "lat": 48.873838,
         "lng": 2.77408
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/peter-pans-flight",
       "sources": [
         {
           "label": "Wikipedia: Peter Pan's Flight",
@@ -2700,14 +3279,31 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/peter-pans-flight"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "7c5b2c2d-1082-4e5c-b155-dc492db16e6e",
       "type": "attraction",
-      "durationMin": 3,
+      "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 1,
       "waitStats": {
@@ -2732,6 +3328,7 @@
         "lat": 48.870977,
         "lng": 2.776827
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/phantom-manor",
       "sources": [
         {
           "label": "Wikipedia: Phantom Manor",
@@ -2746,14 +3343,31 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Mouse Hacking rides guide",
+          "url": "https://www.mousehacking.com/blog/disneyland-paris-rides-and-attractions"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/phantom-manor"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "14f756d6-d6fa-4200-8b41-db84ba294fa6",
       "type": "attraction",
-      "durationMin": 6,
+      "durationMin": 7,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 2,
       "scare": 3,
       "waitStats": {
@@ -2778,6 +3392,7 @@
         "lat": 48.872927,
         "lng": 2.773621
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/attractions/disneyland-park/pirate-galleon",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Park (Paris)",
@@ -2788,6 +3403,10 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/attractions/disneyland-park/pirate-galleon"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2796,6 +3415,7 @@
       "type": "attraction",
       "durationMin": 10,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "fixedWaitMin": 0
@@ -2812,6 +3432,7 @@
         "lat": 48.873493,
         "lng": 2.773381
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/pirates-of-the-caribbean",
       "sources": [
         {
           "label": "Wikipedia: Pirates of the Caribbean (attraction)",
@@ -2826,6 +3447,22 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/attractions/disneyland-park/pirates-of-the-caribbean"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2834,6 +3471,7 @@
       "type": "attraction",
       "durationMin": 10,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 2,
       "scare": 2,
       "waitStats": {
@@ -2858,6 +3496,7 @@
         "lat": 48.87274,
         "lng": 2.773771
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/pirates-beach",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Park (Paris)",
@@ -2868,6 +3507,14 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/pirates-beach"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -2876,6 +3523,8 @@
       "type": "attraction",
       "durationMin": 20,
       "minHeightCm": null,
+      "heightSource": "draft",
+      "ageRule": "Two play areas for children aged 3-6 and 7-9; maximum height 1.40 m.",
       "thrill": 1,
       "scare": 0,
       "fixedWaitMin": 0
@@ -2892,6 +3541,7 @@
         "lat": 48.874677,
         "lng": 2.778782
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/star-tours-the-aventures-continue",
       "sources": [
         {
           "label": "Wikipedia: Star Tours – The Adventures Continue",
@@ -2906,14 +3556,31 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/star-tours-the-aventures-continue"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "5d10b8b2-7d34-4794-8857-76688e5864bc",
       "type": "attraction",
-      "durationMin": 5,
+      "durationMin": 7,
       "minHeightCm": 102,
+      "heightSource": "corroborated",
       "thrill": 3,
       "scare": 1,
       "waitStats": {
@@ -2938,6 +3605,7 @@
         "lat": 48.873651,
         "lng": 2.778863
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/hyper-space-mountain",
       "sources": [
         {
           "label": "Wikipedia: Star Wars Hyperspace Mountain",
@@ -2952,14 +3620,31 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: dlptips.com ride restrictions (2026)",
+          "url": "https://dlptips.com/advice/ride-restrictions/"
+        },
+        {
+          "label": "Height cross-check: The Better Vacation height requirements",
+          "url": "https://thebettervacation.com/fr/paris/disneyland-paris-height-requirements/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/hyper-space-mountain"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
       "review": "draft",
       "themeparksId": "ddca340c-7ba1-4f23-89eb-0d3d52c84bda",
       "type": "attraction",
-      "durationMin": 2,
+      "durationMin": 5,
       "minHeightCm": 120,
+      "heightSource": "corroborated",
       "thrill": 5,
       "scare": 2,
       "waitStats": {
@@ -2984,6 +3669,7 @@
         "lat": 48.871173,
         "lng": 2.776563
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/thunder-mesa-riverboat-landing",
       "sources": [
         {
           "label": "Wikipedia: Disney riverboats",
@@ -2998,6 +3684,18 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Height cross-check: Picniq attractions for younger ones",
+          "url": "https://holidays.picniq.co.uk/disneyland-paris-guides/best-disneyland-paris-attractions-for-younger-ones/"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/thunder-mesa-riverboat-landing"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -3006,6 +3704,7 @@
       "type": "attraction",
       "durationMin": 15,
       "minHeightCm": null,
+      "heightSource": "corroborated",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -3026,6 +3725,12 @@
       "description": "Meet Mickey Mouse in his theatre dressing room for photos and autographs.",
       "rating": 4,
       "ratingReason": "Guaranteed Mickey photo, but a long queue.",
+      "location": {
+        "lat": 48.8748,
+        "lng": 2.7744
+      },
+      "locationApproximate": true,
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/meet-mickey/",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Park (Paris)",
@@ -3040,6 +3745,17 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Position: placed by hand near neighbouring attractions on the official map (approximate)"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/meet-mickey/"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -3048,6 +3764,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -3068,6 +3785,12 @@
       "description": "Meet a Disney princess in a royal pavilion for a photo and a chat. It has the longest average queue in the park.",
       "rating": 3,
       "ratingReason": "Lovely for fans, but a very long queue for one princess.",
+      "location": {
+        "lat": 48.87355,
+        "lng": 2.7747
+      },
+      "locationApproximate": true,
+      "officialUrl": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/princess-pavilion/",
       "sources": [
         {
           "label": "Wikipedia: Disneyland Park (Paris)",
@@ -3082,6 +3805,17 @@
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
         },
         {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Position: placed by hand near neighbouring attractions on the official map (approximate)"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/attractions/disneyland-park/princess-pavilion/"
+        },
+        {
           "label": "Rating, thrill and scariness: planner editorial judgement"
         }
       ],
@@ -3090,6 +3824,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 0,
       "waitStats": {
@@ -3110,10 +3845,27 @@
       "description": "Meet Star Wars characters in Discoveryland's Starport hangar.",
       "rating": 3,
       "ratingReason": "Good for Star Wars fans.",
+      "location": {
+        "lat": 48.87455,
+        "lng": 2.77895
+      },
+      "locationApproximate": true,
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/starport",
       "sources": [
         {
           "label": "Queue-Times statistics, Disneyland Park",
           "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Position: placed by hand near neighbouring attractions on the official map (approximate)"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/starport"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -3123,6 +3875,7 @@
       "type": "attraction",
       "durationMin": 5,
       "minHeightCm": null,
+      "heightSource": "draft",
       "thrill": 1,
       "scare": 1,
       "waitStats": {
@@ -3147,6 +3900,7 @@
         "lat": 48.8717,
         "lng": 2.7782
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/disney-stars-on-parade",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
@@ -3155,6 +3909,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/disney-stars-on-parade"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -3181,6 +3939,7 @@
         "lat": 48.87284356722657,
         "lng": 2.776469886302948
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/entertainment/nighttime-spectacular",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
@@ -3189,6 +3948,10 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/entertainment/nighttime-spectacular"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -3215,6 +3978,7 @@
         "lat": 48.87001022097784,
         "lng": 2.7728059887886047
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/lion-king-show",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
@@ -3223,6 +3987,14 @@
         {
           "label": "ThemeParks.wiki show times (4 Oct 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Official Disneyland Park accessibility guide (August 2026)",
+          "url": "https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/entertainment/disneyland-park/lion-king-show"
         },
         {
           "label": "Rating, thrill and scariness: planner editorial judgement"
@@ -3252,10 +4024,15 @@
         "lat": 48.87277,
         "lng": 2.775236
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/agrabah-cafe",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/agrabah-cafe"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3279,10 +4056,15 @@
         "lat": 48.873528,
         "lng": 2.774677
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/au-chalet-de-la-marionnette",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/au-chalet-de-la-marionnette"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3305,10 +4087,15 @@
         "lat": 48.8736571395232,
         "lng": 2.775783576071262
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/auberge-de-cendrillon",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/auberge-de-cendrillon"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3332,10 +4119,15 @@
         "lat": 48.871975,
         "lng": 2.777754
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cable-car-bake-shop",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cable-car-bake-shop"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3358,10 +4150,15 @@
         "lat": 48.874057,
         "lng": 2.778097
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/cafe-hyperion",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/cafe-hyperion"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3384,10 +4181,15 @@
         "lat": 48.872371,
         "lng": 2.77452
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cafe-de-la-brousse",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cafe-de-la-brousse"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3410,10 +4212,15 @@
         "lat": 48.873306,
         "lng": 2.772994
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/captain-jacks-restaurant-pirates",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/captain-jacks-restaurant-pirates"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3437,10 +4244,15 @@
         "lat": 48.871664,
         "lng": 2.774558
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/casa-de-coco-restaurante-de-familia",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/casa-de-coco-restaurante-de-familia"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3464,10 +4276,15 @@
         "lat": 48.871983,
         "lng": 2.777476
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/caseys-corner",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/caseys-corner"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3490,10 +4307,15 @@
         "lat": 48.872605,
         "lng": 2.778027
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/character-dining-at-plaza-gardens",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/character-dining-at-plaza-gardens"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3517,10 +4339,15 @@
         "lat": 48.87174,
         "lng": 2.773429
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/colonel-hathis-pizza-outpost",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/colonel-hathis-pizza-outpost"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3543,10 +4370,15 @@
         "lat": 48.871931,
         "lng": 2.777805
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/cookie-kitchen",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/cookie-kitchen"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3569,10 +4401,15 @@
         "lat": 48.871928,
         "lng": 2.773866
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-post",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-post"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3595,10 +4432,15 @@
         "lat": 48.87327,
         "lng": 2.7781
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-station",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/cool-station"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3621,10 +4463,15 @@
         "lat": 48.871027,
         "lng": 2.773392
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/cowboy-cookout-barbecue",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/cowboy-cookout-barbecue"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3647,10 +4494,15 @@
         "lat": 48.870677,
         "lng": 2.7722850000000108
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/critter-corral",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/critter-corral"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3673,10 +4525,15 @@
         "lat": 48.874138,
         "lng": 2.775522
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/l-arbre-enchante",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/l-arbre-enchante"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3699,10 +4556,15 @@
         "lat": 48.871533,
         "lng": 2.776634
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/last-chance-cafe",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/last-chance-cafe"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3725,10 +4587,15 @@
         "lat": 48.874474,
         "lng": 2.77489
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/march-hare-refreshments",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/march-hare-refreshments"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3751,10 +4618,15 @@
         "lat": 48.871782,
         "lng": 2.778021
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/market-house-deli",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/market-house-deli"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3777,10 +4649,15 @@
         "lat": 48.87168,
         "lng": 2.774965
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/overland-trail-cafe",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/overland-trail-cafe"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3803,10 +4680,15 @@
         "lat": 48.874315,
         "lng": 2.776468
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/pizzeria-bella-notte",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/pizzeria-bella-notte"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3829,10 +4711,15 @@
         "lat": 48.872605,
         "lng": 2.77778
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/plaza-gardens-restaurant",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/plaza-gardens-restaurant"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3856,10 +4743,15 @@
         "lat": 48.87206,
         "lng": 2.774473
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/restaurant-hakuna-matata",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/restaurant-hakuna-matata"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3882,10 +4774,15 @@
         "lat": 48.87435811100483,
         "lng": 2.7796104146805023
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/rocket-cafe",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/rocket-cafe"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3908,10 +4805,15 @@
         "lat": 48.871262,
         "lng": 2.776632
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/silver-spur-steakhouse",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/silver-spur-steakhouse"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3935,10 +4837,15 @@
         "lat": 48.8721,
         "lng": 2.77763
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/gibson-girl-ice-cream-parlour",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/gibson-girl-ice-cream-parlour"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3961,10 +4868,15 @@
         "lat": 48.871845,
         "lng": 2.778292
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/ice-cream-company",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/ice-cream-company"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -3987,10 +4899,15 @@
         "lat": 48.871646,
         "lng": 2.776365
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/lucky-nugget-saloon",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/lucky-nugget-saloon"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -4013,10 +4930,15 @@
         "lat": 48.874859,
         "lng": 2.775106
       },
+      "officialUrl": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/the-old-mill",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-usd/dining/disneyland-park/the-old-mill"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -4039,10 +4961,15 @@
         "lat": 48.874154,
         "lng": 2.773769
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/toad-hall-restaurant",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/toad-hall-restaurant"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -4065,10 +4992,15 @@
         "lat": 48.872234,
         "lng": 2.777902
       },
+      "officialUrl": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/victorias-home-style-restaurant",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-gb/dining/disneyland-park/victorias-home-style-restaurant"
         },
         {
           "label": "Service type and rating: planner editorial judgement"
@@ -4091,10 +5023,15 @@
         "lat": 48.871732,
         "lng": 2.777713
       },
+      "officialUrl": "https://www.disneylandparis.com/en-int/dining/disneyland-park/walts-american-restaurant",
       "sources": [
         {
           "label": "ThemeParks.wiki entity list",
           "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Official Disneyland Paris page",
+          "url": "https://www.disneylandparis.com/en-int/dining/disneyland-park/walts-american-restaurant"
         },
         {
           "label": "Service type and rating: planner editorial judgement"

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { sampleCatalog } from '../test/sampleCatalog'
 import { STORAGE_KEY, type KeyValueStorage } from './persistence'
-import { createPlannerStore, selectedDay, selectedTrip } from './store'
+import { createPlannerStore, mapPark, selectedDay, selectedTrip } from './store'
 
 class MemoryStorage implements KeyValueStorage {
   data = new Map<string, string>()
@@ -236,5 +236,39 @@ describe('group profile and filters', () => {
     expect(s().profile).toBeUndefined()
     s().setProfile({})
     expect(s().profile).toBeUndefined()
+  })
+})
+
+describe('map view state (park-map spec, Decision 6)', () => {
+  test('the catalog starts as a list; the view and map park are not saved', () => {
+    const storage = new MemoryStorage()
+    const { s } = setup(storage)
+    expect(s().catalogView).toBe('list')
+    s().setCatalogView('map')
+    s().setMapPark('daw')
+    const saved = storage.data.get(STORAGE_KEY) ?? ''
+    expect(saved).not.toContain('catalogView')
+    expect(saved).not.toContain('mapParkId')
+  })
+
+  test('the map shows the single-park filter, else the chosen park, else the last item’s park, else Disneyland Park', () => {
+    const { s, day } = setup()
+    expect(mapPark(s(), sampleCatalog)).toBe('dlp')
+    s().addItem(day().id, 'daw.avengers-flight-force')
+    expect(mapPark(s(), sampleCatalog)).toBe('daw')
+    s().setMapPark('dlp')
+    expect(mapPark(s(), sampleCatalog)).toBe('dlp')
+    s().setFilters({ parkId: 'daw' })
+    expect(mapPark(s(), sampleCatalog)).toBe('daw')
+  })
+
+  test('switching park on the map moves a single-park filter along and drops its areas', () => {
+    const { s } = setup()
+    s().setFilters({ parkId: 'dlp', areaIds: ['frontierland'], types: ['attraction'] })
+    s().setMapPark('daw')
+    expect(s().filters).toMatchObject({ parkId: 'daw', areaIds: [], types: ['attraction'] })
+    s().setFilters({ parkId: 'all', areaIds: ['frontierland'] })
+    s().setMapPark('dlp')
+    expect(s().filters).toMatchObject({ parkId: 'all', areaIds: ['frontierland'] })
   })
 })
