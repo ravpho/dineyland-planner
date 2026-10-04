@@ -25,6 +25,6 @@
 
 ## 5. Integration checks
 
-- [ ] 5.1 Run `openspec validate combine-parks-in-a-day --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass and CI on the branch is green
+- [x] 5.1 Run `openspec validate combine-parks-in-a-day --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass and CI on the branch is green
 - [ ] 5.2 Owner opens the deployed update on the phone that already holds a saved trip; verify the trip is still there and a park-hopping day can be planned
 - [ ] 5.3 When archiving, update the `trip-itinerary` main spec Purpose so it no longer says "one park … for each day"; verify `openspec validate --specs --strict` passes after the archive
