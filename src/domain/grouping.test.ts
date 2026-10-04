@@ -87,6 +87,17 @@ describe('group a day by area (route-optimization spec)', () => {
     expect(groupByArea(d, real)).toEqual(groupByArea(d, real))
   })
 
+  test('firstPark starts the grouped order in the other park', () => {
+    const d = day(['dlp.big-thunder-mountain', 'daw.frozen-ever-after', 'dlp.phantom-manor', 'daw.crushs-coaster'])
+    const order = grouped({ ...d, items: groupByArea(d, real, { firstPark: 'daw' }) }, real)
+    expect(groupByArea(d, real, { firstPark: 'daw' }).map((e) => e.itemId.slice(0, 3))).toEqual(['daw', 'daw', 'dlp', 'dlp'])
+    expect(order.slice(0, 2).sort()).toEqual(['daw.crushs-coaster', 'daw.frozen-ever-after'])
+    // A park the day does not use, or no option, keeps the park of the first item first.
+    expect(groupByArea(d, real, { firstPark: 'dlp' })).toEqual(groupByArea(d, real))
+    const dawOnly = day(['daw.frozen-ever-after', 'daw.crushs-coaster'])
+    expect(groupByArea(dawOnly, real, { firstPark: 'dlp' })).toEqual(groupByArea(dawOnly, real))
+  })
+
   test('entries keep their keys and show times', () => {
     const d = day(['dlp.big-thunder-mountain', 'daw.frozen-ever-after', 'dlp.phantom-manor'])
     expect([...groupByArea(d, real)].sort((a, b) => a.key.localeCompare(b.key))).toEqual(d.items)
@@ -128,6 +139,20 @@ describe('meals and shows keep their time (route-optimization spec)', () => {
     const d = day(['dlp.big-thunder-mountain', 'dlp.star-wars-hyperspace-mountain', 'dlp.walts', 'dlp.peter-pans-flight', ['dlp.parade', '13:30'], 'dlp.phantom-manor'])
     const order = groupByArea(d, sampleCatalog).map((e) => e.itemId)
     expect(order.indexOf('dlp.walts')).toBeLessThan(order.indexOf('dlp.parade'))
+  })
+
+  test('a lunch with a meal time goes where it is reached closest to that time', () => {
+    const rides = day(['dlp.big-thunder-mountain', 'daw.frozen-ever-after', 'dlp.phantom-manor', 'daw.crushs-coaster', 'dlp.pirates-of-the-caribbean', 'dlp.peter-pans-flight'])
+    const d: Day = { ...rides, items: [{ key: 'lunch', itemId: 'dlp.au-chalet-de-la-marionnette', mealTime: '12:00' }, ...rides.items] }
+    const order = groupByArea(d, real)
+    const chosen = Math.abs(arrivalAt({ ...d, items: order }, real, 'lunch').arrive - 12 * 60)
+    const others = order.filter((e) => e.key !== 'lunch')
+    for (let i = 0; i <= others.length; i++) {
+      const alternative = [...others.slice(0, i), d.items[0]!, ...others.slice(i)]
+      expect(Math.abs(arrivalAt({ ...d, items: alternative }, real, 'lunch').arrive - 12 * 60)).toBeGreaterThanOrEqual(chosen)
+    }
+    expect(order.findIndex((e) => e.key === 'lunch')).toBeGreaterThan(0) // not left first, where it was listed
+    expect(arrivalAt({ ...d, items: order }, real, 'lunch').lateBy).toBe(0)
   })
 
   test('a show that cannot be reached in time is placed right away', () => {

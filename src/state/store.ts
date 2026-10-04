@@ -2,6 +2,7 @@ import { createStore, type StoreApi } from 'zustand/vanilla'
 import type { Catalog, ParkId } from '../domain/catalog'
 import { DEFAULT_FILTERS, type CatalogFilters } from '../domain/filters'
 import { groupByArea } from '../domain/grouping'
+import { searchRoute } from '../domain/optimize'
 import { scheduleDay } from '../domain/schedule'
 import type { GroupProfile } from '../domain/suitability'
 import { monthOf } from '../domain/time'
@@ -15,11 +16,26 @@ export type AddResult = { ok: true; key: string } | { ok: false; reason: 'unknow
 /** Walking minutes are the day's timeline totals before and after grouping. */
 export type GroupResult = { changed: false } | { changed: true; walkBefore: number; walkAfter: number }
 
+/** A show whose start time optimizing changed. */
+export interface ShowTimeChange {
+  name: string
+  before: string
+  after: string
+}
+
+/** The day's end and its queueing plus walking minutes, from the timeline, before and after optimizing. */
+export type OptimizeResult =
+  | { changed: false }
+  | { changed: true; endBefore: number; endAfter: number; queueWalkBefore: number; queueWalkAfter: number; showTimes: ShowTimeChange[] }
+
 export interface PlannerState extends SavedState {
   filters: CatalogFilters
   lastRemoved?: { tripId: string; dayId: string; entry: PlanItem; index: number }
-  /** Session only (design Decision 4). `grouped` is the day's items array right after grouping. */
-  lastGrouped?: { dayId: string; previous: PlanItem[]; grouped: PlanItem[] }
+  /**
+   * Session only (optimize-day-route design Decision 7). Written by grouping, optimizing and swapping a
+   * restaurant; `changed` is the day's items array right after the change.
+   */
+  lastRouteChange?: { dayId: string; previous: PlanItem[]; changed: PlanItem[] }
   storage: LoadResult['status'] | 'ok'
   /** Session only, not saved (design Decision 6). */
   catalogView: CatalogView
@@ -34,15 +50,23 @@ export interface PlannerState extends SavedState {
   selectDay(dayId: string): void
   setTripLength(tripId: string, dayCount: number): void
   setDayWindow(dayId: string, start: string, end: string): void
-  addItem(dayId: string, itemId: string, options?: { index?: number; showTime?: string }): AddResult
+  addItem(dayId: string, itemId: string, options?: { index?: number; showTime?: string; mealTime?: string }): AddResult
   removeItem(dayId: string, key: string): void
   undoRemove(): void
   moveItem(dayId: string, from: number, to: number): void
   setShowTime(dayId: string, key: string, time: string): void
+  /** Sets or clears (undefined) a restaurant's meal time. */
+  setMealTime(dayId: string, key: string, time: string | undefined): void
+  /** Locks a show's time so optimizing keeps it. */
+  setShowLock(dayId: string, key: string, locked: boolean): void
   /** Reorders the day by park and area, keeping meals and shows at their time. */
   groupDayByArea(dayId: string): GroupResult
-  /** Restores the order before grouping, unless the day's items changed since. */
-  undoGroup(): void
+  /** Reorders the day, and picks unlocked show times, so it ends as early as the search can find. */
+  optimizeDayRoute(dayId: string): OptimizeResult
+  /** Replaces a restaurant in place, keeping its key and meal time. Returns false when nothing changed. */
+  swapRestaurant(dayId: string, key: string, itemId: string): boolean
+  /** Undoes the last grouping, optimizing or restaurant swap, unless the day's items changed since. */
+  undoRouteChange(): void
   importTrip(trip: Trip): void
   setProfile(profile: GroupProfile | undefined): void
   setFilters(filters: Partial<CatalogFilters>): void
@@ -137,6 +161,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         if (!item) return { ok: false, reason: 'unknown-item' }
         const entry: PlanItem = { key: newId(), itemId }
         if (item.type === 'show') entry.showTime = options.showTime ?? item.times[0]
+        if (item.type === 'restaurant' && options.mealTime) entry.mealTime = options.mealTime
         updateDay(dayId, (d) => {
           const list = [...d.items]
           list.splice(clamp(options.index ?? list.length, 0, list.length), 0, entry)
@@ -173,22 +198,77 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       setShowTime(dayId, key, time) {
         updateDay(dayId, (d) => ({ ...d, items: d.items.map((e) => (e.key === key ? { ...e, showTime: time } : e)) }))
       },
+      setMealTime(dayId, key, time) {
+        updateDay(dayId, (d) => ({
+          ...d,
+          items: d.items.map((e) => {
+            if (e.key !== key) return e
+            const { mealTime: _old, ...rest } = e
+            return time ? { ...rest, mealTime: time } : rest
+          }),
+        }))
+      },
+      setShowLock(dayId, key, locked) {
+        updateDay(dayId, (d) => ({
+          ...d,
+          items: d.items.map((e) => {
+            if (e.key !== key) return e
+            const { timeLocked: _old, ...rest } = e
+            return locked ? { ...rest, timeLocked: true } : rest
+          }),
+        }))
+      },
       groupDayByArea(dayId) {
         const day = findDay(dayId)?.day
         if (!day) return { changed: false }
         const grouped = groupByArea(day, catalog)
         if (grouped.every((e, i) => e === day.items[i])) return { changed: false }
         updateDay(dayId, (d) => ({ ...d, items: grouped }))
-        set({ lastGrouped: { dayId, previous: day.items, grouped } })
+        set({ lastRouteChange: { dayId, previous: day.items, changed: grouped } })
         const walking = (items: PlanItem[]) => scheduleDay({ ...day, items }, catalog).breakdown.walking
         return { changed: true, walkBefore: walking(day.items), walkAfter: walking(grouped) }
       },
-      undoGroup() {
-        const last = get().lastGrouped
+      optimizeDayRoute(dayId) {
+        const day = findDay(dayId)?.day
+        if (!day) return { changed: false }
+        const optimized = searchRoute(day, catalog).items
+        if (optimized.length === day.items.length && optimized.every((e, i) => e === day.items[i])) return { changed: false }
+        updateDay(dayId, (d) => ({ ...d, items: optimized }))
+        set({ lastRouteChange: { dayId, previous: day.items, changed: optimized } })
+        const before = scheduleDay(day, catalog)
+        const after = scheduleDay({ ...day, items: optimized }, catalog)
+        const previous = new Map(day.items.map((e) => [e.key, e]))
+        const showTimes = optimized.flatMap((e) => {
+          const item = items.get(e.itemId)
+          const old = previous.get(e.key)
+          if (item?.type !== 'show' || !old) return []
+          const [was, now] = [old.showTime ?? item.times[0]!, e.showTime ?? item.times[0]!]
+          return was === now ? [] : [{ name: item.name, before: was, after: now }]
+        })
+        return {
+          changed: true,
+          endBefore: before.end,
+          endAfter: after.end,
+          queueWalkBefore: before.breakdown.queueing + before.breakdown.walking,
+          queueWalkAfter: after.breakdown.queueing + after.breakdown.walking,
+          showTimes,
+        }
+      },
+      swapRestaurant(dayId, key, itemId) {
+        const day = findDay(dayId)?.day
+        const entry = day?.items.find((e) => e.key === key)
+        if (!day || !entry || entry.itemId === itemId || items.get(itemId)?.type !== 'restaurant' || items.get(entry.itemId)?.type !== 'restaurant') return false
+        const swapped = day.items.map((e) => (e === entry ? { ...e, itemId } : e))
+        updateDay(dayId, (d) => ({ ...d, items: swapped }))
+        set({ lastRouteChange: { dayId, previous: day.items, changed: swapped } })
+        return true
+      },
+      undoRouteChange() {
+        const last = get().lastRouteChange
         if (!last) return
-        // Any edit to the day's items replaces its array, so this only undoes an untouched grouping.
-        if (findDay(last.dayId)?.day.items === last.grouped) updateDay(last.dayId, (d) => ({ ...d, items: last.previous }))
-        set({ lastGrouped: undefined })
+        // Any edit to the day's items replaces its array, so this only undoes an untouched change.
+        if (findDay(last.dayId)?.day.items === last.changed) updateDay(last.dayId, (d) => ({ ...d, items: last.previous }))
+        set({ lastRouteChange: undefined })
       },
       importTrip(trip) {
         set((s) => ({ trips: [...s.trips, trip], selectedTripId: trip.id, selectedDayId: trip.days[0]?.id }))

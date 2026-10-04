@@ -98,6 +98,73 @@ describe('day schedule (day-schedule spec)', () => {
     expect(lunch!.end - lunch!.arrive).toBe(15 + 75)
   })
 
+  describe('meal times (optimize-day-route: Meals in the timeline)', () => {
+    // A filler ride at the entrance (1-minute walk), then lunch 170 m north (5-minute walk).
+    const c = catalogWith([attraction('filler', {}), restaurant('lunch', { location: north(170), mealMin: 75 }), attraction('after', { location: north(170) })])
+    const mealDay = (fillerMin: number, mealTime?: string): [Catalog, Day] => {
+      const cat = structuredClone(c)
+      ;(cat.items.find((i) => i.id === 'dlp.filler') as Attraction).durationMin = fillerMin
+      return [cat, { id: 'd1', date: '2026-08-12', start: '10:00', end: '22:00', items: [{ key: 'a', itemId: 'dlp.filler' }, { key: 'b', itemId: 'dlp.lunch', ...(mealTime ? { mealTime } : {}) }, { key: 'c', itemId: 'dlp.after' }] }]
+    }
+
+    test('early for lunch: free time until 30 minutes before the meal time, and the wait starts then', () => {
+      const [cat, d] = mealDay(59, '12:00') // filler ends 11:00
+      const [filler, lunch] = scheduled(scheduleDay(d, cat))
+      expect(formatClock(filler!.end)).toBe('11:00')
+      expect(formatClock(lunch!.arrive)).toBe('11:05')
+      expect(lunch!.freeBefore).toBe(25)
+      expect(lunch!.lateBy).toBe(0)
+      expect(formatClock(lunch!.start - lunch!.wait)).toBe('11:30')
+      expect(lunch!.wait).toBe(5) // table service, before the lunch peak
+      expect(lunch!.end - lunch!.start).toBe(75)
+    })
+
+    test('late for lunch: flagged, and the next items start from the meal end', () => {
+      const [cat, d] = mealDay(159, '12:00') // filler ends 12:40, lunch reached 12:45
+      const [, lunch, after] = scheduled(scheduleDay(d, cat))
+      expect(formatClock(lunch!.arrive)).toBe('12:45')
+      expect(lunch!.lateBy).toBe(15)
+      expect(lunch!.freeBefore).toBe(0)
+      expect(lunch!.wait).toBe(15) // lunch peak
+      expect(after!.arrive).toBe(lunch!.end + 1)
+    })
+
+    test('within the window: neither free time nor late', () => {
+      const [cat, d] = mealDay(109, '12:00') // reached 11:55
+      const [, lunch] = scheduled(scheduleDay(d, cat))
+      expect([lunch!.freeBefore, lunch!.lateBy]).toEqual([0, 0])
+    })
+
+    test('a restaurant without a meal time starts as soon as the user arrives and is never late', () => {
+      for (const fillerMin of [59, 159]) {
+        const [cat, d] = mealDay(fillerMin)
+        const [, lunch] = scheduled(scheduleDay(d, cat))
+        expect(lunch!.freeBefore).toBe(0)
+        expect(lunch!.lateBy).toBe(0)
+        expect(lunch!.start).toBe(lunch!.arrive + lunch!.wait)
+      }
+    })
+
+    test('changing a meal time from 12:00 to 13:00 turns the start into free time', () => {
+      const [cat, noon] = mealDay(109, '12:00') // filler ends 11:50, lunch reached 11:55
+      const [, at12] = scheduled(scheduleDay(noon, cat))
+      expect(at12!.freeBefore).toBe(0)
+      const [, at13] = scheduled(scheduleDay({ ...noon, items: noon.items.map((e) => (e.key === 'b' ? { ...e, mealTime: '13:00' } : e)) }, cat))
+      expect(at13!.freeBefore).toBe(35)
+      expect(formatClock(at13!.start - at13!.wait)).toBe('12:30')
+    })
+
+    test('the breakdown still adds up with meal windows', () => {
+      for (const [fillerMin, mealTime] of [[59, '12:00'], [159, '12:00'], [104, '13:00']] as const) {
+        const [cat, d] = mealDay(fillerMin, mealTime)
+        const s = scheduleDay(d, cat)
+        const b = s.breakdown
+        expect(b.queueing + b.attractions + b.meals + b.shows + b.walking + b.free).toBe(s.end - s.windowStart)
+        expect(b.meals).toBe(75)
+      }
+    })
+  })
+
   test('fits: last item ends 17:20 in a window ending 18:00', () => {
     const c = catalogWith([attraction('filler', { durationMin: 59 })])
     const s = scheduleDay(day('16:20', '18:00', ['dlp.filler']), c)

@@ -1,6 +1,6 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useMemo, useState } from 'react'
-import type { CatalogItem, Show } from '../domain/catalog'
+import type { CatalogItem, Restaurant, Show } from '../domain/catalog'
 import { filterCatalog, type ListedItem, type SortOrder } from '../domain/filters'
 import { MONTH_NAMES, useIsWide, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
@@ -11,6 +11,7 @@ import { FilterIcon, GripIcon, PlusIcon } from './icons'
 import { ItemDetail } from './ItemDetail'
 import { ParkMap } from './ParkMap'
 import { itemFacts, TYPE_LABELS } from './labels'
+import { MealTimePicker } from './MealTimePicker'
 import { ShowTimePicker } from './ShowTimePicker'
 import { Badge, IconButton, inputClass, Stars } from './ui'
 
@@ -64,6 +65,7 @@ export function CatalogList() {
   const addToDay = useAddToDay()
   const [open, setOpen] = useState<CatalogItem | null>(null)
   const [picking, setPicking] = useState<Show | null>(null)
+  const [pickingMeal, setPickingMeal] = useState<Restaurant | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   const view = usePlanner((s) => s.catalogView)
   const setView = usePlanner((s) => s.setCatalogView)
@@ -82,6 +84,7 @@ export function CatalogList() {
 
   const add = (item: CatalogItem) => {
     if (item.type === 'show') setPicking(item)
+    else if (item.type === 'restaurant') setPickingMeal(item)
     else addToDay(item)
   }
 
@@ -168,6 +171,16 @@ export function CatalogList() {
           onPick={(time) => {
             addToDay(picking, { showTime: time })
             setPicking(null)
+          }}
+        />
+      )}
+      {pickingMeal && (
+        <MealTimePicker
+          restaurant={pickingMeal}
+          onClose={() => setPickingMeal(null)}
+          onPick={(time) => {
+            addToDay(pickingMeal, time ? { mealTime: time } : {})
+            setPickingMeal(null)
           }}
         />
       )}

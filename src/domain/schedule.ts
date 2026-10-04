@@ -18,9 +18,9 @@ export interface ScheduledSlot {
   waitIsEstimate: boolean
   start: Minutes
   end: Minutes
-  /** Shows: free time before the early-arrival period. */
+  /** Shows: free time before the early-arrival period. Meals with a time: free time before the window opens. */
   freeBefore: Minutes
-  /** Shows: minutes after the time the user needed to be there. */
+  /** Shows: minutes after the time the user needed to be there. Meals with a time: minutes after the window closes. */
   lateBy: Minutes
   /** Ends after the day's window. */
   afterWindow: boolean
@@ -58,6 +58,50 @@ export interface DaySchedule {
   parks: ParkId[]
 }
 
+/** A meal with a time is reached within this many minutes of it (optimize-day-route design Decision 2). */
+export const MEAL_WINDOW_MIN = 30
+
+/** How one item fills the timeline once the user arrives there. */
+export interface ItemTiming {
+  wait: Minutes
+  waitIsEstimate: boolean
+  start: Minutes
+  end: Minutes
+  freeBefore: Minutes
+  lateBy: Minutes
+}
+
+/**
+ * Timing of one item when the user arrives at `arrive`. Shared by the timeline and the route search,
+ * so they never disagree (optimize-day-route design Decision 3).
+ */
+export function timeItem(item: CatalogItem, entry: PlanItem, arrive: Minutes, park: Park, month: number): ItemTiming {
+  if (item.type === 'show') {
+    const showStart = parseClock(entry.showTime ?? item.times[0]!)
+    const needBy = showStart - item.arriveEarlyMin
+    return {
+      wait: 0,
+      waitIsEstimate: false,
+      start: showStart,
+      end: Math.max(showStart + item.durationMin, arrive),
+      freeBefore: Math.max(0, needBy - arrive),
+      lateBy: Math.max(0, arrive - needBy),
+    }
+  }
+  let freeBefore = 0
+  let lateBy = 0
+  if (item.type === 'restaurant' && entry.mealTime) {
+    const mealTime = parseClock(entry.mealTime)
+    freeBefore = Math.max(0, mealTime - MEAL_WINDOW_MIN - arrive)
+    lateBy = Math.max(0, arrive - (mealTime + MEAL_WINDOW_MIN))
+  }
+  const begin = arrive + freeBefore
+  const estimate = itemWait(item, park, month, begin)
+  const start = begin + estimate.minutes
+  const duration = item.type === 'restaurant' ? mealMinutes(item) : item.durationMin
+  return { wait: estimate.minutes, waitIsEstimate: estimate.estimate, start, end: start + duration, freeBefore, lateBy }
+}
+
 /** Turns a day's ordered items into a timeline (design Decision 6). */
 export function scheduleDay(day: Day, catalog: Catalog, profile?: GroupProfile): DaySchedule {
   const parks = new Map(catalog.parks.map((p) => [p.id, p as Park]))
@@ -86,32 +130,12 @@ export function scheduleDay(day: Day, catalog: Catalog, profile?: GroupProfile):
     const arrive = t + walk
     breakdown.walking += walk
 
-    let wait = 0
-    let waitIsEstimate = false
-    let start: Minutes
-    let end: Minutes
-    let freeBefore = 0
-    let lateBy = 0
-    if (item.type === 'show') {
-      const showStart = parseClock(entry.showTime ?? item.times[0]!)
-      const needBy = showStart - item.arriveEarlyMin
-      freeBefore = Math.max(0, needBy - arrive)
-      lateBy = Math.max(0, arrive - needBy)
-      start = showStart
-      end = Math.max(showStart + item.durationMin, arrive)
-      breakdown.free += freeBefore
-      breakdown.shows += end - Math.max(arrive, needBy)
-    } else {
-      const estimate = itemWait(item, park, month, arrive)
-      wait = estimate.minutes
-      waitIsEstimate = estimate.estimate
-      start = arrive + wait
-      const duration = item.type === 'restaurant' ? mealMinutes(item) : item.durationMin
-      end = start + duration
-      breakdown.queueing += wait
-      if (item.type === 'restaurant') breakdown.meals += duration
-      else breakdown.attractions += duration
-    }
+    const { wait, waitIsEstimate, start, end, freeBefore, lateBy } = timeItem(item, entry, arrive, park, month)
+    breakdown.free += freeBefore
+    breakdown.queueing += wait
+    if (item.type === 'show') breakdown.shows += end - arrive - freeBefore
+    else if (item.type === 'restaurant') breakdown.meals += end - start
+    else breakdown.attractions += end - start
 
     slots.push({
       kind: 'scheduled',

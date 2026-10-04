@@ -20,11 +20,12 @@ export async function showTab(page: Page, tab: 'Catalog' | 'Plan') {
   if (await link.isVisible()) await link.click()
 }
 
-export async function addFromCatalog(page: Page, name: string, showTime?: string) {
+/** `time` picks a button in the sheet that opens for shows (a start time) and restaurants (a meal time or "Any time"). */
+export async function addFromCatalog(page: Page, name: string, time?: string) {
   await showTab(page, 'Catalog')
   await page.getByLabel('Search by name').fill(name)
   await page.getByRole('button', { name: `Add ${name} to day`, exact: true }).click()
-  if (showTime) await page.getByRole('dialog').getByRole('button', { name: showTime, exact: true }).click()
+  if (time) await page.getByRole('dialog').getByRole('button', { name: time, exact: true }).click()
   await page.getByLabel('Search by name').fill('')
 }
 

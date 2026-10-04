@@ -4,6 +4,10 @@ export interface PlanItem {
   itemId: string
   /** Planned start time for shows, HH:MM. */
   showTime?: string
+  /** Shows: optimizing keeps `showTime` as it is. */
+  timeLocked?: true
+  /** Restaurants: when the user wants to eat, HH:MM. Reached within 30 minutes of it. */
+  mealTime?: string
 }
 
 /** A day can hold items from both parks; it is not tied to one. */
