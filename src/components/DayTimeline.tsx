@@ -8,7 +8,7 @@ import type { Day } from '../domain/trip'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { useToast } from './Toast'
 import { DownIcon, GripIcon, TrashIcon, UpIcon, WalkIcon } from './icons'
-import { TYPE_LABELS } from './labels'
+import { TYPE_LABELS, areaName } from './labels'
 import { Badge, IconButton, inputClass } from './ui'
 
 export const DAY_DROP_ID = 'day-drop'
@@ -65,6 +65,9 @@ function SlotCard({ day, slot, index, count, windowEnd }: { day: Day; slot: Slot
                 <span className="font-medium text-slate-900" data-testid="slot-name">{slot.item.name}</span>
               </p>
               <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-slate-600">
+                <span className="font-medium text-slate-700" data-testid="slot-area">
+                  {areaName(slot.item, catalog)}
+                </span>
                 <span className="inline-flex items-center gap-1" data-testid="slot-walk">
                   <WalkIcon width={14} height={14} /> {slot.walk} min
                 </span>

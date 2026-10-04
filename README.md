@@ -7,7 +7,8 @@ Plan your days at Disneyland Paris. It covers both parks: Disneyland Park and Di
 - Each item links to its official Disneyland Paris page (where one was found) and opens in your maps app. Heights say how they were checked: official, matching independent sources, or not yet verified.
 - Filter by height, thrill and scariness, or save a group profile so unsuitable rides are greyed out automatically.
 - Build a day (or a multi-day trip) that **combines both parks**: items from Disneyland Park and Disney Adventure World in any order, added by tap or drag and reordered by drag.
-- See a timeline with walking (including park changes through both entrances), typical queues and fixed show times, and whether the day **fits** your time or how far it runs **over**. Days that use both parks remind you that you need a ticket valid for both.
+- **Group by area** in one tap. The day is reordered so each park's rides are together and the areas follow the shortest walk. Meals and shows keep their time. A message shows the walking saved, with Undo.
+- See a timeline with each item's area, walking (including park changes through both entrances), typical queues and fixed show times, and whether the day **fits** your time or how far it runs **over**. Days that use both parks remind you that you need a ticket valid for both.
 - Works on phones, installs to the home screen and works offline. Trips stay on your device; share links move them between devices.
 
 Waits are typical values built from real [Queue-Times.com](https://queue-times.com/en-US) statistics, not live data. Live in-park updates are planned next. This is an unofficial app, not affiliated with Disney.
@@ -57,7 +58,7 @@ To build for that path locally: `BASE_PATH=/dineyland-planner/ npm run build`.
 
 | Path | What |
 |---|---|
-| `src/domain/` | Framework-free logic: catalog schema, wait model, walking, scheduler, filters, map geometry and route, share links |
+| `src/domain/` | Framework-free logic: catalog schema, wait model, walking, scheduler, grouping by area, filters, map geometry and route, share links |
 | `src/state/` | Zustand store and device storage |
 | `src/components/`, `src/screens/` | React UI |
 | `scripts/data/` | Data collection and catalog build |

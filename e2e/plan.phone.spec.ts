@@ -121,3 +121,20 @@ test('park-hopping day: two park changes, ticket reminder, and a share round tri
   await expect(other.getByTestId('park-change')).toHaveCount(2)
 })
 
+
+test('group by area: one park change, areas shown, and undo', async ({ page }) => {
+  await createTrip(page, { name: 'Zig-zag day' })
+  for (const n of ['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"]) await addFromCatalog(page, n)
+  await showTab(page, 'Plan')
+  await expect(page.getByTestId('park-change')).toHaveCount(3)
+
+  await page.getByRole('button', { name: 'Group by area' }).click()
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Crush's Coaster", 'Frozen Ever After'])
+  expect(await page.getByTestId('slot-area').allTextContents()).toEqual(['Frontierland', 'Frontierland', 'Worlds of Pixar', 'World of Frozen'])
+  await expect(page.getByTestId('park-change')).toHaveCount(1)
+  await expect(page.getByRole('status').filter({ hasText: 'Grouped by area' })).toHaveText(/Grouped by area · walking 95 → 48 min/)
+
+  await page.getByRole('button', { name: 'Undo' }).click()
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"])
+  await expect(page.getByTestId('park-change')).toHaveCount(3)
+})

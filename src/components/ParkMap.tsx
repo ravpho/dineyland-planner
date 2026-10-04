@@ -25,7 +25,7 @@ import { areaCentres, entranceOf, locate } from '../domain/walking'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { mapPark, selectedDay } from '../state/store'
 import { CloseIcon, ExternalIcon, MinusIcon, PlusIcon } from './icons'
-import { itemFacts, TYPE_LABELS } from './labels'
+import { areaName, itemFacts, TYPE_LABELS } from './labels'
 import { Badge, Button, IconButton, Sheet, Stars } from './ui'
 
 /** Zone colours by area order: Main Street / Plaza, then the themed lands. */
@@ -379,7 +379,7 @@ function MapItemCard({
   const catalog = useCatalog()
   const { item, unsuitable } = listed
   const park = catalog.parks.find((p) => p.id === item.parkId)!
-  const area = park.areas.find((a) => a.id === item.areaId)?.name
+  const area = areaName(item, catalog)
   const centres = useMemo(() => areaCentres(catalog), [catalog])
   const walk = walkFromLastStop(schedule, item, catalog, centres)
   const last = schedule?.slots.filter((s) => s.kind === 'scheduled').at(-1)?.item

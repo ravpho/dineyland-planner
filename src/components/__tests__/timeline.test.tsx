@@ -83,6 +83,21 @@ describe('timeline marks (day-schedule spec)', () => {
     expect(screen.getByTestId('ticket-reminder')).toHaveTextContent(/ticket valid for Disneyland Park and Disney Adventure World/)
   })
 
+  test('each item shows its area', () => {
+    renderDay(day(['dlp.peter-pans-flight']))
+    expect(within(slots()[0]!).getByTestId('slot-area')).toHaveTextContent('Fantasyland')
+  })
+
+  test('items from both parks show their own areas', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'daw.avengers-flight-force']))
+    expect(screen.getAllByTestId('slot-area').map((a) => a.textContent)).toEqual(['Frontierland', 'Avengers Campus'])
+  })
+
+  test('an entry no longer available shows no area', () => {
+    renderDay(day(['dlp.retired']))
+    expect(within(slots()[0]!).queryByTestId('slot-area')).toBeNull()
+  })
+
   test('single-park day: no park change and no ticket reminder', () => {
     renderDay(day(['dlp.big-thunder-mountain', 'dlp.phantom-manor']))
     expect(screen.queryByTestId('park-change')).toBeNull()

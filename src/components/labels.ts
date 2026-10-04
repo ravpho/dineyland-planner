@@ -1,4 +1,4 @@
-import { SERVICE_LABELS, scareLabel, thrillLabel, type CatalogItem, type Coordinates, type HeightSource, type ItemType } from '../domain/catalog'
+import { SERVICE_LABELS, scareLabel, thrillLabel, type Catalog, type CatalogItem, type Coordinates, type HeightSource, type ItemType } from '../domain/catalog'
 
 export const TYPE_LABELS: Record<ItemType, string> = { attraction: 'Attraction', restaurant: 'Restaurant', show: 'Show' }
 
@@ -12,6 +12,11 @@ export const HEIGHT_SOURCE_LABELS: Record<HeightSource, string> = {
 /** Google Maps URL (documented, keyless format); opens the Maps app on phones that have it. */
 export function mapsUrl({ lat, lng }: Coordinates): string {
   return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
+}
+
+/** The name of the item's area, such as "Fantasyland". */
+export function areaName(item: CatalogItem, catalog: Catalog): string | undefined {
+  return catalog.parks.find((p) => p.id === item.parkId)?.areas.find((a) => a.id === item.areaId)?.name
 }
 
 export function heightLabel(minHeightCm: number | null): string {

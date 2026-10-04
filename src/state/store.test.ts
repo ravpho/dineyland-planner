@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest'
+import { scheduleDay } from '../domain/schedule'
 import { sampleCatalog } from '../test/sampleCatalog'
 import { STORAGE_KEY, type KeyValueStorage } from './persistence'
 import { createPlannerStore, mapPark, selectedDay, selectedTrip } from './store'
@@ -270,5 +271,80 @@ describe('map view state (park-map spec, Decision 6)', () => {
     s().setFilters({ parkId: 'all', areaIds: ['frontierland'] })
     s().setMapPark('dlp')
     expect(s().filters).toMatchObject({ parkId: 'all', areaIds: ['frontierland'] })
+  })
+})
+
+describe('group by area (route-optimization spec)', () => {
+  const zigzag = ['dlp.big-thunder-mountain', 'daw.avengers-flight-force', 'dlp.phantom-manor', 'dlp.parade']
+  const setupZigzag = (storage?: KeyValueStorage) => {
+    const t = setup(storage)
+    for (const id of zigzag) t.s().addItem(t.day().id, id)
+    return t
+  }
+
+  test('grouping reorders the day and reports walking before and after', () => {
+    const { s, day } = setupZigzag()
+    const before = day()
+    const result = s().groupDayByArea(day().id)
+    expect(ids(day().items)).toEqual(['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'daw.avengers-flight-force', 'dlp.parade'])
+    expect(result).toEqual({
+      changed: true,
+      walkBefore: scheduleDay(before, sampleCatalog).breakdown.walking,
+      walkAfter: scheduleDay(day(), sampleCatalog).breakdown.walking,
+    })
+    expect(result.changed && result.walkAfter < result.walkBefore).toBe(true)
+  })
+
+  test('an already grouped day is left alone', () => {
+    const { s, day } = setupZigzag()
+    s().groupDayByArea(day().id)
+    const grouped = day().items
+    expect(s().groupDayByArea(day().id)).toEqual({ changed: false })
+    expect(day().items).toBe(grouped)
+  })
+
+  test('undo restores the order before grouping', () => {
+    const { s, day } = setupZigzag()
+    s().groupDayByArea(day().id)
+    s().undoGroup()
+    expect(ids(day().items)).toEqual(zigzag)
+    expect(s().lastGrouped).toBeUndefined()
+  })
+
+  test('undo does nothing after an item was moved', () => {
+    const { s, day } = setupZigzag()
+    s().groupDayByArea(day().id)
+    s().moveItem(day().id, 0, 1)
+    const moved = ids(day().items)
+    s().undoGroup()
+    expect(ids(day().items)).toEqual(moved)
+  })
+
+  test('undo does nothing after a show time changed', () => {
+    const { s, day } = setupZigzag()
+    expect(s().groupDayByArea(day().id).changed).toBe(true)
+    const parade = day().items.find((e) => e.itemId === 'dlp.parade')!
+    s().setShowTime(day().id, parade.key, '17:30')
+    const edited = day().items
+    s().undoGroup()
+    expect(day().items).toBe(edited)
+    expect(ids(edited)).not.toEqual(zigzag)
+  })
+
+  test('items added after grouping go to the end', () => {
+    const { s, day } = setupZigzag()
+    s().groupDayByArea(day().id)
+    const grouped = ids(day().items)
+    s().addItem(day().id, 'dlp.peter-pans-flight')
+    expect(ids(day().items)).toEqual([...grouped, 'dlp.peter-pans-flight'])
+  })
+
+  test('the undo state is not saved on the device', () => {
+    const storage = new MemoryStorage()
+    const { s, day } = setupZigzag(storage)
+    s().groupDayByArea(day().id)
+    expect(s().lastGrouped).toBeDefined()
+    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastGrouped')
+    expect(createPlannerStore(sampleCatalog, storage).getState().lastGrouped).toBeUndefined()
   })
 })
