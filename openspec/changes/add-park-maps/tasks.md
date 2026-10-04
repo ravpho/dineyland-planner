@@ -8,10 +8,10 @@
 
 ## 2. Curated data
 
-- [ ] 2.1 Update Disneyland Park curated data from the guide: official durations, scariness at least Mild for every ride the guide says may frighten younger guests, Autopia's height as `official`, and the guide added to those items' sources. Verify `npm run data` reports no guide differences
-- [ ] 2.2 Reassess every attraction's height level: `corroborated` only where Wikipedia or one guide agrees with at least one other independent source (including "no minimum height"); otherwise `draft`. Record the sources used. Verify `data/REVIEW.md` lists each attraction with its level and the remaining drafts
-- [ ] 2.3 Add approximate positions (`locationApproximate: true`) for Meet Mickey Mouse, Princess Pavilion and Welcome to Starport, placed from neighbouring rides and the official map. Verify every catalog item now has a location
-- [ ] 2.4 Find official page addresses by web search for attractions, shows and restaurants of both parks, recording only addresses returned on `www.disneylandparis.com`, each with a source entry. Add park `officialMapUrl`: the guide PDF for Disneyland Park and a search-confirmed official page for Disney Adventure World. Verify the schema passes and the report's "no official link" list contains only items no search returned
+- [x] 2.1 Update Disneyland Park curated data from the guide: official durations, scariness at least Mild for every ride the guide says may frighten younger guests, Autopia's height as `official`, and the guide added to those items' sources. Verify `npm run data` reports no guide differences
+- [x] 2.2 Reassess every attraction's height level: `corroborated` only where Wikipedia or one guide agrees with at least one other independent source (including "no minimum height"); otherwise `draft`. Record the sources used. Verify `data/REVIEW.md` lists each attraction with its level and the remaining drafts
+- [x] 2.3 Add approximate positions (`locationApproximate: true`) for Meet Mickey Mouse, Princess Pavilion and Welcome to Starport, placed from neighbouring rides and the official map. Verify every catalog item now has a location
+- [x] 2.4 Find official page addresses by web search for attractions, shows and restaurants of both parks, recording only addresses returned on `www.disneylandparis.com`, each with a source entry. Add park `officialMapUrl`: the guide PDF for Disneyland Park and a search-confirmed official page for Disney Adventure World. Verify the schema passes and the report's "no official link" list contains only items no search returned
 
 ## 3. Map logic (pure modules)
 

@@ -75,6 +75,8 @@ The route is built from `scheduleDay` slots (missing items skipped). Stop number
 
 `ItemDetail` shows the level next to the height, together with the existing "follow posted signs" advice.
 
+*Added during implementation:* the official guide labels exactly the rides that have a minimum height as "Attraction subject to physical restrictions": Big Thunder Mountain, Star Tours, Hyperspace Mountain, Autopia and Indiana Jones. For Disneyland Park, a ride without that label in the guide, plus an independent source saying "no minimum height", therefore counts as `corroborated`. Where sources disagree (Spider-Man W.E.B. Adventure: "any height" vs "1.02 m recommended"), the height stays `draft`.
+
 ### 8. Official sources feed curated data through the build report
 - `collect.ts` also saves the guide's text (`pdftotext -raw`) as `data/raw/official-guide-dlp.txt`. The 1.5 MB PDF itself is not committed.
 - A parser (`scripts/data/officialGuide.ts`) extracts duration and "may frighten younger guests" per numbered entry.

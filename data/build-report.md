@@ -25,6 +25,23 @@ _None._
 
 _None._
 
+## Official guide differences (0)
+
+_None._
+
+## Official guide entries with a duration not linked to an item (3)
+
+- #12 Disneyland Railroad − Frontierland Depot
+- #38 Disneyland Railroad - Discoveryland Station
+- #25 Disneyland Railroad - Fantasyland Station
+
+## Items without an official page link (4)
+
+- Chez Berlioz (daw.chez-berlioz)
+- Chez Marie (daw.chez-marie)
+- Chez Toulouse (daw.chez-toulouse)
+- Speciality Ice Cream (daw.speciality-ice-cream)
+
 ## Curated Queue-Times ids not found (0)
 
 _None._
