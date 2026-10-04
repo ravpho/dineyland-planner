@@ -1,7 +1,8 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, screen } from '@testing-library/react'
 import { afterEach, describe, expect, test } from 'vitest'
 import App from './App'
 import { parseHash } from './routing'
+import { renderWithPlanner } from './test/render'
 
 afterEach(() => {
   window.location.hash = ''
@@ -16,12 +17,12 @@ describe('routing', () => {
     ['', 'Plan'],
   ])('%s renders the %s screen', (hash, heading) => {
     window.location.hash = hash
-    render(<App />)
+    renderWithPlanner(<App />)
     expect(screen.getByRole('heading', { name: heading })).toBeInTheDocument()
   })
 
   test('follows hash changes', async () => {
-    render(<App />)
+    renderWithPlanner(<App />)
     await act(async () => {
       window.location.hash = '#/about'
       window.dispatchEvent(new HashChangeEvent('hashchange'))

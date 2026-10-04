@@ -41,24 +41,24 @@
 
 ## 6. Catalog screens
 
-- [ ] 6.1 Build the catalog list (rows with name, type, rating and duration, plus height, thrill and wait range for the planned month on attractions), search box and match count; verify a component test renders rows and a Playwright test filters by typing "thunder"
-- [ ] 6.2 Build the filter panel and group profile editor (park, area, type, height, maximum thrill, maximum scariness, greyed or hidden unsuitable items with reasons, clear filters, sort); verify a Playwright test sets a 110 cm profile, sees a 120 cm ride greyed out with "Needs 120 cm", then hides it
-- [ ] 6.3 Build the item detail view for attractions, restaurants and shows, with a sources section and the "typical wait" explanation (years used, collection date); verify a component test per item type shows every field the park-catalog spec requires
+- [x] 6.1 Build the catalog list (rows with name, type, rating and duration, plus height, thrill and wait range for the planned month on attractions), search box and match count; verify a component test renders rows and a Playwright test filters by typing "thunder"
+- [x] 6.2 Build the filter panel and group profile editor (park, area, type, height, maximum thrill, maximum scariness, greyed or hidden unsuitable items with reasons, clear filters, sort); verify a Playwright test sets a 110 cm profile, sees a 120 cm ride greyed out with "Needs 120 cm", then hides it
+- [x] 6.3 Build the item detail view for attractions, restaurants and shows, with a sources section and the "typical wait" explanation (years used, collection date); verify a component test per item type shows every field the park-catalog spec requires
 
 ## 7. Trip and day screens
 
-- [ ] 7.1 Build trip management (create, rename, delete with confirmation, switch, change length with confirmation) and day settings (park, start and end time); verify a Playwright test creates a 3-day trip and sees the right dates
-- [ ] 7.2 Build the day item list with tap-to-add from the catalog, the other-park message, a show time picker, remove with undo, and move-up/move-down buttons; verify a Playwright test covering add, other-park rejection, remove with undo and move up
-- [ ] 7.3 Add dnd-kit reordering (200 ms long-press on touch, mouse, keyboard) and catalog-to-day dragging in the wide layout; verify Playwright tests reorder by touch drag at 390×844 and drop a catalog item into position at 1280×800
-- [ ] 7.4 Render the timeline per item (walk, arrival, wait, start, end, free time, "N min late", marks for items past the window end, unsuitability marks, "No longer available"); verify component tests for each mark type
-- [ ] 7.5 Add the fit summary and time breakdown, with the summary pinned to the bottom of the screen on phones; verify a Playwright test sees "Over by" change to "Fits" after removing an item and that the summary stays visible while scrolling a 15-item day
-- [ ] 7.6 Add "Copy share link" and the import screen (confirm to add as a new trip, error for unreadable links); verify a Playwright test exports a trip, opens the link in a fresh browser context, imports it and sees identical days and items
+- [x] 7.1 Build trip management (create, rename, delete with confirmation, switch, change length with confirmation) and day settings (park, start and end time); verify a Playwright test creates a 3-day trip and sees the right dates
+- [x] 7.2 Build the day item list with tap-to-add from the catalog, the other-park message, a show time picker, remove with undo, and move-up/move-down buttons; verify a Playwright test covering add, other-park rejection, remove with undo and move up
+- [x] 7.3 Add dnd-kit reordering (200 ms long-press on touch, mouse, keyboard) and catalog-to-day dragging in the wide layout; verify Playwright tests reorder by touch drag at 390×844 and drop a catalog item into position at 1280×800
+- [x] 7.4 Render the timeline per item (walk, arrival, wait, start, end, free time, "N min late", marks for items past the window end, unsuitability marks, "No longer available"); verify component tests for each mark type
+- [x] 7.5 Add the fit summary and time breakdown, with the summary pinned to the bottom of the screen on phones; verify a Playwright test sees "Over by" change to "Fits" after removing an item and that the summary stays visible while scrolling a 15-item day
+- [x] 7.6 Add "Copy share link" and the import screen (confirm to add as a new trip, error for unreadable links); verify a Playwright test exports a trip, opens the link in a fresh browser context, imports it and sees identical days and items
 
 ## 8. App shell, offline and about
 
-- [ ] 8.1 Build the responsive layouts (tabs below 768 px, side by side from 1024 px, 44 px minimum touch targets); verify a Playwright test at 360×740 finds no horizontal scroll and every button at least 44×44 px
-- [ ] 8.2 Configure vite-plugin-pwa (manifest, icons, pre-cache of app and catalog, update prompt that keeps trips); verify a Playwright test loads the app, goes offline, reloads and still sees the catalog and saved trips, and a Lighthouse installability check passes
-- [ ] 8.3 Build the about page (Powered by Queue-Times.com link, ThemeParks.wiki and Wikipedia credits, data date, unofficial-app statement, "follow posted signs" note, add-to-home-screen tip); verify a component test finds each element
+- [x] 8.1 Build the responsive layouts (tabs below 768 px, side by side from 1024 px, 44 px minimum touch targets); verify a Playwright test at 360×740 finds no horizontal scroll and every button at least 44×44 px
+- [x] 8.2 Configure vite-plugin-pwa (manifest, icons, pre-cache of app and catalog, update prompt that keeps trips); verify a Playwright test loads the app, goes offline, reloads and still sees the catalog and saved trips, and a Lighthouse installability check passes
+- [x] 8.3 Build the about page (Powered by Queue-Times.com link, ThemeParks.wiki and Wikipedia credits, data date, unofficial-app statement, "follow posted signs" note, add-to-home-screen tip); verify a component test finds each element
 - [ ] 8.4 Write the project README (what it is, run, test, refresh data, review data, deploy); verify the documented commands run as written
 
 ## 9. CI and deployment
