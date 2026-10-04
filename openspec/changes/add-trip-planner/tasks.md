@@ -35,9 +35,9 @@
 
 ## 5. State and persistence
 
-- [ ] 5.1 Build the Zustand store for trips: create, rename, delete, switch, change length, day park and window with defaults, add, remove with undo, reorder, show times, rejecting items from the other park, and removing items on park change after confirmation; verify unit tests for each trip-itinerary spec scenario that does not need the UI
-- [ ] 5.2 Save to `localStorage` under a versioned key with migrations, a "storage unavailable" flag, and a rule that data saved with a newer schema version is left alone; verify unit tests for reload persistence, migration from a v0 sample, unavailable storage and newer-version data
-- [ ] 5.3 Store the group profile (saved) and catalog filters (session only) with "clear filters" keeping the profile; verify unit tests for profile persistence and clear behaviour
+- [x] 5.1 Build the Zustand store for trips: create, rename, delete, switch, change length, day park and window with defaults, add, remove with undo, reorder, show times, rejecting items from the other park, and removing items on park change after confirmation; verify unit tests for each trip-itinerary spec scenario that does not need the UI
+- [x] 5.2 Save to `localStorage` under a versioned key with migrations, a "storage unavailable" flag, and a rule that data saved with a newer schema version is left alone; verify unit tests for reload persistence, migration from a v0 sample, unavailable storage and newer-version data
+- [x] 5.3 Store the group profile (saved) and catalog filters (session only) with "clear filters" keeping the profile; verify unit tests for profile persistence and clear behaviour
 
 ## 6. Catalog screens
 
