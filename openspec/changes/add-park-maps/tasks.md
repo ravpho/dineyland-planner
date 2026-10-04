@@ -33,7 +33,7 @@
 
 ## 6. Integration checks
 
-- [ ] 6.1 Add Playwright tests at 390×844: switch to Map, zoom in, tap Phantom Manor after planning Big Thunder Mountain and see the same walk as the timeline then shows, add from the card, see numbered stops, open the area table, reload offline and still see the map; and at 1280×800, check the map renders beside the plan. Verify `npm run e2e` passes
+- [x] 6.1 Add Playwright tests at 390×844: switch to Map, zoom in, tap Phantom Manor after planning Big Thunder Mountain and see the same walk as the timeline then shows, add from the card, see numbered stops, open the area table, reload offline and still see the map; and at 1280×800, check the map renders beside the plan. Verify `npm run e2e` passes
 - [ ] 6.2 Update the README and `data/README.md` (map view, official links, height levels, official guide snapshot); verify the documented commands run as written
 - [ ] 6.3 Run `openspec validate add-park-maps --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`, push, and check CI; verify all pass
 - [ ] 6.4 Owner checks the deployed map on a phone (find items by area, see the route of a park-hopping day, open an official page and "Open in Maps") and reviews the remaining draft heights in `data/REVIEW.md`; verify findings are fixed or recorded as follow-ups
