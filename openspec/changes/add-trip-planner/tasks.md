@@ -2,10 +2,10 @@
 
 ## 1. Project setup
 
-- [ ] 1.1 Scaffold a Vite + React + TypeScript app with Tailwind CSS at the repository root; verify `npm run dev` serves a page and `npm run build` writes `dist/`
-- [ ] 1.2 Add ESLint, Vitest and Playwright (configured to use the pre-installed Chromium at `/opt/pw-browsers`) with scripts `lint`, `typecheck`, `test`, `e2e`; verify each script runs and exits 0 with a placeholder test
-- [ ] 1.3 Extend `.claude/hooks/session-start.sh` to run `npm install` when `package.json` exists; verify by running the hook with `CLAUDE_CODE_REMOTE=true` in a clean checkout and seeing `node_modules/` created
-- [ ] 1.4 Add hash-based routing with placeholder screens for `#/catalog`, `#/plan`, `#/about` and `#/import/:data`; verify with a Vitest + React Testing Library test that each route renders its screen
+- [x] 1.1 Scaffold a Vite + React + TypeScript app with Tailwind CSS at the repository root; verify `npm run dev` serves a page and `npm run build` writes `dist/`
+- [x] 1.2 Add ESLint, Vitest and Playwright (configured to use the pre-installed Chromium at `/opt/pw-browsers`) with scripts `lint`, `typecheck`, `test`, `e2e`; verify each script runs and exits 0 with a placeholder test
+- [x] 1.3 Extend `.claude/hooks/session-start.sh` to run `npm install` when `package.json` exists; verify by running the hook with `CLAUDE_CODE_REMOTE=true` in a clean checkout and seeing `node_modules/` created
+- [x] 1.4 Add hash-based routing with placeholder screens for `#/catalog`, `#/plan`, `#/about` and `#/import/:data`; verify with a Vitest + React Testing Library test that each route renders its screen
 
 ## 2. Catalog data model and pipeline
 

@@ -15,3 +15,9 @@ fi
 if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
   echo 'export OPENSPEC_TELEMETRY=0' >> "$CLAUDE_ENV_FILE"
 fi
+
+# Install the app's dependencies so lint, tests and builds work in the session.
+if [ -f "${CLAUDE_PROJECT_DIR:-.}/package.json" ]; then
+  cd "${CLAUDE_PROJECT_DIR:-.}"
+  npm install --no-audit --no-fund >/dev/null 2>&1
+fi
