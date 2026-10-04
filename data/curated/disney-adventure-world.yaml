@@ -29,6 +29,8 @@ park:
   hoursSources:
   - {label: ThemeParks.wiki schedule (October–November 2026), url: 'https://api.themeparks.wiki/v1/entity/ca888437-ebb4-4d50-aed2-d227f7096968/schedule'}
   - {label: 'Other months: planner estimate'}
+  officialMapUrl: 'https://www.disneylandparis.com/en-usd/destinations/disney-adventure-world'
+  officialMapLabel: Official Disney Adventure World page
 items:
 - id: daw.avengers-assemble-flight-force
   type: attraction

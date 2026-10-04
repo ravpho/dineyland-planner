@@ -2,9 +2,9 @@
 
 ## 1. Data model and official sources
 
-- [ ] 1.1 Extend the catalog schema (design Decision 7): `officialUrl` (only `https://www.disneylandparis.com/...`), `locationApproximate`, attraction `heightSource` (`official` | `corroborated` | `draft`), and park `officialMapUrl` / `officialMapLabel`. Verify with schema tests that accept a valid sample and reject an official link on another host and an unknown height level
-- [ ] 1.2 Save the official Disneyland Park guide as text in `data/raw/official-guide-dlp.txt` from `collect.ts` (`pdftotext -raw`), and write `scripts/data/officialGuide.ts` to extract each entry's duration and "may frighten younger guests" flag. Verify parser tests against the committed text: Big Thunder Mountain is 5 minutes and frightening, and Pirates of the Caribbean is 10 minutes
-- [ ] 1.3 Extend `npm run data`'s report with the official-guide differences (durations, frightening rides with scariness None) and the items without an official link; generate the new height column in `data/REVIEW.md`. Verify a fixture test where a mismatched duration and a missing link both appear in the report
+- [x] 1.1 Extend the catalog schema (design Decision 7): `officialUrl` (only `https://www.disneylandparis.com/...`), `locationApproximate`, attraction `heightSource` (`official` | `corroborated` | `draft`), and park `officialMapUrl` / `officialMapLabel`. Verify with schema tests that accept a valid sample and reject an official link on another host and an unknown height level
+- [x] 1.2 Save the official Disneyland Park guide as text in `data/raw/official-guide-dlp.txt` from `collect.ts` (`pdftotext -raw`), and write `scripts/data/officialGuide.ts` to extract each entry's duration and "may frighten younger guests" flag. Verify parser tests against the committed text: Big Thunder Mountain is 5 minutes and frightening, and Pirates of the Caribbean is 10 minutes
+- [x] 1.3 Extend `npm run data`'s report with the official-guide differences (durations, frightening rides with scariness None) and the items without an official link; generate the new height column in `data/REVIEW.md`. Verify a fixture test where a mismatched duration and a missing link both appear in the report
 
 ## 2. Curated data
 

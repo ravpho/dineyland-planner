@@ -20,4 +20,6 @@ park:
     - { open: "09:30", close: "21:00" }
   hoursSources:
     - { label: Test fixture }
+  officialMapUrl: 'https://www.disneylandparis.com/en-int/destinations/test'
+  officialMapLabel: Test map
 items: []

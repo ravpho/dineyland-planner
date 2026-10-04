@@ -29,6 +29,8 @@ park:
   hoursSources:
   - {label: ThemeParks.wiki schedule (October–November 2026), url: 'https://api.themeparks.wiki/v1/entity/dae968d5-630d-4719-8b06-3d107e944401/schedule'}
   - {label: 'Other months: planner estimate'}
+  officialMapUrl: 'https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf'
+  officialMapLabel: Official Disneyland Park map (accessibility guide, PDF)
 items:
 - id: dlp.its-a-small-world
   type: attraction

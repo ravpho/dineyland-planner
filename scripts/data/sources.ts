@@ -29,3 +29,7 @@ export const CURATED_DIR = 'data/curated'
 export const CATALOG_FILE = 'src/data/catalog.json'
 export const REPORT_FILE = 'data/build-report.md'
 export const REVIEW_FILE = 'data/REVIEW.md'
+
+/** Official Disneyland Park accessibility guide (one-page poster with the park map). */
+export const OFFICIAL_GUIDE_DLP_URL = 'https://brochure.disneylandparis.com/HCP/EN/adlp/common/data/catalogue.pdf'
+export const OFFICIAL_GUIDE_DLP_TEXT_FILE = `${RAW_DIR}/official-guide-dlp.txt`

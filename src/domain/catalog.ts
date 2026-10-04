@@ -21,6 +21,13 @@ export const SERVICE_LABELS: Record<ServiceType, string> = {
 const clockTime = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'expected HH:MM')
 const coordinates = z.object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) })
 const source = z.object({ label: z.string().min(1), url: z.url().optional() })
+/** Only pages on the official Disneyland Paris website. */
+const officialUrl = z.url().refine((u) => u.startsWith('https://www.disneylandparis.com/'), {
+  message: 'official links must be on https://www.disneylandparis.com/',
+})
+
+export const HEIGHT_SOURCES = ['official', 'corroborated', 'draft'] as const
+export type HeightSource = (typeof HEIGHT_SOURCES)[number]
 
 const baseItem = z.object({
   id: z.string().regex(/^(dlp|daw)\.[a-z0-9-]+$/, 'expected <park>.<slug>'),
@@ -31,6 +38,9 @@ const baseItem = z.object({
   rating: z.number().int().min(1).max(5),
   ratingReason: z.string().min(1),
   location: coordinates.optional(),
+  /** The position was placed by hand and is not exact. */
+  locationApproximate: z.boolean().optional(),
+  officialUrl: officialUrl.optional(),
   sources: z.array(source).min(1),
   review: z.enum(['draft', 'reviewed']),
   themeparksId: z.string().optional(),
@@ -47,6 +57,8 @@ export const attractionSchema = baseItem
     type: z.literal('attraction'),
     durationMin: z.number().positive(),
     minHeightCm: z.number().int().positive().nullable(),
+    /** How the height rule was checked (design Decision 7). */
+    heightSource: z.enum(HEIGHT_SOURCES).default('draft'),
     ageRule: z.string().optional(),
     thrill: z.number().int().min(1).max(5),
     scare: z.number().int().min(0).max(3),
@@ -84,6 +96,9 @@ export const parkSchema = z.object({
   /** Relative crowd level per month (mean 1.0), January..December. */
   monthFactors: z.array(z.number().positive()).length(12),
   hoursSources: z.array(source).min(1),
+  /** Official park map or park page. */
+  officialMapUrl: z.url(),
+  officialMapLabel: z.string().min(1),
 })
 
 export const catalogSchema = z

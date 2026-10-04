@@ -8,6 +8,7 @@ import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { parse as parseYaml } from 'yaml'
 import { PARK_IDS, catalogSchema, type Catalog, type CatalogItem, type ParkId } from '../../src/domain/catalog'
+import { parseOfficialGuide, type GuideEntry } from './officialGuide'
 import { parseParkYearStats, parseRideStats, type ParkYearStats } from './queueTimes'
 import {
   CATALOG_FILE,
@@ -31,6 +32,8 @@ interface ThemeparksEntity {
 
 type CuratedItem = Omit<CatalogItem, 'parkId' | 'waitStats'> & {
   queueTimesId?: number
+  /** Number of the item on the official guide's map (Disneyland Park); used to compare facts. */
+  officialGuideNumber?: number
   [key: string]: unknown
 }
 
@@ -51,6 +54,8 @@ export interface BuildInput {
   /** Ride statistics from partial newer years, used only for attractions missing from `stats`. */
   fallbackStats?: Record<ParkId, Record<number, Omit<ParkYearStats, 'crowdByMonth'>>>
   collectedAt: string
+  /** Entries of the official Disneyland Park guide, when its text snapshot exists. */
+  officialGuide?: GuideEntry[]
 }
 
 export interface BuildReport {
@@ -59,6 +64,9 @@ export interface BuildReport {
   unknownThemeparksIds: { itemId: string; themeparksId: string }[]
   unknownQueueTimesIds: { itemId: string; queueTimesId: number }[]
   withoutStatistics: { itemId: string; name: string; hasFixedWait: boolean }[]
+  guideDifferences: { itemId: string; name: string; field: 'duration' | 'scare'; curated: string; guide: string }[]
+  guideEntriesUnlinked: { number: number; name: string }[]
+  withoutOfficialUrl: { itemId: string; name: string }[]
   reviewed: number
   draft: number
 }
@@ -73,6 +81,9 @@ export function buildCatalog(input: BuildInput): { catalog: unknown; report: Bui
     unknownThemeparksIds: [],
     unknownQueueTimesIds: [],
     withoutStatistics: [],
+    guideDifferences: [],
+    guideEntriesUnlinked: [],
+    withoutOfficialUrl: [],
     reviewed: 0,
     draft: 0,
   }
@@ -92,11 +103,24 @@ export function buildCatalog(input: BuildInput): { catalog: unknown; report: Bui
     const knownQueueTimes = new Map<number, string>()
     for (const s of [...parkStats, ...fallback]) for (const r of s.averages) knownQueueTimes.set(r.rideId, r.name)
 
+    const usedGuideNumbers = new Set<number>()
     const usedThemeparks = new Set(excluded?.themeparks?.map((e) => e.id))
     const usedQueueTimes = new Set(excluded?.queueTimes?.map((e) => e.id))
 
     for (const item of curatedItems) {
-      const { queueTimesId, location, ...rest } = item
+      const { queueTimesId, officialGuideNumber, location, ...rest } = item
+      if (!item.officialUrl) report.withoutOfficialUrl.push({ itemId: item.id, name: item.name })
+      if (officialGuideNumber !== undefined && input.officialGuide) {
+        usedGuideNumbers.add(officialGuideNumber)
+        const entry = input.officialGuide.find((e) => e.number === officialGuideNumber)
+        const durationMin = 'durationMin' in item ? (item.durationMin as number) : undefined
+        if (entry?.durationMin !== undefined && durationMin !== undefined && entry.durationMin !== durationMin) {
+          report.guideDifferences.push({ itemId: item.id, name: item.name, field: 'duration', curated: `${durationMin} min`, guide: `about ${entry.durationMin} min` })
+        }
+        if (entry?.frightening && item.type === 'attraction' && (item as { scare?: number }).scare === 0) {
+          report.guideDifferences.push({ itemId: item.id, name: item.name, field: 'scare', curated: 'None', guide: 'may frighten younger guests' })
+        }
+      }
       const out: Record<string, unknown> = { ...rest, parkId: park.id }
       if (item.review === 'reviewed') report.reviewed++
       else report.draft++
@@ -148,6 +172,11 @@ export function buildCatalog(input: BuildInput): { catalog: unknown; report: Bui
     for (const [id, name] of knownQueueTimes) {
       if (!usedQueueTimes.has(id)) report.unmatchedQueueTimes.push({ park: park.id, id, name })
     }
+    if (park.id === 'dlp' && input.officialGuide) {
+      for (const e of input.officialGuide) {
+        if (e.durationMin !== undefined && !usedGuideNumbers.has(e.number)) report.guideEntriesUnlinked.push({ number: e.number, name: e.name })
+      }
+    }
   }
 
   // Fixed park order (Disneyland Park first), whatever the curated file names are.
@@ -168,6 +197,9 @@ export function formatReport(report: BuildReport): string {
   section('Unmatched Queue-Times rides', report.unmatchedQueueTimes.map((r) => `${r.park}: ${r.name} (id ${r.id})`))
   section('Attractions without statistics', report.withoutStatistics.map((a) => `${a.name} (${a.itemId})${a.hasFixedWait ? ' – uses fixedWaitMin' : ' – NEEDS fixedWaitMin'}`))
   section('Curated ThemeParks.wiki ids not found', report.unknownThemeparksIds.map((x) => `${x.itemId}: ${x.themeparksId}`))
+  section('Official guide differences', report.guideDifferences.map((d) => `${d.name} (${d.itemId}) ${d.field}: curated ${d.curated}, guide ${d.guide}`))
+  section('Official guide entries with a duration not linked to an item', report.guideEntriesUnlinked.map((e) => `#${e.number} ${e.name}`))
+  section('Items without an official page link', report.withoutOfficialUrl.map((x) => `${x.name} (${x.itemId})`))
   section('Curated Queue-Times ids not found', report.unknownQueueTimesIds.map((x) => `${x.itemId}: ${x.queueTimesId}`))
   return lines.join('\n')
 }
@@ -182,13 +214,13 @@ export function formatReview(curated: CuratedPark[]): string {
     '# Attraction data review',
     '',
     'Generated by `npm run data` from `data/curated/`. Check each row, heights first, then edit the curated YAML',
-    "and set the entry's `review: reviewed`. \"draft\" heights were not found in a cited source: confirm them on park signage",
-    'or the official site.',
+    "and set the entry's `review: reviewed`. Height check: \"official\" = stated in an official Disneyland Paris document;",
+    '"corroborated" = independent sources agree; "draft" = not yet verified, confirm on park signage or the official site.',
     '',
   ]
   for (const { park, items } of curated) {
     const areas = new Map(park.areas.map((a) => [a.id, a.name]))
-    lines.push(`## ${park.name}`, '', '| ✓ | Attraction | Area | Min height | Height source | Age rule | Thrill | Scariness | Sources |', '|---|---|---|---|---|---|---|---|---|')
+    lines.push(`## ${park.name}`, '', '| ✓ | Attraction | Area | Min height | Height check | Age rule | Thrill | Scariness | Sources |', '|---|---|---|---|---|---|---|---|---|')
     for (const item of items) {
       if (item.type !== 'attraction') continue
       const a = item as CuratedItem & { minHeightCm: number | null; thrill: number; scare: number; ageRule?: string; heightSource?: string }
@@ -230,9 +262,11 @@ export async function runBuild(options: RunOptions = {}) {
       if (html) fallbackStats[park][year] = parseRideStats(html)
     }
   }
+  const guideText = await readFile(join(rawDir, 'official-guide-dlp.txt'), 'utf8').catch(() => null)
+  const officialGuide = guideText ? parseOfficialGuide(guideText) : undefined
   const collectedAt = (await readFile(options.rawDir ? join(rawDir, 'collected-at.txt') : COLLECTED_AT_FILE, 'utf8')).trim()
 
-  const { catalog, report } = buildCatalog({ curated, themeparks, stats, fallbackStats, collectedAt })
+  const { catalog, report } = buildCatalog({ curated, themeparks, stats, fallbackStats, collectedAt, officialGuide })
   await writeFile(options.reportFile ?? REPORT_FILE, formatReport(report))
   await writeFile(options.reviewFile ?? REVIEW_FILE, formatReview(curated))
   const result = catalogSchema.safeParse(catalog)

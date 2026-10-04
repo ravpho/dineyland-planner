@@ -52,9 +52,21 @@ describe('data build with fixture curated files', () => {
     expect(await readFile(join(dir, 'report.md'), 'utf8')).toMatch(/Peter Pan's Flight/)
   })
 
+  test('reports differences from the official guide and items without an official link', async () => {
+    expect(report.guideDifferences).toContainEqual({
+      itemId: 'dlp.big-thunder-mountain', name: 'Big Thunder Mountain', field: 'duration', curated: '4 min', guide: 'about 5 min',
+    })
+    expect(report.withoutOfficialUrl.map((x) => x.itemId)).toContain('dlp.big-thunder-mountain')
+    expect(report.guideEntriesUnlinked.map((e) => e.name)).toContain('Phantom Manor')
+    const md = await readFile(join(dir, 'report.md'), 'utf8')
+    expect(md).toMatch(/Official guide differences \(1\)/)
+    expect(md).toMatch(/Big Thunder Mountain \(dlp\.big-thunder-mountain\) duration: curated 4 min, guide about 5 min/)
+    expect(md).toMatch(/Items without an official page link/)
+  })
+
   test('writes a review checklist row per attraction', async () => {
     const review = await readFile(join(dir, 'REVIEW.md'), 'utf8')
-    expect(review).toMatch(/\| Big Thunder Mountain \| Frontierland \| 102 cm \|/)
+    expect(review).toMatch(/\| Big Thunder Mountain \| Frontierland \| 102 cm \| draft \|/)
   })
 
   test('leaves curated files byte-identical', async () => {

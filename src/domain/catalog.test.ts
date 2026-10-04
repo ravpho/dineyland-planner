@@ -28,6 +28,30 @@ describe('catalog schema', () => {
     expect(catalogSchema.safeParse(c).success).toBe(false)
   })
 
+  test('rejects an official link outside www.disneylandparis.com', () => {
+    const c = clone()
+    c.items[0]!.officialUrl = 'https://example.com/big-thunder'
+    const result = catalogSchema.safeParse(c)
+    expect(result.success).toBe(false)
+    expect(result.error!.issues.map((i) => i.message).join()).toMatch(/www\.disneylandparis\.com/)
+  })
+
+  test('rejects an unknown height level, and defaults a missing one to draft', () => {
+    const c = clone()
+    const a = c.items.find((i) => i.type === 'attraction') as { heightSource?: string }
+    a.heightSource = 'guess'
+    expect(catalogSchema.safeParse(c).success).toBe(false)
+    delete a.heightSource
+    const parsed = catalogSchema.parse(c)
+    expect((parsed.items[0] as { heightSource: string }).heightSource).toBe('draft')
+  })
+
+  test('requires an official map link per park', () => {
+    const c = clone() as unknown as { parks: Record<string, unknown>[] }
+    delete c.parks[0]!.officialMapUrl
+    expect(catalogSchema.safeParse(c).success).toBe(false)
+  })
+
   test('rejects an attraction with neither statistics nor a fixed wait', () => {
     const c = clone()
     const a = c.items.find((i) => i.type === 'attraction')!
