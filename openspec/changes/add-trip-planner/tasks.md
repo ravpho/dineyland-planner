@@ -59,7 +59,7 @@
 - [x] 8.1 Build the responsive layouts (tabs below 768 px, side by side from 1024 px, 44 px minimum touch targets); verify a Playwright test at 360×740 finds no horizontal scroll and every button at least 44×44 px
 - [x] 8.2 Configure vite-plugin-pwa (manifest, icons, pre-cache of app and catalog, update prompt that keeps trips); verify a Playwright test loads the app, goes offline, reloads and still sees the catalog and saved trips, and a Lighthouse installability check passes
 - [x] 8.3 Build the about page (Powered by Queue-Times.com link, ThemeParks.wiki and Wikipedia credits, data date, unofficial-app statement, "follow posted signs" note, add-to-home-screen tip); verify a component test finds each element
-- [ ] 8.4 Write the project README (what it is, run, test, refresh data, review data, deploy); verify the documented commands run as written
+- [x] 8.4 Write the project README (what it is, run, test, refresh data, review data, deploy); verify the documented commands run as written
 
 ## 9. CI and deployment
 
