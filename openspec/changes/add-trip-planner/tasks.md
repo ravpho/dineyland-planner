@@ -27,11 +27,11 @@
 
 ## 4. Planning logic (pure modules)
 
-- [ ] 4.1 Implement the wait model (attractions with statistics, fixed-wait attractions, restaurants by service type and peak, shows with no wait) per design Decision 4; verify unit tests for every wait-estimates spec scenario (busier month, midday versus opening, multiples of 5, walk-through estimate, lunch peak, fireworks)
-- [ ] 4.2 Implement walking time from coordinates with the area-centre fallback per design Decision 5; verify unit tests show neighbouring items get a shorter walk than opposite sides of the park and that an item without coordinates uses its area centre
-- [ ] 4.3 Implement `scheduleDay` per design Decision 6; verify unit tests for every day-schedule spec scenario (first item times, wait recalculated after reordering, free time before a show, late show, table-service meal, fits, over with marked items, breakdown adding up, unsuitable item still scheduled) and that unknown items are skipped
-- [ ] 4.4 Implement filtering, suitability reasons, accent- and case-insensitive search and sorting; verify unit tests for every catalog-filtering spec scenario and the park-catalog search scenarios
-- [ ] 4.5 Implement share-link encoding and decoding with lz-string and zod validation; verify unit tests for the round trip, a damaged link failing cleanly, and a 7-day trip with 15 items per day encoding to under 2,000 characters
+- [x] 4.1 Implement the wait model (attractions with statistics, fixed-wait attractions, restaurants by service type and peak, shows with no wait) per design Decision 4; verify unit tests for every wait-estimates spec scenario (busier month, midday versus opening, multiples of 5, walk-through estimate, lunch peak, fireworks)
+- [x] 4.2 Implement walking time from coordinates with the area-centre fallback per design Decision 5; verify unit tests show neighbouring items get a shorter walk than opposite sides of the park and that an item without coordinates uses its area centre
+- [x] 4.3 Implement `scheduleDay` per design Decision 6; verify unit tests for every day-schedule spec scenario (first item times, wait recalculated after reordering, free time before a show, late show, table-service meal, fits, over with marked items, breakdown adding up, unsuitable item still scheduled) and that unknown items are skipped
+- [x] 4.4 Implement filtering, suitability reasons, accent- and case-insensitive search and sorting; verify unit tests for every catalog-filtering spec scenario and the park-catalog search scenarios
+- [x] 4.5 Implement share-link encoding and decoding with lz-string and zod validation; verify unit tests for the round trip, a damaged link failing cleanly, and a 7-day trip with 15 items per day encoding to under 2,000 characters
 
 ## 5. State and persistence
 
