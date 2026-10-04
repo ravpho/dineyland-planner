@@ -38,5 +38,5 @@
 
 ## 4. Integration checks
 
-- [ ] 4.1 Run `openspec validate group-day-by-area --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass and CI on the branch is green
+- [x] 4.1 Run `openspec validate group-day-by-area --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass and CI on the branch is green
 - [ ] 4.2 Owner opens the deployed update on a phone, groups a real planned day that includes lunch and a show; verify walking drops in the message, lunch stays near its planned time, the show is not flagged late, and Undo restores the day
