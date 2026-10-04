@@ -4,7 +4,7 @@ import { MONTH_NAMES, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { unsuitableReason } from '../domain/suitability'
 import { ExternalIcon } from './icons'
-import { HEIGHT_SOURCE_LABELS, heightLabel, mapsUrl, TYPE_LABELS } from './labels'
+import { areaName, HEIGHT_SOURCE_LABELS, heightLabel, mapsUrl, TYPE_LABELS } from './labels'
 import { Badge, Button, Sheet, Stars } from './ui'
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -31,7 +31,7 @@ export function ItemDetail({ item, onClose, onAdd }: { item: CatalogItem; onClos
   const month = usePlanningMonth()
   const profile = usePlanner((s) => s.profile)
   const park = catalog.parks.find((p) => p.id === item.parkId)!
-  const area = park.areas.find((a) => a.id === item.areaId)?.name
+  const area = areaName(item, catalog)
   const reason = unsuitableReason(item, profile)
 
   return (

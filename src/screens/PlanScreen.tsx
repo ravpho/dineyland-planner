@@ -8,6 +8,7 @@ import { CreateTripForm } from '../components/CreateTripForm'
 import { DaySettings } from '../components/DaySettings'
 import { DayTimeline } from '../components/DayTimeline'
 import { Breakdown, FitBar, TicketReminder } from '../components/FitSummary'
+import { RouteActions } from '../components/RouteActions'
 import { TripBar } from '../components/TripBar'
 
 const PARK_SHORT = { dlp: 'DLP', daw: 'DAW' } as const
@@ -60,6 +61,7 @@ export default function PlanScreen() {
       </div>
       <DaySettings day={day} />
       <TicketReminder schedule={schedule} />
+      <RouteActions day={day} />
       <DayTimeline day={day} schedule={schedule} />
       <Breakdown schedule={schedule} />
       <FitBar schedule={schedule} />

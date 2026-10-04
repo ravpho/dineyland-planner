@@ -1,6 +1,8 @@
 import { createStore, type StoreApi } from 'zustand/vanilla'
 import type { Catalog, ParkId } from '../domain/catalog'
 import { DEFAULT_FILTERS, type CatalogFilters } from '../domain/filters'
+import { groupByArea } from '../domain/grouping'
+import { scheduleDay } from '../domain/schedule'
 import type { GroupProfile } from '../domain/suitability'
 import { monthOf } from '../domain/time'
 import { MAX_TRIP_DAYS, addDays, newId, type Day, type PlanItem, type Trip } from '../domain/trip'
@@ -10,9 +12,14 @@ export type CatalogView = 'list' | 'map'
 
 export type AddResult = { ok: true; key: string } | { ok: false; reason: 'unknown-item' | 'no-day' }
 
+/** Walking minutes are the day's timeline totals before and after grouping. */
+export type GroupResult = { changed: false } | { changed: true; walkBefore: number; walkAfter: number }
+
 export interface PlannerState extends SavedState {
   filters: CatalogFilters
   lastRemoved?: { tripId: string; dayId: string; entry: PlanItem; index: number }
+  /** Session only (design Decision 4). `grouped` is the day's items array right after grouping. */
+  lastGrouped?: { dayId: string; previous: PlanItem[]; grouped: PlanItem[] }
   storage: LoadResult['status'] | 'ok'
   /** Session only, not saved (design Decision 6). */
   catalogView: CatalogView
@@ -32,6 +39,10 @@ export interface PlannerState extends SavedState {
   undoRemove(): void
   moveItem(dayId: string, from: number, to: number): void
   setShowTime(dayId: string, key: string, time: string): void
+  /** Reorders the day by park and area, keeping meals and shows at their time. */
+  groupDayByArea(dayId: string): GroupResult
+  /** Restores the order before grouping, unless the day's items changed since. */
+  undoGroup(): void
   importTrip(trip: Trip): void
   setProfile(profile: GroupProfile | undefined): void
   setFilters(filters: Partial<CatalogFilters>): void
@@ -161,6 +172,23 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       },
       setShowTime(dayId, key, time) {
         updateDay(dayId, (d) => ({ ...d, items: d.items.map((e) => (e.key === key ? { ...e, showTime: time } : e)) }))
+      },
+      groupDayByArea(dayId) {
+        const day = findDay(dayId)?.day
+        if (!day) return { changed: false }
+        const grouped = groupByArea(day, catalog)
+        if (grouped.every((e, i) => e === day.items[i])) return { changed: false }
+        updateDay(dayId, (d) => ({ ...d, items: grouped }))
+        set({ lastGrouped: { dayId, previous: day.items, grouped } })
+        const walking = (items: PlanItem[]) => scheduleDay({ ...day, items }, catalog).breakdown.walking
+        return { changed: true, walkBefore: walking(day.items), walkAfter: walking(grouped) }
+      },
+      undoGroup() {
+        const last = get().lastGrouped
+        if (!last) return
+        // Any edit to the day's items replaces its array, so this only undoes an untouched grouping.
+        if (findDay(last.dayId)?.day.items === last.grouped) updateDay(last.dayId, (d) => ({ ...d, items: last.previous }))
+        set({ lastGrouped: undefined })
       },
       importTrip(trip) {
         set((s) => ({ trips: [...s.trips, trip], selectedTripId: trip.id, selectedDayId: trip.days[0]?.id }))
