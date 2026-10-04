@@ -3,6 +3,8 @@
 Plan your days at Disneyland Paris. It covers both parks: Disneyland Park and Disney Adventure World.
 
 - Browse every attraction, restaurant and show of both parks in one list, each labelled with its park and area. Each has a description, a "worth it" rating, duration, height limit, thrill level, scariness and typical waits by month and time of day. Sort by name, rating, busiest wait or duration.
+- Switch the catalog to a **map** of either park: area zones, every item at its position, zoom and drag, the walk from your last planned stop, walking times between areas, and your day's route with numbered stops.
+- Each item links to its official Disneyland Paris page (where one was found) and opens in your maps app. Heights say how they were checked: official, matching independent sources, or not yet verified.
 - Filter by height, thrill and scariness, or save a group profile so unsuitable rides are greyed out automatically.
 - Build a day (or a multi-day trip) that **combines both parks**: items from Disneyland Park and Disney Adventure World in any order, added by tap or drag and reordered by drag.
 - See a timeline with walking (including park changes through both entrances), typical queues and fixed show times, and whether the day **fits** your time or how far it runs **over**. Days that use both parks remind you that you need a ticket valid for both.
@@ -43,7 +45,7 @@ See [data/README.md](data/README.md) for the sources, the curated file format an
 
 ## Review the data
 
-Descriptions, ratings, heights, thrill and scariness start as drafts. Open [data/REVIEW.md](data/REVIEW.md), check each attraction (heights first), correct `data/curated/*.yaml`, set `review: reviewed`, and run `npm run data`.
+Descriptions, ratings, heights, thrill and scariness start as drafts. Open [data/REVIEW.md](data/REVIEW.md), check each attraction (heights marked "draft" first), correct `data/curated/*.yaml`, set `review: reviewed`, and run `npm run data`. The height check levels are explained in [data/README.md](data/README.md#height-check-levels).
 
 ## Deploy
 
@@ -55,7 +57,7 @@ To build for that path locally: `BASE_PATH=/dineyland-planner/ npm run build`.
 
 | Path | What |
 |---|---|
-| `src/domain/` | Framework-free logic: catalog schema, wait model, walking, scheduler, filters, share links |
+| `src/domain/` | Framework-free logic: catalog schema, wait model, walking, scheduler, filters, map geometry and route, share links |
 | `src/state/` | Zustand store and device storage |
 | `src/components/`, `src/screens/` | React UI |
 | `scripts/data/` | Data collection and catalog build |
