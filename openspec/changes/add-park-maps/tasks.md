@@ -15,10 +15,10 @@
 
 ## 3. Map logic (pure modules)
 
-- [ ] 3.1 Add the local metre projection and park bounds (Decision 1). Verify unit tests: the park entrance projects inside the bounds, 0.001° of latitude is about 111 m, and x distances are scaled by cos(latitude)
-- [ ] 3.2 Add area zone geometry (convex hull with fallbacks for one or two points, Decision 2) and greedy label placement (Decision 3). Verify unit tests for a hull of a square plus an inner point, the one- and two-point cases, and that overlapping labels keep the higher-rated one
-- [ ] 3.3 Add map walking helpers: walk from the selected day's last stop, walk to each area, and the area-to-area table (Decision 4). Verify that a unit test's "walk from last stop" equals the walk `scheduleDay` computes after appending the same item, both within a park and across parks, and that the table is symmetric with a dash on the diagonal
-- [ ] 3.4 Add the route model from `scheduleDay` slots: day-wide stop numbers, solid segments within the shown park, and dashed park-change segments to the entrance (Decision 5). Verify unit tests for three Disneyland Park stops numbered 1, 2, 3, and for Big Thunder Mountain → Frozen Ever After producing an outgoing dashed segment labelled "to Disney Adventure World"
+- [x] 3.1 Add the local metre projection and park bounds (Decision 1). Verify unit tests: the park entrance projects inside the bounds, 0.001° of latitude is about 111 m, and x distances are scaled by cos(latitude)
+- [x] 3.2 Add area zone geometry (convex hull with fallbacks for one or two points, Decision 2) and greedy label placement (Decision 3). Verify unit tests for a hull of a square plus an inner point, the one- and two-point cases, and that overlapping labels keep the higher-rated one
+- [x] 3.3 Add map walking helpers: walk from the selected day's last stop, walk to each area, and the area-to-area table (Decision 4). Verify that a unit test's "walk from last stop" equals the walk `scheduleDay` computes after appending the same item, both within a park and across parks, and that the table is symmetric with a dash on the diagonal
+- [x] 3.4 Add the route model from `scheduleDay` slots: day-wide stop numbers, solid segments within the shown park, and dashed park-change segments to the entrance (Decision 5). Verify unit tests for three Disneyland Park stops numbered 1, 2, 3, and for Big Thunder Mountain → Frozen Ever After producing an outgoing dashed segment labelled "to Disney Adventure World"
 
 ## 4. Map UI
 
