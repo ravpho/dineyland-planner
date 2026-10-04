@@ -139,7 +139,7 @@
 
 ## 7. Integration checks
 
-- [ ] 7.1 Run `openspec validate optimize-day-route --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass and CI on the branch is green
+- [x] 7.1 Run `openspec validate optimize-day-route --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass and CI on the branch is green
 - [ ] 7.2 Owner opens the deployed update on a phone, plans a real day with lunch at 12:00, dinner at 18:00 and an unlocked show, and optimizes it. Verify:
   - the end time drops in the message;
   - both meals stay within 30 minutes of their times;
