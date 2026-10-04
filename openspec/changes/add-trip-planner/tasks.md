@@ -9,20 +9,20 @@
 
 ## 2. Catalog data model and pipeline
 
-- [ ] 2.1 Define the catalog types and a zod schema (parks, areas, entrance coordinates, attractions, restaurants, shows, thrill and scariness scales, sources, data date); verify unit tests accept a valid sample and reject samples with a missing park, an out-of-range thrill level and a description over 300 characters
-- [ ] 2.2 Write `scripts/data/collect.ts` to save the ThemeParks.wiki children list and the Queue-Times stats pages for parks 4 and 28, years 2023–2025, into `data/raw/`; run it and verify all 7 snapshot files exist and are non-empty
-- [ ] 2.3 Write the Queue-Times parser (per-ride average and average-maximum queue time, crowd level by month); verify Vitest tests against the committed snapshots return values for known rides and 12 monthly crowd levels per park and year
-- [ ] 2.4 Write `scripts/data/build.ts` (`npm run data`) that merges curated YAML with parsed statistics into `src/data/catalog.json`, validates it with the schema, and writes `data/build-report.md` listing unmatched source items and attractions without statistics; verify with a fixture-based test that the report names an unmatched ride and that curated files are byte-identical after the run
-- [ ] 2.5 Document the data pipeline (commands, file layout, how to add an entry, which years are used) in `data/README.md`; verify the documented commands run as written
+- [x] 2.1 Define the catalog types and a zod schema (parks, areas, entrance coordinates, attractions, restaurants, shows, thrill and scariness scales, sources, data date); verify unit tests accept a valid sample and reject samples with a missing park, an out-of-range thrill level and a description over 300 characters
+- [x] 2.2 Write `scripts/data/collect.ts` to save the ThemeParks.wiki children list and the Queue-Times stats pages for parks 4 and 28, years 2023–2025, into `data/raw/`; run it and verify all 7 snapshot files exist and are non-empty
+- [x] 2.3 Write the Queue-Times parser (per-ride average and average-maximum queue time, crowd level by month); verify Vitest tests against the committed snapshots return values for known rides and 12 monthly crowd levels per park and year
+- [x] 2.4 Write `scripts/data/build.ts` (`npm run data`) that merges curated YAML with parsed statistics into `src/data/catalog.json`, validates it with the schema, and writes `data/build-report.md` listing unmatched source items and attractions without statistics; verify with a fixture-based test that the report names an unmatched ride and that curated files are byte-identical after the run
+- [x] 2.5 Document the data pipeline (commands, file layout, how to add an entry, which years are used) in `data/README.md`; verify the documented commands run as written
 
 ## 3. Curated catalog content
 
-- [ ] 3.1 Draft `data/curated/disneyland-park.yaml` with areas, entrance coordinates and every attraction, including meet-and-greets that have queues. Each entry gets ids, Queue-Times name, a description of at most 300 characters, a rating with reason, duration, minimum height, age rules, thrill, scariness, `fixedWaitMin` where there are no statistics, sources and `review: draft`, based on Wikipedia, ThemeParks.wiki and Queue-Times. Verify `npm run data` reports no unmatched Disneyland Park attractions
-- [ ] 3.2 Draft `data/curated/disney-adventure-world.yaml` the same way for Disney Adventure World; verify `npm run data` reports no unmatched attractions for that park
-- [ ] 3.3 Add the restaurants of both parks (service type, description, rating, meal-duration override where needed, sources); verify the build report lists no unmatched ThemeParks.wiki restaurants other than ones deliberately excluded, each with a reason
-- [ ] 3.4 Add the scheduled shows of both parks (typical start times, duration, `arriveEarlyMin`, area, sources), including the daytime parade and the evening fireworks; verify the schema test passes and each show has at least one start time
-- [ ] 3.5 Add typical opening and closing times per park per month, marked as estimates with sources; verify the schema test passes and every month has hours for both parks
-- [ ] 3.6 Generate `data/REVIEW.md`, a checklist table of every attraction's height, thrill, scariness and sources for the owner to confirm; verify the file lists every attraction in the catalog
+- [x] 3.1 Draft `data/curated/disneyland-park.yaml` with areas, entrance coordinates and every attraction, including meet-and-greets that have queues. Each entry gets ids, Queue-Times name, a description of at most 300 characters, a rating with reason, duration, minimum height, age rules, thrill, scariness, `fixedWaitMin` where there are no statistics, sources and `review: draft`, based on Wikipedia, ThemeParks.wiki and Queue-Times. Verify `npm run data` reports no unmatched Disneyland Park attractions
+- [x] 3.2 Draft `data/curated/disney-adventure-world.yaml` the same way for Disney Adventure World; verify `npm run data` reports no unmatched attractions for that park
+- [x] 3.3 Add the restaurants of both parks (service type, description, rating, meal-duration override where needed, sources); verify the build report lists no unmatched ThemeParks.wiki restaurants other than ones deliberately excluded, each with a reason
+- [x] 3.4 Add the scheduled shows of both parks (typical start times, duration, `arriveEarlyMin`, area, sources), including the daytime parade and the evening fireworks; verify the schema test passes and each show has at least one start time
+- [x] 3.5 Add typical opening and closing times per park per month, marked as estimates with sources; verify the schema test passes and every month has hours for both parks
+- [x] 3.6 Generate `data/REVIEW.md`, a checklist table of every attraction's height, thrill, scariness and sources for the owner to confirm; verify the file lists every attraction in the catalog
 - [ ] 3.7 Owner reviews `data/REVIEW.md`, heights first, and corrections are applied with entries set to `review: reviewed`; verify `npm run data` succeeds and the report shows the reviewed count
 
 ## 4. Planning logic (pure modules)

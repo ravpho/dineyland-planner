@@ -1,0 +1,740 @@
+# Hand-reviewed catalog data for Disney Adventure World.
+# `npm run data` merges this file with data/raw/ into src/data/catalog.json.
+# The build never writes to this file. See data/README.md for the field reference.
+# heightSource: wikipedia = height taken from the cited article; draft = drafted, check park signage.
+park:
+  id: daw
+  name: Disney Adventure World
+  themeparksId: ca888437-ebb4-4d50-aed2-d227f7096968
+  entrance: {lat: 48.868391, lng: 2.780802}
+  areas:
+  - {id: world-premiere-plaza, name: World Premiere Plaza}
+  - {id: worlds-of-pixar, name: Worlds of Pixar}
+  - {id: avengers-campus, name: Marvel Avengers Campus}
+  - {id: adventure-way, name: Adventure Way}
+  - {id: world-of-frozen, name: World of Frozen}
+  hours:
+  - {open: '10:00', close: '20:00'}
+  - {open: '09:30', close: '21:00'}
+  - {open: '09:30', close: '21:00'}
+  - {open: '09:30', close: '22:00'}
+  - {open: '09:30', close: '22:00'}
+  - {open: '09:30', close: '23:00'}
+  - {open: '09:30', close: '23:00'}
+  - {open: '09:30', close: '23:00'}
+  - {open: '09:30', close: '22:00'}
+  - {open: '09:00', close: '22:00'}
+  - {open: '09:30', close: '21:00'}
+  - {open: '10:00', close: '21:00'}
+  hoursSources:
+  - {label: ThemeParks.wiki schedule (October–November 2026), url: 'https://api.themeparks.wiki/v1/entity/ca888437-ebb4-4d50-aed2-d227f7096968/schedule'}
+  - {label: 'Other months: planner estimate'}
+items:
+- id: daw.avengers-assemble-flight-force
+  type: attraction
+  name: 'Avengers Assemble: Flight Force'
+  areaId: avengers-campus
+  themeparksId: ff2e7d6f-5aaf-47b8-8695-53a66e9fe073
+  queueTimesId: 10848
+  description: Launched indoor roller coaster with inversions, flying with Iron Man and Captain Marvel. Intense and mostly
+    in the dark.
+  rating: 4
+  ratingReason: Strong thrills with short waits for a coaster.
+  durationMin: 2
+  minHeightCm: 120
+  heightSource: wikipedia
+  thrill: 5
+  scare: 1
+  sources:
+  - {label: 'Wikipedia: Avengers Assemble: Flight Force', url: 'https://en.wikipedia.org/wiki/Avengers_Assemble:_Flight_Force'}
+  - &id001 {label: 'Queue-Times statistics, Disney Adventure World', url: 'https://queue-times.com/parks/28/stats'}
+  - &id002 {label: ThemeParks.wiki entity list, url: 'https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children'}
+  - &id003 {label: 'Rating, thrill and scariness: planner editorial judgement'}
+  review: draft
+- id: daw.cars-quatre-roues-rallye
+  type: attraction
+  name: Cars Quatre Roues Rallye
+  areaId: worlds-of-pixar
+  themeparksId: d944b02c-12ce-4176-ac62-6a936f180b5c
+  queueTimesId: 31
+  description: Spinning cars at a Radiator Springs service station that whirl around each other like a teacup ride.
+  rating: 2
+  ratingReason: Short spinner; fine if the queue is short.
+  durationMin: 2
+  minHeightCm: null
+  heightSource: draft
+  thrill: 2
+  scare: 0
+  sources:
+  - {label: 'Wikipedia: Cars Quatre Roues Rallye', url: 'https://en.wikipedia.org/wiki/Cars_Quatre_Roues_Rallye'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.cars-road-trip
+  type: attraction
+  name: Cars ROAD TRIP
+  areaId: worlds-of-pixar
+  themeparksId: 449a20d8-9bfd-4b2b-b437-38a279aa8d88
+  queueTimesId: 29
+  description: Tram tour through scenes inspired by the Cars films, including a special-effects canyon scene.
+  rating: 3
+  ratingReason: Relaxed ride with one big effects scene.
+  durationMin: 7
+  minHeightCm: null
+  heightSource: draft
+  thrill: 1
+  scare: 1
+  sources:
+  - {label: 'Wikipedia: Cars: Road Trip', url: 'https://en.wikipedia.org/wiki/Cars:_Road_Trip'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.crushs-coaster
+  type: attraction
+  name: Crush's Coaster
+  areaId: worlds-of-pixar
+  themeparksId: f0d4b531-e291-471b-9527-00410c2bbd65
+  queueTimesId: 32
+  description: Spinning roller coaster in sea-turtle shells, riding the East Australian Current from Finding Nemo, mostly
+    in the dark.
+  rating: 4
+  ratingReason: Great fun, but the queue is often the longest in the park.
+  durationMin: 2
+  minHeightCm: 107
+  heightSource: wikipedia
+  thrill: 4
+  scare: 1
+  sources:
+  - {label: 'Wikipedia: Crush''s Coaster', url: 'https://en.wikipedia.org/wiki/Crush''s_Coaster'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.frozen-ever-after
+  type: attraction
+  name: Frozen Ever After
+  areaId: world-of-frozen
+  themeparksId: 630e2675-f9fc-4984-ba83-03daf5fc89ed
+  queueTimesId: 15413
+  description: Boat ride through Arendelle and Elsa's ice palace with songs from Frozen, including a short backwards section
+    and a small drop. Opened in 2026.
+  rating: 5
+  ratingReason: New headliner with superb animatronics.
+  durationMin: 5
+  minHeightCm: null
+  heightSource: draft
+  thrill: 2
+  scare: 1
+  sources:
+  - {label: 'Wikipedia: Frozen Ever After', url: 'https://en.wikipedia.org/wiki/Frozen_Ever_After'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.flying-carpets-over-agrabah
+  type: attraction
+  name: Les Tapis Volants – Flying Carpets Over Agrabah
+  areaId: world-premiere-plaza
+  themeparksId: 8e229723-51c1-4668-b956-5bc45305acd9
+  queueTimesId: 33
+  description: Flying-carpet spinner that you steer up and down, set on an Aladdin film set.
+  rating: 2
+  ratingReason: Simple spinner for young children.
+  durationMin: 2
+  minHeightCm: null
+  heightSource: draft
+  thrill: 1
+  scare: 0
+  sources:
+  - {label: 'Wikipedia: The Magic Carpets of Aladdin', url: 'https://en.wikipedia.org/wiki/The_Magic_Carpets_of_Aladdin'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.rc-racer
+  type: attraction
+  name: RC Racer
+  areaId: worlds-of-pixar
+  themeparksId: 15bad9c3-8378-4ac5-ab90-2f8d0ee09d26
+  queueTimesId: 34
+  description: Half-pipe coaster that swings RC backwards and forwards up a 25-metre track. Short and stomach-churning.
+  rating: 3
+  ratingReason: Short burst of thrills; queue can be long for one minute.
+  durationMin: 1
+  minHeightCm: 120
+  heightSource: wikipedia
+  thrill: 4
+  scare: 0
+  sources:
+  - {label: 'Wikipedia: RC Racer', url: 'https://en.wikipedia.org/wiki/RC_Racer'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.raiponce-tangled-spin
+  type: attraction
+  name: Raiponce Tangled Spin
+  areaId: adventure-way
+  themeparksId: 25556e4e-aa6c-41ff-b196-29967362345e
+  queueTimesId: 15415
+  description: Spinning boats circling under floating lanterns from Tangled, on Adventure Way. Opened in 2026.
+  rating: 3
+  ratingReason: Pretty, gentle spinner for families.
+  durationMin: 2
+  minHeightCm: null
+  heightSource: draft
+  thrill: 2
+  scare: 0
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.ratatouille-the-adventure
+  type: attraction
+  name: 'Ratatouille: L’Aventure Totalement Toquée de Rémy'
+  areaId: worlds-of-pixar
+  themeparksId: 73e1c590-ef8f-496c-bf6c-d7e7fde0c7df
+  queueTimesId: 37
+  description: Trackless 3D ride that shrinks you to rat size as Rémy races through Gusteau's kitchen and restaurant in Paris.
+  rating: 5
+  ratingReason: Clever, funny ride for every age.
+  durationMin: 5
+  minHeightCm: null
+  heightSource: draft
+  thrill: 2
+  scare: 1
+  sources:
+  - {label: 'Wikipedia: Remy''s Ratatouille Adventure', url: 'https://en.wikipedia.org/wiki/Remy''s_Ratatouille_Adventure'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.slinky-dog-zigzag-spin
+  type: attraction
+  name: Slinky Dog Zigzag Spin
+  areaId: worlds-of-pixar
+  themeparksId: 337bce77-57bd-49c7-83d7-662f16c162ea
+  queueTimesId: 36
+  description: Gentle circular ride with Slinky Dog chasing his tail in Toy Story Playland.
+  rating: 2
+  ratingReason: Gentle ride for young children.
+  durationMin: 2
+  minHeightCm: null
+  heightSource: draft
+  thrill: 1
+  scare: 0
+  sources:
+  - {label: 'Wikipedia: Slinky Dog Zigzag Spin', url: 'https://en.wikipedia.org/wiki/Slinky_Dog_Zigzag_Spin'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.spider-man-web-adventure
+  type: attraction
+  name: Spider-Man W.E.B. Adventure
+  areaId: avengers-campus
+  themeparksId: f710814b-232d-4469-aad7-d98b328a15b7
+  queueTimesId: 10845
+  description: Interactive 3D ride where you use hand gestures to sling webs at runaway robots alongside Spider-Man.
+  rating: 4
+  ratingReason: Inventive interactive ride for all ages.
+  durationMin: 5
+  minHeightCm: null
+  heightSource: draft
+  thrill: 1
+  scare: 1
+  sources:
+  - {label: 'Wikipedia: Web Slingers: A Spider-Man Adventure', url: 'https://en.wikipedia.org/wiki/Web_Slingers:_A_Spider-Man_Adventure'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.twilight-zone-tower-of-terror
+  type: attraction
+  name: The Twilight Zone Tower of Terror
+  areaId: world-premiere-plaza
+  themeparksId: d2ec9363-a215-4904-b297-b66734ea9a00
+  queueTimesId: 40
+  description: Haunted Hollywood hotel where your lift car drops and rises repeatedly in the dark. Intense and scary.
+  rating: 5
+  ratingReason: Brilliant theming and real airtime.
+  durationMin: 4
+  minHeightCm: 102
+  heightSource: wikipedia
+  thrill: 5
+  scare: 3
+  sources:
+  - {label: 'Wikipedia: The Twilight Zone Tower of Terror', url: 'https://en.wikipedia.org/wiki/The_Twilight_Zone_Tower_of_Terror'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.toy-soldiers-parachute-drop
+  type: attraction
+  name: Toy Soldiers Parachute Drop
+  areaId: worlds-of-pixar
+  themeparksId: a10b25e2-3176-449a-a8a5-4119902887bb
+  queueTimesId: 35
+  description: Parachute drop tower with the Green Army Men in Toy Story Playland; gentle drops for older children.
+  rating: 3
+  ratingReason: Mild drop ride; slow-loading queue.
+  durationMin: 2
+  minHeightCm: 81
+  heightSource: draft
+  thrill: 3
+  scare: 0
+  sources:
+  - {label: 'Wikipedia: Toy Soldiers Parachute Drop', url: 'https://en.wikipedia.org/wiki/Toy_Soldiers_Parachute_Drop'}
+  - *id001
+  - *id002
+  - *id003
+  review: draft
+- id: daw.mickey-and-the-magician
+  type: show
+  name: Mickey and the Magician
+  areaId: world-premiere-plaza
+  themeparksId: 0f5cce1d-69ed-4fad-9505-a1914dd150cb
+  description: Broadway-style stage show where Mickey, apprentice to a magician, meets Disney characters and their songs.
+  rating: 5
+  ratingReason: Excellent stage show.
+  durationMin: 30
+  times:
+  - '13:00'
+  - '14:05'
+  - '15:10'
+  - '17:25'
+  - '18:30'
+  arriveEarlyMin: 20
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - &id004 {label: ThemeParks.wiki show times (4 Oct 2026), url: 'https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live'}
+  - *id003
+  review: draft
+- id: daw.together-a-pixar-musical-adventure
+  type: show
+  name: 'TOGETHER: a Pixar Musical Adventure'
+  areaId: world-premiere-plaza
+  themeparksId: 72d20d9c-1f46-4866-b9b9-b428d0aaf6e8
+  description: Stage musical with live performers celebrating Pixar stories and songs in the Studio Theatre.
+  rating: 4
+  ratingReason: Fun show and a seated break.
+  durationMin: 25
+  times:
+  - '11:15'
+  - '12:25'
+  - '13:35'
+  - '15:40'
+  - '16:50'
+  arriveEarlyMin: 15
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - *id004
+  - *id003
+  review: draft
+- id: daw.stitch-live
+  type: show
+  name: Stitch Live!
+  areaId: world-premiere-plaza
+  themeparksId: f2a48cc2-4dc3-47fd-9992-0c30eeba24f0
+  description: Interactive show where Stitch talks live with the audience from his spaceship.
+  rating: 3
+  ratingReason: Funny for young children.
+  durationMin: 20
+  times:
+  - '10:30'
+  - '10:50'
+  - '11:10'
+  - '11:30'
+  - '11:50'
+  - '12:10'
+  - '12:30'
+  - '12:50'
+  - '13:10'
+  - '13:30'
+  - '13:50'
+  - '14:10'
+  - '14:30'
+  - '14:50'
+  - '15:10'
+  - '15:30'
+  - '15:50'
+  - '16:10'
+  - '16:30'
+  - '16:50'
+  - '17:10'
+  - '17:30'
+  - '17:50'
+  - '18:10'
+  arriveEarlyMin: 10
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - *id004
+  - *id003
+  review: draft
+- id: daw.animation-academy
+  type: show
+  name: Animation Academy
+  areaId: world-premiere-plaza
+  themeparksId: 3bdddd5f-6ec1-4143-a915-2e95b2fa275f
+  description: Drawing class where a Disney animator teaches you to sketch a character step by step.
+  rating: 3
+  ratingReason: Relaxing and you keep your drawing.
+  durationMin: 20
+  times:
+  - '10:30'
+  - '11:00'
+  - '11:30'
+  - '12:00'
+  - '12:30'
+  - '13:00'
+  - '13:30'
+  - '14:00'
+  - '14:30'
+  - '15:00'
+  - '15:30'
+  - '16:00'
+  - '16:30'
+  - '17:00'
+  arriveEarlyMin: 10
+  sources:
+  - *id002
+  - *id004
+  - *id003
+  review: draft
+- id: daw.disney-cascade-of-lights
+  type: show
+  name: Disney Cascade of Lights
+  areaId: adventure-way
+  themeparksId: 2c51b641-2398-4833-8e1a-346fd7fe09db
+  description: Night-time show of water, light and music on Adventure Bay at the end of the day.
+  rating: 4
+  ratingReason: Beautiful finale to the day.
+  durationMin: 20
+  times:
+  - '21:50'
+  arriveEarlyMin: 30
+  sources:
+  - *id002
+  - *id004
+  - *id003
+  review: draft
+- id: daw.a-celebration-in-arendelle
+  type: show
+  name: A Celebration in Arendelle
+  areaId: world-of-frozen
+  themeparksId: c122d2e4-7fb7-4360-bb73-f0dc37a38179
+  description: Live Frozen show on the water of Arendelle Bay with Anna, Elsa and friends.
+  rating: 4
+  ratingReason: Lovely for Frozen fans.
+  durationMin: 15
+  times:
+  - '12:20'
+  - '13:20'
+  - '15:50'
+  - '16:50'
+  - '17:50'
+  arriveEarlyMin: 15
+  location: {lat: 48.8643, lng: 2.774}
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - *id004
+  - *id003
+  review: draft
+- id: daw.bistrot-chez-remy
+  type: restaurant
+  name: Bistrot Chez Rémy
+  areaId: worlds-of-pixar
+  themeparksId: 6528b0e3-0e49-44f8-a2ca-b135a4d267a4
+  service: table
+  description: Table-service French bistro themed to Ratatouille, where you dine at rat size among giant props.
+  rating: 4
+  ratingReason: Fun theming and good French food.
+  mealMin: 75
+  sources:
+  - {label: 'Wikipedia: Bistrot Chez Rémy', url: 'https://en.wikipedia.org/wiki/Bistrot_Chez_Rémy'}
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.cafe-luminosity
+  type: restaurant
+  name: Café Luminosity
+  areaId: adventure-way
+  themeparksId: b346283b-5b8a-4d9f-b0ae-445ad2a13853
+  service: counter
+  description: Eatery on Adventure Way.
+  rating: 3
+  ratingReason: Convenient on Adventure Way.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.chez-berlioz
+  type: restaurant
+  name: Chez Berlioz
+  areaId: adventure-way
+  themeparksId: 54b320f7-6063-4738-a92f-166ac1c5c3a4
+  service: snack
+  description: Small eatery on Adventure Way named after one of the Aristocats kittens.
+  rating: 3
+  ratingReason: Quick bite on Adventure Way.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.chez-marie
+  type: restaurant
+  name: Chez Marie
+  areaId: adventure-way
+  themeparksId: 47afeb9c-2c88-4c71-bbeb-4aeb19361c04
+  service: snack
+  description: Small eatery on Adventure Way named after one of the Aristocats kittens.
+  rating: 3
+  ratingReason: Quick bite on Adventure Way.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.chez-toulouse
+  type: restaurant
+  name: Chez Toulouse
+  areaId: adventure-way
+  themeparksId: 2325d6b6-e32a-4fb9-b805-5963b1cbcd64
+  service: snack
+  description: Small eatery on Adventure Way named after one of the Aristocats kittens.
+  rating: 3
+  ratingReason: Quick bite on Adventure Way.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.fan-tastic-food-truck
+  type: restaurant
+  name: FAN-tastic Food Truck
+  areaId: avengers-campus
+  themeparksId: 679f0091-d7f9-4b09-85bf-75827abb6219
+  service: snack
+  description: Food truck near Avengers Campus.
+  rating: 2
+  ratingReason: Quick snack.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.ice-cream-creations
+  type: restaurant
+  name: Ice Cream Creations
+  areaId: world-premiere-plaza
+  themeparksId: 2d2e9053-4eba-4d44-a343-f88570c0513f
+  service: snack
+  description: Ice-cream stop near World Premiere Plaza.
+  rating: 3
+  ratingReason: Ice-cream break.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.la-terrasse-panoramique
+  type: restaurant
+  name: La Terrasse Panoramique
+  areaId: adventure-way
+  themeparksId: fc6dcafb-0ca7-42eb-9da8-ca6efd3c3806
+  service: counter
+  description: Eatery with a terrace near Adventure Bay.
+  rating: 3
+  ratingReason: Nice spot by the water.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.laugh-n-go
+  type: restaurant
+  name: Laugh'N' Go!
+  areaId: worlds-of-pixar
+  themeparksId: 1c04ec07-13c2-4d83-af15-6d9bac387db1
+  service: snack
+  description: Food truck serving cheese-based snacks from The Laughing Cow.
+  rating: 2
+  ratingReason: Quick cheesy snack.
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.nordic-crowns-tavern
+  type: restaurant
+  name: Nordic Crowns Tavern
+  areaId: world-of-frozen
+  themeparksId: 9ee859db-2623-4ba3-8b40-ef32972cb8ee
+  service: counter
+  description: Frozen-themed restaurant in the World of Frozen, opened in 2026.
+  rating: 3
+  ratingReason: Themed meal in Arendelle.
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.pym-kitchen
+  type: restaurant
+  name: PYM Kitchen
+  areaId: avengers-campus
+  themeparksId: 5f492609-5f79-4ca2-a3ca-39cdd0438739
+  service: table
+  description: All-you-can-eat buffet themed to Ant-Man and the Wasp, with giant and tiny food.
+  rating: 4
+  ratingReason: Fun buffet with lots of choice.
+  mealMin: 75
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.searchlight
+  type: restaurant
+  name: Searchlight
+  areaId: world-premiere-plaza
+  themeparksId: 20e0430d-a0d4-4bbf-a5da-b6cff3ffd23a
+  service: snack
+  description: Snack stop near World Premiere Plaza.
+  rating: 2
+  ratingReason: Quick snack.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.speciality-ice-cream
+  type: restaurant
+  name: Speciality Ice Cream
+  areaId: world-premiere-plaza
+  themeparksId: 290f42d3-46bd-4cd1-b69d-891788b0afdb
+  service: snack
+  description: Ice-cream stop near World Premiere Plaza.
+  rating: 2
+  ratingReason: Ice-cream break.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.stark-factory
+  type: restaurant
+  name: Stark Factory
+  areaId: avengers-campus
+  themeparksId: 7dae6b67-0da8-4cb6-8e6e-fb2c2f262a4d
+  service: counter
+  description: Counter-service pizza and pasta restaurant in Tony Stark's factory in Avengers Campus.
+  rating: 3
+  ratingReason: Quick pizza and pasta.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.super-diner
+  type: restaurant
+  name: Super Diner
+  areaId: avengers-campus
+  themeparksId: 80283731-cd16-42fe-860e-28c70de9e59c
+  service: table
+  description: 1940s-style table-service diner themed to the Agent Carter series.
+  rating: 3
+  ratingReason: Retro diner atmosphere.
+  mealMin: 60
+  sources:
+  - {label: 'Wikipedia: Disney Adventure World', url: 'https://en.wikipedia.org/wiki/Disney_Adventure_World'}
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.hollywood-gardens-restaurant
+  type: restaurant
+  name: The Hollywood Gardens Restaurant
+  areaId: world-premiere-plaza
+  themeparksId: d75b7092-0bf9-4a94-bef9-2c9979b8a889
+  service: counter
+  description: Restaurant near World Premiere Plaza.
+  rating: 3
+  ratingReason: Convenient near the entrance.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.regal-view-lounge
+  type: restaurant
+  name: The Regal View Lounge
+  areaId: adventure-way
+  themeparksId: 37588b4a-f847-4fb1-a6c0-6fabd2aa5cba
+  service: snack
+  description: Lounge on Adventure Way next to The Regal View Restaurant.
+  rating: 3
+  ratingReason: Drinks with a view.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.regal-view-restaurant
+  type: restaurant
+  name: The Regal View Restaurant
+  areaId: adventure-way
+  themeparksId: ff75413f-edee-4f9c-a9e8-0da580d127e2
+  service: table
+  description: Table-service restaurant on Adventure Way.
+  rating: 3
+  ratingReason: Sit-down option on Adventure Way.
+  mealMin: 75
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+- id: daw.web-food-truck
+  type: restaurant
+  name: WEB Food Truck
+  areaId: avengers-campus
+  themeparksId: 460759ef-bceb-4e07-bdaa-7d1ab81e1413
+  service: snack
+  description: Food truck in Avengers Campus.
+  rating: 2
+  ratingReason: Quick snack.
+  sources:
+  - *id002
+  - {label: 'Service type and rating: planner editorial judgement'}
+  review: draft
+excluded:
+  themeparks:
+  - {id: 943860c5-c931-4212-a387-9e5cd139179d, name: Disney Princess Cavalcade, reason: Route and location not known.}
+  - {id: 75d60cb3-c95c-4ce2-aeb4-36e4050f14f3, name: Miguel's Fiesta Latina, reason: Short street show; not modelled yet.}
+  - {id: cd486865-9d66-4860-8111-303b3f56c71f, name: Minnie’s Dream Factory, reason: Short street show; not modelled yet.}
+  - {id: 7a696f1b-c72d-48ec-b877-2c66c94e7e75, name: 'Guardians of the Galaxy: Dance Challenge!', reason: Short street show;
+      not modelled yet.}
+  - {id: 62d616e5-e580-431d-9a21-5c377e8cd484, name: Warriors of Wakanda, reason: Short street show; not modelled yet.}
+  - {id: 08e247d6-21c9-4682-91f5-6e0fa6f93ed4, name: Heroic Welcome, reason: Short street show; not modelled yet.}
+  - {id: 652558c2-9f2d-488c-8e1b-57c284e3e836, name: 'Reserved Viewing Area : Disney Cascade of Lights', reason: 'Paid viewing
+      area, not a separate show.'}
+  - {id: 9f028a0f-dd29-42b8-8f7f-1fa57ff98568, name: Meet Woody, reason: Character meet without queue statistics; not modelled
+      yet.}
+  - {id: 6d70e95a-12a4-4eae-ba41-82669245a536, name: Meet Mickey, reason: Character meet without queue statistics; not modelled
+      yet.}
+  - {id: 39a6ece4-44f5-4b36-9dac-66ed40d07ddd, name: Meet Bo Peep, reason: Character meet without queue statistics; not modelled
+      yet.}
+  - {id: a3bb8c37-68ef-401f-b43c-5838bb79ca9d, name: Spider-Man Heroic Encounter, reason: Character meet without queue statistics;
+      not modelled yet.}
+  - {id: 968f5038-37d2-4fa4-9f34-9364c137bd2b, name: MARVEL Super Hero Heroic Encounter, reason: Character meet without queue
+      statistics; not modelled yet.}
+  - {id: 9d20895f-b80c-48c1-8e74-0e153b762b37, name: Rencontre Royale, reason: Character meet without queue statistics; not
+      modelled yet.}
+  - {id: 9b00b4ad-e09b-4f68-a87a-8c4c9667eb6f, name: Meet a Toy Story Character, reason: Character meet without queue statistics;
+      not modelled yet.}
+  queueTimes:
+  - {id: 10849, name: 'Avengers Assemble: Flight Force Single Rider', reason: Single-rider lines are out of scope.}
+  - {id: 7277, name: Crush's Coaster Single Rider, reason: Single-rider lines are out of scope.}
+  - {id: 7280, name: RC Racer Single Rider, reason: Single-rider lines are out of scope.}
+  - {id: 7279, name: 'Ratatouille: The Adventure Single Rider', reason: Single-rider lines are out of scope.}
+  - {id: 10846, name: Spider-Man W.E.B. Adventure Single Rider, reason: Single-rider lines are out of scope.}
+  - {id: 7281, name: Toy Soldiers Parachute Drop Single Rider, reason: Single-rider lines are out of scope.}
+  - {id: 15422, name: Frozen Ever After Single Rider, reason: Single-rider lines are out of scope.}
+  - {id: 16247, name: Entry to World of Frozen, reason: 'Entry queue for the area, not an attraction.'}

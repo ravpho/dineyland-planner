@@ -39,7 +39,8 @@ Tailwind's utility classes make the two layouts (phone tabs below 768 px, side-b
 ```
  scripts/data/collect.ts   (manual run, needs network)
    |-- ThemeParks.wiki children ---------> data/raw/themeparks-children.json
-   |-- Queue-Times /parks/{4,28}/stats/{2023..2025}
+   |-- ThemeParks.wiki live + schedules --> data/raw/themeparks-{live,schedule-*}.json
+   |-- Queue-Times /parks/{4,28}/stats/{2023..2026}
    |                                ------> data/raw/queue-times/<park>-<year>.html
    v
  scripts/data/build.ts     (offline, part of `npm run data`)
@@ -49,7 +50,10 @@ Tailwind's utility classes make the two layouts (phone tabs below 768 px, side-b
    v
  src/data/catalog.json     (generated, committed, validated against a schema)
 ```
-- Curated files are split by park: `data/curated/disneyland-park.yaml` and `data/curated/disney-adventure-world.yaml`. Each entry has a stable app id (for example `dlp.big-thunder-mountain`), the ThemeParks.wiki id, the Queue-Times ride name, descriptive fields, a `sources` list and a `review: draft | reviewed` status.
+- Curated files are split by park: `data/curated/disneyland-park.yaml` and `data/curated/disney-adventure-world.yaml`. Each entry has a stable app id (for example `dlp.big-thunder-mountain`), the ThemeParks.wiki id, the Queue-Times ride id (taken from the stats page links, which is more stable than the name), descriptive fields, a `sources` list and a `review: draft | reviewed` status.
+- *Added during implementation:*
+  - Collection also saves ThemeParks.wiki live data and park schedules. Show times seen on the collection day become each show's typical times, and the schedule supplies real opening hours for the coming month; other months stay estimates.
+  - Two attractions opened in 2026 (Frozen Ever After, Raiponce Tangled Spin) are missing from the 2023–2025 statistics. For rides missing from `STATS_YEARS`, the build falls back to the partial 2026 page (`FALLBACK_YEARS`), for ride averages only. Monthly crowd factors still use 2023–2025.
 - The build script never writes to curated files, which satisfies the spec rule that collection must not overwrite hand-reviewed fields.
 - Raw snapshots are committed, so CI and anyone else can rebuild without the network, and parser tests run against real saved pages.
 - Matching uses ids recorded in the curated files, not fuzzy name matching. Unmatched source items and attractions without statistics are printed and written to `data/build-report.md`.

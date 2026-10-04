@@ -1,0 +1,4110 @@
+{
+  "version": 1,
+  "collectedAt": "2026-10-04",
+  "statsYears": [
+    2023,
+    2024,
+    2025
+  ],
+  "parks": [
+    {
+      "id": "daw",
+      "name": "Disney Adventure World",
+      "entrance": {
+        "lat": 48.868391,
+        "lng": 2.780802
+      },
+      "areas": [
+        {
+          "id": "world-premiere-plaza",
+          "name": "World Premiere Plaza"
+        },
+        {
+          "id": "worlds-of-pixar",
+          "name": "Worlds of Pixar"
+        },
+        {
+          "id": "avengers-campus",
+          "name": "Marvel Avengers Campus"
+        },
+        {
+          "id": "adventure-way",
+          "name": "Adventure Way"
+        },
+        {
+          "id": "world-of-frozen",
+          "name": "World of Frozen"
+        }
+      ],
+      "hours": [
+        {
+          "open": "10:00",
+          "close": "20:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:00",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "10:00",
+          "close": "21:00"
+        }
+      ],
+      "monthFactors": [
+        1.098,
+        1.115,
+        1.228,
+        1.159,
+        1.098,
+        1.081,
+        0.908,
+        1.003,
+        1.193,
+        0.994,
+        0.545,
+        0.579
+      ],
+      "hoursSources": [
+        {
+          "label": "ThemeParks.wiki schedule (October–November 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/ca888437-ebb4-4d50-aed2-d227f7096968/schedule"
+        },
+        {
+          "label": "Other months: planner estimate"
+        }
+      ]
+    },
+    {
+      "id": "dlp",
+      "name": "Disneyland Park",
+      "entrance": {
+        "lat": 48.870205,
+        "lng": 2.779913
+      },
+      "areas": [
+        {
+          "id": "main-street",
+          "name": "Main Street, U.S.A."
+        },
+        {
+          "id": "frontierland",
+          "name": "Frontierland"
+        },
+        {
+          "id": "adventureland",
+          "name": "Adventureland"
+        },
+        {
+          "id": "fantasyland",
+          "name": "Fantasyland"
+        },
+        {
+          "id": "discoveryland",
+          "name": "Discoveryland"
+        }
+      ],
+      "hours": [
+        {
+          "open": "10:00",
+          "close": "20:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:00",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "10:00",
+          "close": "21:00"
+        }
+      ],
+      "monthFactors": [
+        0.77,
+        0.871,
+        1.078,
+        1.108,
+        1.137,
+        1.114,
+        0.983,
+        1.173,
+        1.054,
+        1.031,
+        0.77,
+        0.912
+      ],
+      "hoursSources": [
+        {
+          "label": "ThemeParks.wiki schedule (October–November 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/dae968d5-630d-4719-8b06-3d107e944401/schedule"
+        },
+        {
+          "label": "Other months: planner estimate"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "daw.avengers-assemble-flight-force",
+      "name": "Avengers Assemble: Flight Force",
+      "parkId": "daw",
+      "areaId": "avengers-campus",
+      "description": "Launched indoor roller coaster with inversions, flying with Iron Man and Captain Marvel. Intense and mostly in the dark.",
+      "rating": 4,
+      "ratingReason": "Strong thrills with short waits for a coaster.",
+      "location": {
+        "lat": 48.86544789048844,
+        "lng": 2.7794149518013
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Avengers Assemble: Flight Force",
+          "url": "https://en.wikipedia.org/wiki/Avengers_Assemble:_Flight_Force"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ff2e7d6f-5aaf-47b8-8695-53a66e9fe073",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": 120,
+      "thrill": 5,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 16.3,
+        "avgMaxMin": 36,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.cars-quatre-roues-rallye",
+      "name": "Cars Quatre Roues Rallye",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Spinning cars at a Radiator Springs service station that whirl around each other like a teacup ride.",
+      "rating": 2,
+      "ratingReason": "Short spinner; fine if the queue is short.",
+      "location": {
+        "lat": 48.867726,
+        "lng": 2.777854
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Cars Quatre Roues Rallye",
+          "url": "https://en.wikipedia.org/wiki/Cars_Quatre_Roues_Rallye"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "d944b02c-12ce-4176-ac62-6a936f180b5c",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 10.7,
+        "avgMaxMin": 25.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.cars-road-trip",
+      "name": "Cars ROAD TRIP",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Tram tour through scenes inspired by the Cars films, including a special-effects canyon scene.",
+      "rating": 3,
+      "ratingReason": "Relaxed ride with one big effects scene.",
+      "location": {
+        "lat": 48.86651889190989,
+        "lng": 2.775024175643921
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Cars: Road Trip",
+          "url": "https://en.wikipedia.org/wiki/Cars:_Road_Trip"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "449a20d8-9bfd-4b2b-b437-38a279aa8d88",
+      "type": "attraction",
+      "durationMin": 7,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 8.7,
+        "avgMaxMin": 22,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.crushs-coaster",
+      "name": "Crush's Coaster",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Spinning roller coaster in sea-turtle shells, riding the East Australian Current from Finding Nemo, mostly in the dark.",
+      "rating": 4,
+      "ratingReason": "Great fun, but the queue is often the longest in the park.",
+      "location": {
+        "lat": 48.868041,
+        "lng": 2.778142
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Crush's Coaster",
+          "url": "https://en.wikipedia.org/wiki/Crush's_Coaster"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "f0d4b531-e291-471b-9527-00410c2bbd65",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": 107,
+      "thrill": 4,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 66.7,
+        "avgMaxMin": 94.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.frozen-ever-after",
+      "name": "Frozen Ever After",
+      "parkId": "daw",
+      "areaId": "world-of-frozen",
+      "description": "Boat ride through Arendelle and Elsa's ice palace with songs from Frozen, including a short backwards section and a small drop. Opened in 2026.",
+      "rating": 5,
+      "ratingReason": "New headliner with superb animatronics.",
+      "location": {
+        "lat": 48.864108,
+        "lng": 2.773508
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Frozen Ever After",
+          "url": "https://en.wikipedia.org/wiki/Frozen_Ever_After"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "630e2675-f9fc-4984-ba83-03daf5fc89ed",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 64,
+        "avgMaxMin": 103,
+        "years": [
+          2026
+        ]
+      }
+    },
+    {
+      "id": "daw.flying-carpets-over-agrabah",
+      "name": "Les Tapis Volants – Flying Carpets Over Agrabah",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Flying-carpet spinner that you steer up and down, set on an Aladdin film set.",
+      "rating": 2,
+      "ratingReason": "Simple spinner for young children.",
+      "location": {
+        "lat": 48.868288,
+        "lng": 2.778352
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: The Magic Carpets of Aladdin",
+          "url": "https://en.wikipedia.org/wiki/The_Magic_Carpets_of_Aladdin"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "8e229723-51c1-4668-b956-5bc45305acd9",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 11.7,
+        "avgMaxMin": 29.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.rc-racer",
+      "name": "RC Racer",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Half-pipe coaster that swings RC backwards and forwards up a 25-metre track. Short and stomach-churning.",
+      "rating": 3,
+      "ratingReason": "Short burst of thrills; queue can be long for one minute.",
+      "location": {
+        "lat": 48.866903,
+        "lng": 2.776651
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: RC Racer",
+          "url": "https://en.wikipedia.org/wiki/RC_Racer"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "15bad9c3-8378-4ac5-ab90-2f8d0ee09d26",
+      "type": "attraction",
+      "durationMin": 1,
+      "minHeightCm": 120,
+      "thrill": 4,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 31.3,
+        "avgMaxMin": 56.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.raiponce-tangled-spin",
+      "name": "Raiponce Tangled Spin",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Spinning boats circling under floating lanterns from Tangled, on Adventure Way. Opened in 2026.",
+      "rating": 3,
+      "ratingReason": "Pretty, gentle spinner for families.",
+      "location": {
+        "lat": 48.866153,
+        "lng": 2.77663
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "25556e4e-aa6c-41ff-b196-29967362345e",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 11,
+        "avgMaxMin": 31,
+        "years": [
+          2026
+        ]
+      }
+    },
+    {
+      "id": "daw.ratatouille-the-adventure",
+      "name": "Ratatouille: L’Aventure Totalement Toquée de Rémy",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Trackless 3D ride that shrinks you to rat size as Rémy races through Gusteau's kitchen and restaurant in Paris.",
+      "rating": 5,
+      "ratingReason": "Clever, funny ride for every age.",
+      "location": {
+        "lat": 48.86757046243673,
+        "lng": 2.7762224525213237
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Remy's Ratatouille Adventure",
+          "url": "https://en.wikipedia.org/wiki/Remy's_Ratatouille_Adventure"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "73e1c590-ef8f-496c-bf6c-d7e7fde0c7df",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 32,
+        "avgMaxMin": 60.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.slinky-dog-zigzag-spin",
+      "name": "Slinky Dog Zigzag Spin",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Gentle circular ride with Slinky Dog chasing his tail in Toy Story Playland.",
+      "rating": 2,
+      "ratingReason": "Gentle ride for young children.",
+      "location": {
+        "lat": 48.867136,
+        "lng": 2.776959
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Slinky Dog Zigzag Spin",
+          "url": "https://en.wikipedia.org/wiki/Slinky_Dog_Zigzag_Spin"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "337bce77-57bd-49c7-83d7-662f16c162ea",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 9,
+        "avgMaxMin": 24,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.spider-man-web-adventure",
+      "name": "Spider-Man W.E.B. Adventure",
+      "parkId": "daw",
+      "areaId": "avengers-campus",
+      "description": "Interactive 3D ride where you use hand gestures to sling webs at runaway robots alongside Spider-Man.",
+      "rating": 4,
+      "ratingReason": "Inventive interactive ride for all ages.",
+      "location": {
+        "lat": 48.86611484299536,
+        "lng": 2.779369354248047
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Web Slingers: A Spider-Man Adventure",
+          "url": "https://en.wikipedia.org/wiki/Web_Slingers:_A_Spider-Man_Adventure"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "f710814b-232d-4469-aad7-d98b328a15b7",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 41.7,
+        "avgMaxMin": 68.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.twilight-zone-tower-of-terror",
+      "name": "The Twilight Zone Tower of Terror",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Haunted Hollywood hotel where your lift car drops and rises repeatedly in the dark. Intense and scary.",
+      "rating": 5,
+      "ratingReason": "Brilliant theming and real airtime.",
+      "location": {
+        "lat": 48.866753,
+        "lng": 2.778767
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: The Twilight Zone Tower of Terror",
+          "url": "https://en.wikipedia.org/wiki/The_Twilight_Zone_Tower_of_Terror"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "d2ec9363-a215-4904-b297-b66734ea9a00",
+      "type": "attraction",
+      "durationMin": 4,
+      "minHeightCm": 102,
+      "thrill": 5,
+      "scare": 3,
+      "waitStats": {
+        "avgMin": 30.7,
+        "avgMaxMin": 66.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.toy-soldiers-parachute-drop",
+      "name": "Toy Soldiers Parachute Drop",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Parachute drop tower with the Green Army Men in Toy Story Playland; gentle drops for older children.",
+      "rating": 3,
+      "ratingReason": "Mild drop ride; slow-loading queue.",
+      "location": {
+        "lat": 48.867188,
+        "lng": 2.777234
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Toy Soldiers Parachute Drop",
+          "url": "https://en.wikipedia.org/wiki/Toy_Soldiers_Parachute_Drop"
+        },
+        {
+          "label": "Queue-Times statistics, Disney Adventure World",
+          "url": "https://queue-times.com/parks/28/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "a10b25e2-3176-449a-a8a5-4119902887bb",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": 81,
+      "thrill": 3,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 34,
+        "avgMaxMin": 54.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "daw.mickey-and-the-magician",
+      "name": "Mickey and the Magician",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Broadway-style stage show where Mickey, apprentice to a magician, meets Disney characters and their songs.",
+      "rating": 5,
+      "ratingReason": "Excellent stage show.",
+      "location": {
+        "lat": 48.86815769739524,
+        "lng": 2.7791735529899597
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "0f5cce1d-69ed-4fad-9505-a1914dd150cb",
+      "type": "show",
+      "durationMin": 30,
+      "times": [
+        "13:00",
+        "14:05",
+        "15:10",
+        "17:25",
+        "18:30"
+      ],
+      "arriveEarlyMin": 20
+    },
+    {
+      "id": "daw.together-a-pixar-musical-adventure",
+      "name": "TOGETHER: a Pixar Musical Adventure",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Stage musical with live performers celebrating Pixar stories and songs in the Studio Theatre.",
+      "rating": 4,
+      "ratingReason": "Fun show and a seated break.",
+      "location": {
+        "lat": 48.867309630452866,
+        "lng": 2.780265212059021
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "72d20d9c-1f46-4866-b9b9-b428d0aaf6e8",
+      "type": "show",
+      "durationMin": 25,
+      "times": [
+        "11:15",
+        "12:25",
+        "13:35",
+        "15:40",
+        "16:50"
+      ],
+      "arriveEarlyMin": 15
+    },
+    {
+      "id": "daw.stitch-live",
+      "name": "Stitch Live!",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Interactive show where Stitch talks live with the audience from his spaceship.",
+      "rating": 3,
+      "ratingReason": "Funny for young children.",
+      "location": {
+        "lat": 48.86661211095515,
+        "lng": 2.780080139636994
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "f2a48cc2-4dc3-47fd-9992-0c30eeba24f0",
+      "type": "show",
+      "durationMin": 20,
+      "times": [
+        "10:30",
+        "10:50",
+        "11:10",
+        "11:30",
+        "11:50",
+        "12:10",
+        "12:30",
+        "12:50",
+        "13:10",
+        "13:30",
+        "13:50",
+        "14:10",
+        "14:30",
+        "14:50",
+        "15:10",
+        "15:30",
+        "15:50",
+        "16:10",
+        "16:30",
+        "16:50",
+        "17:10",
+        "17:30",
+        "17:50",
+        "18:10"
+      ],
+      "arriveEarlyMin": 10
+    },
+    {
+      "id": "daw.animation-academy",
+      "name": "Animation Academy",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Drawing class where a Disney animator teaches you to sketch a character step by step.",
+      "rating": 3,
+      "ratingReason": "Relaxing and you keep your drawing.",
+      "location": {
+        "lat": 48.86742740189942,
+        "lng": 2.7783317864486885
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "3bdddd5f-6ec1-4143-a915-2e95b2fa275f",
+      "type": "show",
+      "durationMin": 20,
+      "times": [
+        "10:30",
+        "11:00",
+        "11:30",
+        "12:00",
+        "12:30",
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00"
+      ],
+      "arriveEarlyMin": 10
+    },
+    {
+      "id": "daw.disney-cascade-of-lights",
+      "name": "Disney Cascade of Lights",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Night-time show of water, light and music on Adventure Bay at the end of the day.",
+      "rating": 4,
+      "ratingReason": "Beautiful finale to the day.",
+      "location": {
+        "lat": 48.865138230945824,
+        "lng": 2.7749919891357426
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "2c51b641-2398-4833-8e1a-346fd7fe09db",
+      "type": "show",
+      "durationMin": 20,
+      "times": [
+        "21:50"
+      ],
+      "arriveEarlyMin": 30
+    },
+    {
+      "id": "daw.a-celebration-in-arendelle",
+      "name": "A Celebration in Arendelle",
+      "parkId": "daw",
+      "areaId": "world-of-frozen",
+      "description": "Live Frozen show on the water of Arendelle Bay with Anna, Elsa and friends.",
+      "rating": 4,
+      "ratingReason": "Lovely for Frozen fans.",
+      "location": {
+        "lat": 48.8643,
+        "lng": 2.774
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "c122d2e4-7fb7-4360-bb73-f0dc37a38179",
+      "type": "show",
+      "durationMin": 15,
+      "times": [
+        "12:20",
+        "13:20",
+        "15:50",
+        "16:50",
+        "17:50"
+      ],
+      "arriveEarlyMin": 15
+    },
+    {
+      "id": "daw.bistrot-chez-remy",
+      "name": "Bistrot Chez Rémy",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Table-service French bistro themed to Ratatouille, where you dine at rat size among giant props.",
+      "rating": 4,
+      "ratingReason": "Fun theming and good French food.",
+      "location": {
+        "lat": 48.867463,
+        "lng": 2.775793
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Bistrot Chez Rémy",
+          "url": "https://en.wikipedia.org/wiki/Bistrot_Chez_Rémy"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "6528b0e3-0e49-44f8-a2ca-b135a4d267a4",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 75
+    },
+    {
+      "id": "daw.cafe-luminosity",
+      "name": "Café Luminosity",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Eatery on Adventure Way.",
+      "rating": 3,
+      "ratingReason": "Convenient on Adventure Way.",
+      "location": {
+        "lat": 48.865352,
+        "lng": 2.776632
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "b346283b-5b8a-4d9f-b0ae-445ad2a13853",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "daw.chez-berlioz",
+      "name": "Chez Berlioz",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Small eatery on Adventure Way named after one of the Aristocats kittens.",
+      "rating": 3,
+      "ratingReason": "Quick bite on Adventure Way.",
+      "location": {
+        "lat": 48.866209,
+        "lng": 2.774238
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "54b320f7-6063-4738-a92f-166ac1c5c3a4",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.chez-marie",
+      "name": "Chez Marie",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Small eatery on Adventure Way named after one of the Aristocats kittens.",
+      "rating": 3,
+      "ratingReason": "Quick bite on Adventure Way.",
+      "location": {
+        "lat": 48.866132,
+        "lng": 2.774056
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "47afeb9c-2c88-4c71-bbeb-4aeb19361c04",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.chez-toulouse",
+      "name": "Chez Toulouse",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Small eatery on Adventure Way named after one of the Aristocats kittens.",
+      "rating": 3,
+      "ratingReason": "Quick bite on Adventure Way.",
+      "location": {
+        "lat": 48.86628,
+        "lng": 2.774413
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "2325d6b6-e32a-4fb9-b805-5963b1cbcd64",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.fan-tastic-food-truck",
+      "name": "FAN-tastic Food Truck",
+      "parkId": "daw",
+      "areaId": "avengers-campus",
+      "description": "Food truck near Avengers Campus.",
+      "rating": 2,
+      "ratingReason": "Quick snack.",
+      "location": {
+        "lat": 48.86570196868203,
+        "lng": 2.778419852256775
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "679f0091-d7f9-4b09-85bf-75827abb6219",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.ice-cream-creations",
+      "name": "Ice Cream Creations",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Ice-cream stop near World Premiere Plaza.",
+      "rating": 3,
+      "ratingReason": "Ice-cream break.",
+      "location": {
+        "lat": 48.867224,
+        "lng": 2.779329
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "2d2e9053-4eba-4d44-a343-f88570c0513f",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.la-terrasse-panoramique",
+      "name": "La Terrasse Panoramique",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Eatery with a terrace near Adventure Bay.",
+      "rating": 3,
+      "ratingReason": "Nice spot by the water.",
+      "location": {
+        "lat": 48.865765,
+        "lng": 2.773667
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "fc6dcafb-0ca7-42eb-9da8-ca6efd3c3806",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "daw.laugh-n-go",
+      "name": "Laugh'N' Go!",
+      "parkId": "daw",
+      "areaId": "worlds-of-pixar",
+      "description": "Food truck serving cheese-based snacks from The Laughing Cow.",
+      "rating": 2,
+      "ratingReason": "Quick cheesy snack.",
+      "location": {
+        "lat": 48.866625,
+        "lng": 2.775209
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "1c04ec07-13c2-4d83-af15-6d9bac387db1",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.nordic-crowns-tavern",
+      "name": "Nordic Crowns Tavern",
+      "parkId": "daw",
+      "areaId": "world-of-frozen",
+      "description": "Frozen-themed restaurant in the World of Frozen, opened in 2026.",
+      "rating": 3,
+      "ratingReason": "Themed meal in Arendelle.",
+      "location": {
+        "lat": 48.864162,
+        "lng": 2.773907
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "9ee859db-2623-4ba3-8b40-ef32972cb8ee",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "daw.pym-kitchen",
+      "name": "PYM Kitchen",
+      "parkId": "daw",
+      "areaId": "avengers-campus",
+      "description": "All-you-can-eat buffet themed to Ant-Man and the Wasp, with giant and tiny food.",
+      "rating": 4,
+      "ratingReason": "Fun buffet with lots of choice.",
+      "location": {
+        "lat": 48.866,
+        "lng": 2.7796389
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "5f492609-5f79-4ca2-a3ca-39cdd0438739",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 75
+    },
+    {
+      "id": "daw.searchlight",
+      "name": "Searchlight",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Snack stop near World Premiere Plaza.",
+      "rating": 2,
+      "ratingReason": "Quick snack.",
+      "location": {
+        "lat": 48.867534,
+        "lng": 2.779616
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "20e0430d-a0d4-4bbf-a5da-b6cff3ffd23a",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.speciality-ice-cream",
+      "name": "Speciality Ice Cream",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Ice-cream stop near World Premiere Plaza.",
+      "rating": 2,
+      "ratingReason": "Ice-cream break.",
+      "location": {
+        "lat": 48.867123,
+        "lng": 2.778548
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "290f42d3-46bd-4cd1-b69d-891788b0afdb",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.stark-factory",
+      "name": "Stark Factory",
+      "parkId": "daw",
+      "areaId": "avengers-campus",
+      "description": "Counter-service pizza and pasta restaurant in Tony Stark's factory in Avengers Campus.",
+      "rating": 3,
+      "ratingReason": "Quick pizza and pasta.",
+      "location": {
+        "lat": 48.8656667,
+        "lng": 2.7800833333333332
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "7dae6b67-0da8-4cb6-8e6e-fb2c2f262a4d",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "daw.super-diner",
+      "name": "Super Diner",
+      "parkId": "daw",
+      "areaId": "avengers-campus",
+      "description": "1940s-style table-service diner themed to the Agent Carter series.",
+      "rating": 3,
+      "ratingReason": "Retro diner atmosphere.",
+      "location": {
+        "lat": 48.86589278028716,
+        "lng": 2.778520018942506
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney Adventure World",
+          "url": "https://en.wikipedia.org/wiki/Disney_Adventure_World"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "80283731-cd16-42fe-860e-28c70de9e59c",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 60
+    },
+    {
+      "id": "daw.hollywood-gardens-restaurant",
+      "name": "The Hollywood Gardens Restaurant",
+      "parkId": "daw",
+      "areaId": "world-premiere-plaza",
+      "description": "Restaurant near World Premiere Plaza.",
+      "rating": 3,
+      "ratingReason": "Convenient near the entrance.",
+      "location": {
+        "lat": 48.867756,
+        "lng": 2.779479
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "d75b7092-0bf9-4a94-bef9-2c9979b8a889",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "daw.regal-view-lounge",
+      "name": "The Regal View Lounge",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Lounge on Adventure Way next to The Regal View Restaurant.",
+      "rating": 3,
+      "ratingReason": "Drinks with a view.",
+      "location": {
+        "lat": 48.865837,
+        "lng": 2.775951
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "37588b4a-f847-4fb1-a6c0-6fabd2aa5cba",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "daw.regal-view-restaurant",
+      "name": "The Regal View Restaurant",
+      "parkId": "daw",
+      "areaId": "adventure-way",
+      "description": "Table-service restaurant on Adventure Way.",
+      "rating": 3,
+      "ratingReason": "Sit-down option on Adventure Way.",
+      "location": {
+        "lat": 48.8659,
+        "lng": 2.776125
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ff75413f-edee-4f9c-a9e8-0da580d127e2",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 75
+    },
+    {
+      "id": "daw.web-food-truck",
+      "name": "WEB Food Truck",
+      "parkId": "daw",
+      "areaId": "avengers-campus",
+      "description": "Food truck in Avengers Campus.",
+      "rating": 2,
+      "ratingReason": "Quick snack.",
+      "location": {
+        "lat": 48.86552376119522,
+        "lng": 2.778975069522857
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "460759ef-bceb-4e07-bdaa-7d1ab81e1413",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.its-a-small-world",
+      "name": "\"it's a small world\"",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Indoor boat cruise past hundreds of singing dolls in scenes from around the world. Calm, colourful and suitable for every age.",
+      "rating": 4,
+      "ratingReason": "Gentle classic everyone can enjoy; queues move quickly.",
+      "location": {
+        "lat": 48.87469,
+        "lng": 2.776084
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: It's a Small World",
+          "url": "https://en.wikipedia.org/wiki/It's_a_Small_World"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ce87a0fe-c644-475e-abb6-9727e05cebff",
+      "type": "attraction",
+      "durationMin": 11,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 11.3,
+        "avgMaxMin": 28.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.adventure-isle",
+      "name": "Adventure Isle",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Island of caves, rope bridges and a suspension bridge to explore on foot beside the pirate ship. No queue; go at your own pace.",
+      "rating": 3,
+      "ratingReason": "Free-roaming exploring and a good break from queues.",
+      "location": {
+        "lat": 48.872736,
+        "lng": 2.77316
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Adventure Isle",
+          "url": "https://en.wikipedia.org/wiki/Adventure_Isle_(Disneyland_Paris)"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "63dfcdab-86c2-4185-99b1-5a353d81bb52",
+      "type": "attraction",
+      "durationMin": 20,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "fixedWaitMin": 0
+    },
+    {
+      "id": "dlp.alices-curious-labyrinth",
+      "name": "Alice's Curious Labyrinth",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Hedge maze based on Alice in Wonderland, ending at the Queen of Hearts' castle with a view over Fantasyland.",
+      "rating": 3,
+      "ratingReason": "Fun for young children; rarely busy.",
+      "location": {
+        "lat": 48.874461,
+        "lng": 2.774518
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Alice's Curious Labyrinth",
+          "url": "https://en.wikipedia.org/wiki/Alice's_Curious_Labyrinth"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "252b9b03-f770-4979-b3b2-f4ffecc3894d",
+      "type": "attraction",
+      "durationMin": 15,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 5,
+        "avgMaxMin": 5.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.autopia",
+      "name": "Autopia",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Drive a petrol-powered car along a guided track through a retro-futuristic landscape. Children love being at the wheel.",
+      "rating": 3,
+      "ratingReason": "Children love driving, but the queue moves slowly.",
+      "location": {
+        "lat": 48.873417,
+        "lng": 2.778797
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Autopia",
+          "url": "https://en.wikipedia.org/wiki/Autopia"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "3a1cd3f7-9c42-4f9b-90fa-dab7ba113862",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": 81,
+      "ageRule": "Guests under 132 cm must ride with an adult driver.",
+      "thrill": 2,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 29.3,
+        "avgMaxMin": 59.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.big-thunder-mountain",
+      "name": "Big Thunder Mountain",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Runaway mine train racing around and under an island in the Rivers of the Far West, with tunnels and drops. Fast but no upside-down sections.",
+      "rating": 5,
+      "ratingReason": "The park's best-loved coaster: fast, long and scenic.",
+      "location": {
+        "lat": 48.871528,
+        "lng": 2.774787
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Big Thunder Mountain Railroad",
+          "url": "https://en.wikipedia.org/wiki/Big_Thunder_Mountain_Railroad"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "852d957c-382e-4afb-bb74-70c9a79055df",
+      "type": "attraction",
+      "durationMin": 4,
+      "minHeightCm": 102,
+      "thrill": 4,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 41.7,
+        "avgMaxMin": 68,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.snow-white-and-the-seven-dwarfs",
+      "name": "Blanche-Neige et les Sept Nains (Snow White)",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Short dark ride through Snow White's story. The Evil Queen and witch scenes can scare young children.",
+      "rating": 3,
+      "ratingReason": "Short and dated, with frightening witch scenes.",
+      "location": {
+        "lat": 48.873445,
+        "lng": 2.775298
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Snow White's Enchanted Wish (all versions)",
+          "url": "https://en.wikipedia.org/wiki/Snow_White's_Enchanted_Wish"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "8ed1472a-4d2e-47f1-b848-353de0bc3670",
+      "type": "attraction",
+      "durationMin": 3,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 2,
+      "waitStats": {
+        "avgMin": 19,
+        "avgMaxMin": 33.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.buzz-lightyear-laser-blast",
+      "name": "Buzz Lightyear Laser Blast",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Ride through Zurg's world shooting targets with a laser blaster to score points. Interactive and a family favourite.",
+      "rating": 4,
+      "ratingReason": "Competitive fun for all ages.",
+      "location": {
+        "lat": 48.87343,
+        "lng": 2.777947
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Buzz Lightyear attractions",
+          "url": "https://en.wikipedia.org/wiki/Buzz_Lightyear's_Space_Ranger_Spin"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "03992704-698d-474b-a721-a5ac3498edb9",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 29,
+        "avgMaxMin": 51.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.casey-jr",
+      "name": "Casey Jr. – le Petit Train du Cirque",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Little circus train that winds and dips past miniature fairy-tale scenes. A gentle first coaster for young children.",
+      "rating": 3,
+      "ratingReason": "Good first coaster for small children.",
+      "location": {
+        "lat": 48.875176,
+        "lng": 2.774151
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Casey Jr. Circus Train",
+          "url": "https://en.wikipedia.org/wiki/Casey_Jr._Circus_Train"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "7ff5d512-aed5-479a-8b3d-9bd1efb4177b",
+      "type": "attraction",
+      "durationMin": 3,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 14.3,
+        "avgMaxMin": 28.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.disneyland-railroad",
+      "name": "Disneyland Railroad (Main Street Station)",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Steam train circling the park with stations in Frontierland, Fantasyland and Discoveryland. A relaxing way to rest your feet and see the park.",
+      "rating": 3,
+      "ratingReason": "Restful grand circle; also handy transport.",
+      "location": {
+        "lat": 48.870821,
+        "lng": 2.779071
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Railroad (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Railroad_(Paris)"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "0d9296c0-a76c-4578-b0f9-2ff4b4e385b5",
+      "type": "attraction",
+      "durationMin": 25,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 23.3,
+        "avgMaxMin": 38,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.dumbo-the-flying-elephant",
+      "name": "Dumbo the Flying Elephant",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Classic spinning ride on flying elephants that you raise and lower yourself.",
+      "rating": 3,
+      "ratingReason": "Iconic for little ones, but the queue loads slowly.",
+      "location": {
+        "lat": 48.874152,
+        "lng": 2.774606
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Dumbo the Flying Elephant",
+          "url": "https://en.wikipedia.org/wiki/Dumbo_the_Flying_Elephant"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "46406e4a-4a02-4d30-89bc-ef1ed63c1ff9",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 28.7,
+        "avgMaxMin": 47.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.frontierland-playground",
+      "name": "Frontierland Playground",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Outdoor play area for young children in Frontierland.",
+      "rating": 2,
+      "ratingReason": "A place for small children to let off steam.",
+      "location": {
+        "lat": 48.870336,
+        "lng": 2.774223
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Park (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "03871aa6-a0b5-41ee-8fd3-b2f4b8dccc79",
+      "type": "attraction",
+      "durationMin": 20,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "fixedWaitMin": 0
+    },
+    {
+      "id": "dlp.horse-drawn-streetcars",
+      "name": "Horse-Drawn Streetcars",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Horse-drawn tram running along Main Street, U.S.A. between Town Square and Central Plaza.",
+      "rating": 2,
+      "ratingReason": "Charming short ride along Main Street.",
+      "location": {
+        "lat": 48.871058,
+        "lng": 2.778806
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Park (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "6bb88973-80d0-45cf-bffe-433f1c551362",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "fixedWaitMin": 5
+    },
+    {
+      "id": "dlp.indiana-jones-temple-of-peril",
+      "name": "Indiana Jones and the Temple of Peril",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Mine-cart roller coaster with a vertical loop through jungle temple ruins. Short, jerky and intense, with one of the highest height limits in the park.",
+      "rating": 3,
+      "ratingReason": "Short and rough; skip it if the queue is long.",
+      "location": {
+        "lat": 48.872429,
+        "lng": 2.772029
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Indiana Jones and the Temple of Peril",
+          "url": "https://en.wikipedia.org/wiki/Indiana_Jones_and_the_Temple_of_Peril"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "5d0ce227-7ad0-4402-a95b-6cf56f25a8ec",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": 140,
+      "thrill": 5,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 19,
+        "avgMaxMin": 43.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.la-cabane-des-robinson",
+      "name": "La Cabane des Robinson (Swiss Family Treehouse)",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Climb the stairs of the Swiss Family Robinson's giant treehouse for views over Adventureland. Not suitable for pushchairs.",
+      "rating": 2,
+      "ratingReason": "Lots of stairs for a nice view.",
+      "location": {
+        "lat": 48.872336,
+        "lng": 2.773744
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Swiss Family Treehouse",
+          "url": "https://en.wikipedia.org/wiki/Swiss_Family_Treehouse"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "7e426533-7727-47e5-8c8e-0dcd46198e57",
+      "type": "attraction",
+      "durationMin": 15,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 5,
+        "avgMaxMin": 6,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.sleeping-beauty-castle-gallery",
+      "name": "La Galerie de la Belle au Bois Dormant",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Gallery inside Sleeping Beauty Castle with tapestries, stained-glass windows and a balcony view down Main Street.",
+      "rating": 3,
+      "ratingReason": "Quick, free of queues and lovely inside the castle.",
+      "location": {
+        "lat": 48.873101,
+        "lng": 2.776212
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Le Château de la Belle au Bois Dormant",
+          "url": "https://en.wikipedia.org/wiki/Le_Château_de_la_Belle_au_Bois_Dormant"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "38bafc85-cb48-488e-aa68-3e2d01ae6a10",
+      "type": "attraction",
+      "durationMin": 10,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "fixedWaitMin": 0
+    },
+    {
+      "id": "dlp.la-taniere-du-dragon",
+      "name": "La Tanière du Dragon",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Dark cave under Sleeping Beauty Castle where a huge animatronic dragon sleeps, wakes and roars.",
+      "rating": 3,
+      "ratingReason": "Short and memorable; may scare toddlers.",
+      "location": {
+        "lat": 48.87308,
+        "lng": 2.775918
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: La Tanière du Dragon",
+          "url": "https://en.wikipedia.org/wiki/La_Tanière_du_Dragon"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "83fa9e7f-4a25-4bee-8e61-4fb8c59cd350",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 2,
+      "fixedWaitMin": 0
+    },
+    {
+      "id": "dlp.le-carrousel-de-lancelot",
+      "name": "Le Carrousel de Lancelot",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Classic carousel of knights' horses behind Sleeping Beauty Castle.",
+      "rating": 2,
+      "ratingReason": "A simple carousel; fine for small children.",
+      "location": {
+        "lat": 48.873908,
+        "lng": 2.775168
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Le Carrousel de Lancelot",
+          "url": "https://en.wikipedia.org/wiki/Le_Carrousel_de_Lancelot"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ced30c44-9b79-45de-a8c9-6347298756c1",
+      "type": "attraction",
+      "durationMin": 3,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 11.3,
+        "avgMaxMin": 19.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.le-passage-enchante-daladdin",
+      "name": "Le Passage Enchanté d'Aladdin",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Walk-through of illuminated scenes from Aladdin inside an Arabian bazaar building.",
+      "rating": 2,
+      "ratingReason": "Short walk-through; quick to see.",
+      "location": {
+        "lat": 48.872441,
+        "lng": 2.775416
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Le Passage Enchanté d'Aladdin",
+          "url": "https://en.wikipedia.org/wiki/Le_Passage_Enchanté_d'Aladdin"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "07782089-5e83-4bee-8a39-735818551844",
+      "type": "attraction",
+      "durationMin": 10,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "fixedWaitMin": 0
+    },
+    {
+      "id": "dlp.le-pays-des-contes-de-fees",
+      "name": "Le Pays des Contes de Fées (Storybook Land)",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Slow boat ride past miniature fairy-tale villages and castles, entering through Monstro the whale.",
+      "rating": 3,
+      "ratingReason": "Peaceful boat ride; nice for small children.",
+      "location": {
+        "lat": 48.87519,
+        "lng": 2.774483
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Storybook Land Canal Boats",
+          "url": "https://en.wikipedia.org/wiki/Storybook_Land_Canal_Boats"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "9056906c-0030-4951-be5e-44ac1f273491",
+      "type": "attraction",
+      "durationMin": 10,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 7.7,
+        "avgMaxMin": 12.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.les-mysteres-du-nautilus",
+      "name": "Les Mystères du Nautilus",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Walk-through of Captain Nemo's submarine from Jules Verne's Twenty Thousand Leagues Under the Seas, with a giant squid surprise.",
+      "rating": 3,
+      "ratingReason": "Detailed walk-through with almost no queue.",
+      "location": {
+        "lat": 48.873432,
+        "lng": 2.779553
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Les Mystères du Nautilus",
+          "url": "https://en.wikipedia.org/wiki/Les_Mystères_du_Nautilus"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "d8d9f62a-9fa3-4aae-a568-4225afc35924",
+      "type": "attraction",
+      "durationMin": 10,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 2,
+      "waitStats": {
+        "avgMin": 5,
+        "avgMaxMin": 5.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.les-voyages-de-pinocchio",
+      "name": "Les Voyages de Pinocchio",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Dark ride through Pinocchio's adventures. Scenes such as Pleasure Island and Monstro the whale can frighten young children.",
+      "rating": 3,
+      "ratingReason": "Short dark ride with a few scary moments.",
+      "location": {
+        "lat": 48.873545,
+        "lng": 2.775157
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Pinocchio's Daring Journey",
+          "url": "https://en.wikipedia.org/wiki/Pinocchio's_Daring_Journey"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "594dabd8-ddc1-4835-aafa-f654e10ed2db",
+      "type": "attraction",
+      "durationMin": 3,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 2,
+      "waitStats": {
+        "avgMin": 22.7,
+        "avgMaxMin": 37.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.mad-hatters-tea-cups",
+      "name": "Mad Hatter's Tea Cups",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Spinning teacups under a lantern-lit canopy; you control how fast your cup spins.",
+      "rating": 3,
+      "ratingReason": "Classic spinner; as wild as you make it.",
+      "location": {
+        "lat": 48.874365,
+        "lng": 2.775025
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Mad Tea Party",
+          "url": "https://en.wikipedia.org/wiki/Mad_Tea_Party"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "bcc5567f-f00b-4a7d-8ee6-526cc8d3d5de",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 8.3,
+        "avgMaxMin": 15.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.main-street-vehicles",
+      "name": "Main Street Vehicles",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Vintage cars, a fire engine and an omnibus making one-way trips along Main Street, U.S.A.",
+      "rating": 2,
+      "ratingReason": "Short, charming ride along Main Street.",
+      "location": {
+        "lat": 48.871327,
+        "lng": 2.778946
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Park (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "d6c61231-8f9b-40fa-943a-fe1454e185e7",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 5,
+        "avgMaxMin": 5.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.mickeys-philharmagic",
+      "name": "Mickey's PhilharMagic",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "3D film in which Donald chases Mickey's magic hat through famous Disney songs, with in-theatre effects. A good seated break.",
+      "rating": 4,
+      "ratingReason": "Great 3D film and a welcome seated break.",
+      "location": {
+        "lat": 48.87445952598315,
+        "lng": 2.7798494696617126
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Mickey's PhilharMagic",
+          "url": "https://en.wikipedia.org/wiki/Mickey's_PhilharMagic"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "a970c245-4924-48bd-bced-efc14850b116",
+      "type": "attraction",
+      "durationMin": 12,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 11.3,
+        "avgMaxMin": 11.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.orbitron",
+      "name": "Orbitron",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Spinning rockets that you pilot up and down around a giant planetary sculpture at the entrance to Discoveryland.",
+      "rating": 3,
+      "ratingReason": "Fun views, but slow-loading queue.",
+      "location": {
+        "lat": 48.873486,
+        "lng": 2.778457
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Astro Orbiter (Orbitron)",
+          "url": "https://en.wikipedia.org/wiki/Astro_Orbiter"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "f0525c25-4ea2-49b7-aab5-150b27658fb6",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 30.7,
+        "avgMaxMin": 53.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.peter-pans-flight",
+      "name": "Peter Pan's Flight",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Fly in a pirate galleon over moonlit London and on to Neverland. A short, beautiful dark ride with famously long queues.",
+      "rating": 4,
+      "ratingReason": "Magical classic, but its queues are among the longest.",
+      "location": {
+        "lat": 48.873838,
+        "lng": 2.77408
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Peter Pan's Flight",
+          "url": "https://en.wikipedia.org/wiki/Peter_Pan's_Flight"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "7c5b2c2d-1082-4e5c-b155-dc492db16e6e",
+      "type": "attraction",
+      "durationMin": 3,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 47,
+        "avgMaxMin": 70.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.phantom-manor",
+      "name": "Phantom Manor",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Slow dark ride through a haunted mansion on Boot Hill, telling the story of a ghostly bride. Often too frightening for young children.",
+      "rating": 5,
+      "ratingReason": "One of the best-themed rides in any Disney park.",
+      "location": {
+        "lat": 48.870977,
+        "lng": 2.776827
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Phantom Manor",
+          "url": "https://en.wikipedia.org/wiki/Phantom_Manor"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "14f756d6-d6fa-4200-8b41-db84ba294fa6",
+      "type": "attraction",
+      "durationMin": 6,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 3,
+      "waitStats": {
+        "avgMin": 12.3,
+        "avgMaxMin": 28,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.pirate-galleon",
+      "name": "Pirate Galleon",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Life-size pirate ship to climb aboard and explore beside Adventure Isle.",
+      "rating": 2,
+      "ratingReason": "Quick stop for young pirates.",
+      "location": {
+        "lat": 48.872927,
+        "lng": 2.773621
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Park (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "76e9e917-fe07-49d5-b604-f65d831210fa",
+      "type": "attraction",
+      "durationMin": 10,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "fixedWaitMin": 0
+    },
+    {
+      "id": "dlp.pirates-of-the-caribbean",
+      "name": "Pirates of the Caribbean",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Boat ride through pirate raids, sunken treasure and a fortress battle, including two short drops in the dark.",
+      "rating": 5,
+      "ratingReason": "Long, detailed and fun for most ages.",
+      "location": {
+        "lat": 48.873493,
+        "lng": 2.773381
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Pirates of the Caribbean (attraction)",
+          "url": "https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean_(attraction)"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "0d822af0-bf02-47a7-bc29-672d2fa4f7ab",
+      "type": "attraction",
+      "durationMin": 10,
+      "minHeightCm": null,
+      "thrill": 2,
+      "scare": 2,
+      "waitStats": {
+        "avgMin": 16,
+        "avgMaxMin": 36,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.pirates-beach",
+      "name": "Pirates' Beach",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Pirate-themed play area for young children in Adventureland.",
+      "rating": 2,
+      "ratingReason": "A place for small children to let off steam.",
+      "location": {
+        "lat": 48.87274,
+        "lng": 2.773771
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Park (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "2aa73e46-8dcf-4201-b334-db31e6e6ca06",
+      "type": "attraction",
+      "durationMin": 20,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "fixedWaitMin": 0
+    },
+    {
+      "id": "dlp.star-tours",
+      "name": "Star Tours: The Adventures Continue",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Motion-simulator flight through Star Wars locations, with random story segments so each ride is different. Can cause motion sickness.",
+      "rating": 4,
+      "ratingReason": "Different story each time; fun for Star Wars fans.",
+      "location": {
+        "lat": 48.874677,
+        "lng": 2.778782
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Star Tours – The Adventures Continue",
+          "url": "https://en.wikipedia.org/wiki/Star_Tours_–_The_Adventures_Continue"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "5d10b8b2-7d34-4794-8857-76688e5864bc",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": 102,
+      "thrill": 3,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 16,
+        "avgMaxMin": 37.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.star-wars-hyperspace-mountain",
+      "name": "Star Wars Hyperspace Mountain",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Launched roller coaster with inversions, in the dark, through a Star Wars space battle. Intense and loud.",
+      "rating": 4,
+      "ratingReason": "Intense headliner coaster for thrill seekers.",
+      "location": {
+        "lat": 48.873651,
+        "lng": 2.778863
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Star Wars Hyperspace Mountain",
+          "url": "https://en.wikipedia.org/wiki/Star_Wars_Hyperspace_Mountain"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ddca340c-7ba1-4f23-89eb-0d3d52c84bda",
+      "type": "attraction",
+      "durationMin": 2,
+      "minHeightCm": 120,
+      "thrill": 5,
+      "scare": 2,
+      "waitStats": {
+        "avgMin": 28.3,
+        "avgMaxMin": 52.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.thunder-mesa-riverboat",
+      "name": "Thunder Mesa Riverboat Landing",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Paddle-steamer cruise around Big Thunder Mountain's island on the Rivers of the Far West.",
+      "rating": 3,
+      "ratingReason": "Relaxing cruise with good views.",
+      "location": {
+        "lat": 48.871173,
+        "lng": 2.776563
+      },
+      "sources": [
+        {
+          "label": "Wikipedia: Disney riverboats",
+          "url": "https://en.wikipedia.org/wiki/Disney_riverboats"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "323bec06-fef7-4a60-989d-e3fcf9d3db7e",
+      "type": "attraction",
+      "durationMin": 15,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 15,
+        "avgMaxMin": 16,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.meet-mickey-mouse",
+      "name": "Meet Mickey Mouse",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Meet Mickey Mouse in his theatre dressing room for photos and autographs.",
+      "rating": 4,
+      "ratingReason": "Guaranteed Mickey photo, but a long queue.",
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Park (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "44eff9fa-cd05-4a00-89b3-e6cec4682636",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 61,
+        "avgMaxMin": 106.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.princess-pavilion",
+      "name": "Princess Pavilion",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Meet a Disney princess in a royal pavilion for a photo and a chat. It has the longest average queue in the park.",
+      "rating": 3,
+      "ratingReason": "Lovely for fans, but a very long queue for one princess.",
+      "sources": [
+        {
+          "label": "Wikipedia: Disneyland Park (Paris)",
+          "url": "https://en.wikipedia.org/wiki/Disneyland_Park_(Paris)"
+        },
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "14924bd7-ffbf-47ee-a96e-2d5bd3fb5f25",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 0,
+      "waitStats": {
+        "avgMin": 101.3,
+        "avgMaxMin": 197.7,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.welcome-to-starport",
+      "name": "Welcome to Starport: A Star Wars Encounter",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Meet Star Wars characters in Discoveryland's Starport hangar.",
+      "rating": 3,
+      "ratingReason": "Good for Star Wars fans.",
+      "sources": [
+        {
+          "label": "Queue-Times statistics, Disneyland Park",
+          "url": "https://queue-times.com/parks/4/stats"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "type": "attraction",
+      "durationMin": 5,
+      "minHeightCm": null,
+      "thrill": 1,
+      "scare": 1,
+      "waitStats": {
+        "avgMin": 28.3,
+        "avgMaxMin": 51.3,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    {
+      "id": "dlp.disney-stars-on-parade",
+      "name": "Disney Stars on Parade",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Daily parade of floats and characters travelling from Fantasyland to Town Square.",
+      "rating": 4,
+      "ratingReason": "Big, colourful parade with many characters.",
+      "location": {
+        "lat": 48.8717,
+        "lng": 2.7782
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "777518c2-1c65-48ba-94a1-e19583c44bf5",
+      "type": "show",
+      "durationMin": 30,
+      "times": [
+        "11:30"
+      ],
+      "arriveEarlyMin": 30
+    },
+    {
+      "id": "dlp.disney-tales-of-magic",
+      "name": "Disney Tales of Magic",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Night-time show of projections, fireworks and music on Sleeping Beauty Castle at park closing. The start time changes with the season.",
+      "rating": 5,
+      "ratingReason": "The best way to end the day.",
+      "location": {
+        "lat": 48.87284356722657,
+        "lng": 2.776469886302948
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "7d0660a9-cc08-45c0-9ab7-2699f5369771",
+      "type": "show",
+      "durationMin": 20,
+      "times": [
+        "22:00"
+      ],
+      "arriveEarlyMin": 45
+    },
+    {
+      "id": "dlp.the-lion-king-rhythms-of-the-pride-lands",
+      "name": "The Lion King: Rhythms of the Pride Lands",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Stage musical with songs from The Lion King, acrobats and dancers in the Frontierland Theater.",
+      "rating": 5,
+      "ratingReason": "High-energy stage show and a seated break.",
+      "location": {
+        "lat": 48.87001022097784,
+        "lng": 2.7728059887886047
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "ThemeParks.wiki show times (4 Oct 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/live"
+        },
+        {
+          "label": "Rating, thrill and scariness: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "78abb817-4564-41e2-b0de-fa0df34664c1",
+      "type": "show",
+      "durationMin": 30,
+      "times": [
+        "12:10",
+        "13:10",
+        "15:45",
+        "16:45"
+      ],
+      "arriveEarlyMin": 20
+    },
+    {
+      "id": "dlp.agrabah-cafe",
+      "name": "Agrabah Café Restaurant",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Buffet restaurant with Mediterranean and North African dishes in an Arabian bazaar setting.",
+      "rating": 3,
+      "ratingReason": "Generous buffet in a themed setting.",
+      "location": {
+        "lat": 48.87277,
+        "lng": 2.775236
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "3a91b818-cb5f-4900-b93e-c67e25f5956d",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 60
+    },
+    {
+      "id": "dlp.au-chalet-de-la-marionnette",
+      "name": "Au Chalet de la Marionnette",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Counter-service restaurant in an Alpine chalet themed to Pinocchio.",
+      "rating": 3,
+      "ratingReason": "Reliable quick meal in Fantasyland.",
+      "location": {
+        "lat": 48.873528,
+        "lng": 2.774677
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "e9124220-9699-4014-8e65-06cad9814a5b",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.auberge-de-cendrillon",
+      "name": "Auberge de Cendrillon",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Table-service restaurant themed to Cinderella where princesses visit the tables during the meal.",
+      "rating": 4,
+      "ratingReason": "Expensive, but a memorable princess meal.",
+      "location": {
+        "lat": 48.8736571395232,
+        "lng": 2.775783576071262
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "616bc6d6-5a14-4d39-90c3-88f6d61e5fd6",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 90
+    },
+    {
+      "id": "dlp.cable-car-bake-shop",
+      "name": "Cable Car Bake Shop",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Bakery and coffee shop on Main Street, U.S.A.",
+      "rating": 3,
+      "ratingReason": "Good coffee and pastries.",
+      "location": {
+        "lat": 48.871975,
+        "lng": 2.777754
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "98e395e6-4a32-4995-98f2-ff766d86c368",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.cafe-hyperion",
+      "name": "Café Hyperion",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Large counter-service burger restaurant under the airship Hyperion in Discoveryland.",
+      "rating": 3,
+      "ratingReason": "Big and quick; easy to find a seat.",
+      "location": {
+        "lat": 48.874057,
+        "lng": 2.778097
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "2683a803-03c4-48b6-9bbd-a7298400a675",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.cafe-de-la-brousse",
+      "name": "Café de la Brousse",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Snack kiosk in Adventureland.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.872371,
+        "lng": 2.77452
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "dd0f02c0-3714-47e2-b761-086cd752b207",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.captain-jacks",
+      "name": "Captain Jack's – Restaurant des Pirates",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Table-service restaurant inside Pirates of the Caribbean, overlooking the moonlit lagoon.",
+      "rating": 4,
+      "ratingReason": "Unique atmosphere inside the ride.",
+      "location": {
+        "lat": 48.873306,
+        "lng": 2.772994
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "8598d1c9-9693-4b10-a7a8-50077ba62a3f",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 75
+    },
+    {
+      "id": "dlp.casa-de-coco",
+      "name": "Casa de Coco – Restaurante de Familia",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Restaurant themed to the film Coco, serving Mexican family-style dishes.",
+      "rating": 3,
+      "ratingReason": "Colourful setting from Coco.",
+      "location": {
+        "lat": 48.871664,
+        "lng": 2.774558
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "e133de74-a086-4991-9ad9-6b72368447bd",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 75
+    },
+    {
+      "id": "dlp.caseys-corner",
+      "name": "Casey's Corner",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Hot dog restaurant with a baseball theme on Main Street, U.S.A.",
+      "rating": 3,
+      "ratingReason": "Quick hot dogs near the entrance.",
+      "location": {
+        "lat": 48.871983,
+        "lng": 2.777476
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "d5c26c67-691b-4250-985f-fdda5e5ac233",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.plaza-gardens-character-dining",
+      "name": "Character Dining at Plaza Gardens Restaurant",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Buffet meal at Plaza Gardens where Disney characters visit the tables.",
+      "rating": 3,
+      "ratingReason": "Characters at your table.",
+      "location": {
+        "lat": 48.872605,
+        "lng": 2.778027
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "e7e211f7-c1c5-466b-934a-d9891ba6547e",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 90
+    },
+    {
+      "id": "dlp.colonel-hathis-outpost",
+      "name": "Colonel Hathi's Outpost Restaurant",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Colonial-style restaurant in Adventureland themed to The Jungle Book.",
+      "rating": 3,
+      "ratingReason": "Quieter option in Adventureland.",
+      "location": {
+        "lat": 48.87174,
+        "lng": 2.773429
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "c8e304bd-876d-46e2-a412-7f8bc1e73a09",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.cookie-kitchen",
+      "name": "Cookie Kitchen",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Bakery on Main Street, U.S.A. selling cookies, muffins and sandwiches.",
+      "rating": 3,
+      "ratingReason": "Good for a quick breakfast.",
+      "location": {
+        "lat": 48.871931,
+        "lng": 2.777805
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "b1d843de-80b6-4ee1-bfd4-54d40f6026e7",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.cool-post",
+      "name": "Cool Post",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Snack and drinks kiosk in Adventureland.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.871928,
+        "lng": 2.773866
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "3954d4fe-3420-4df8-926c-aa2b0cc89853",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.cool-station",
+      "name": "Cool Station",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Snack and drinks kiosk in Discoveryland.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.87327,
+        "lng": 2.7781
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ef54a7f3-8276-4879-a431-0b9f9219ac78",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.cowboy-cookout-barbecue",
+      "name": "Cowboy Cookout Barbecue",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Large barn-style counter-service restaurant in Frontierland serving burgers and barbecue.",
+      "rating": 3,
+      "ratingReason": "Big, roomy and quick.",
+      "location": {
+        "lat": 48.871027,
+        "lng": 2.773392
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "4b2f71bd-332b-478c-8cd0-8627b3ec13fc",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.critter-corral",
+      "name": "Critter Corral",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Snack kiosk in Frontierland.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.870677,
+        "lng": 2.7722850000000108
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "2060c5ac-2ca2-48d0-9772-8f1b5fd3a702",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.larbre-enchante",
+      "name": "L'Arbre Enchanté",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Snack kiosk in Fantasyland.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.874138,
+        "lng": 2.775522
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "5bd7aa6a-69f5-443a-8c8a-e007678336d8",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.last-chance-cafe",
+      "name": "Last Chance Cafe",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Snack stop in Frontierland near Big Thunder Mountain.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.871533,
+        "lng": 2.776634
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ac95f062-776b-48d9-bc77-869a9307dac7",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.march-hare-refreshments",
+      "name": "March Hare Refreshments",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Snack kiosk in Fantasyland near Alice's Curious Labyrinth.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.874474,
+        "lng": 2.77489
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "c7773e1f-c75d-4ab8-b6e6-a797abfa82d9",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.market-house-deli",
+      "name": "Market House Deli",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Deli on Main Street, U.S.A. serving sandwiches and salads.",
+      "rating": 3,
+      "ratingReason": "Quick and light.",
+      "location": {
+        "lat": 48.871782,
+        "lng": 2.778021
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "5b3c8ce8-e773-4f4c-a508-cadde75188ce",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.overland-trail-cafe",
+      "name": "Overland Trail Cafe",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Snack stop in Frontierland.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.87168,
+        "lng": 2.774965
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ee25803b-51b1-4c67-86c3-eb4121c2ca8c",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.pizzeria-bella-notte",
+      "name": "Pizzeria Bella Notte",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Counter-service pizza and pasta restaurant themed to Lady and the Tramp.",
+      "rating": 3,
+      "ratingReason": "Family-friendly pizza and pasta.",
+      "location": {
+        "lat": 48.874315,
+        "lng": 2.776468
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "4a0db383-6bb7-49e2-bc1e-06997e65325f",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.plaza-gardens",
+      "name": "Plaza Gardens Restaurant",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Buffet restaurant in a Victorian building at the end of Main Street, U.S.A.",
+      "rating": 3,
+      "ratingReason": "Large buffet with plenty of choice.",
+      "location": {
+        "lat": 48.872605,
+        "lng": 2.77778
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "5b492a0f-7c9f-4c82-b6dc-4d1be20f7b1e",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 60
+    },
+    {
+      "id": "dlp.restaurant-hakuna-matata",
+      "name": "Restaurant Hakuna Matata",
+      "parkId": "dlp",
+      "areaId": "adventureland",
+      "description": "Counter-service restaurant themed to The Lion King in Adventureland.",
+      "rating": 3,
+      "ratingReason": "Quick meal in Adventureland.",
+      "location": {
+        "lat": 48.87206,
+        "lng": 2.774473
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "98e16089-4a95-4565-830a-faf5f730272d",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.rocket-cafe",
+      "name": "Rocket Café",
+      "parkId": "dlp",
+      "areaId": "discoveryland",
+      "description": "Coffee and snack stop in Discoveryland.",
+      "rating": 3,
+      "ratingReason": "Good coffee break.",
+      "location": {
+        "lat": 48.87435811100483,
+        "lng": 2.7796104146805023
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "69ab4a1d-725e-4bdc-8284-7c076001b523",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.silver-spur-steakhouse",
+      "name": "Silver Spur Steakhouse",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Western-style table-service steakhouse in Frontierland.",
+      "rating": 4,
+      "ratingReason": "Good steaks in a calm setting.",
+      "location": {
+        "lat": 48.871262,
+        "lng": 2.776632
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "222aa656-ac33-457c-8193-7c625949f40e",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 75
+    },
+    {
+      "id": "dlp.gibson-girl-ice-cream-parlour",
+      "name": "The Gibson Girl Ice Cream Parlour",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Ice-cream parlour on Main Street, U.S.A.",
+      "rating": 3,
+      "ratingReason": "Classic ice-cream stop.",
+      "location": {
+        "lat": 48.8721,
+        "lng": 2.77763
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "5ae7196f-3096-478b-b602-b8fe49d964ea",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.the-ice-cream-company",
+      "name": "The Ice Cream Company",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Ice-cream shop on Main Street, U.S.A.",
+      "rating": 3,
+      "ratingReason": "Classic ice-cream stop.",
+      "location": {
+        "lat": 48.871845,
+        "lng": 2.778292
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "678d76cf-6b24-40ec-a536-26c3667745e8",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.the-lucky-nugget-saloon",
+      "name": "The Lucky Nugget Saloon",
+      "parkId": "dlp",
+      "areaId": "frontierland",
+      "description": "Wild West saloon restaurant in Frontierland.",
+      "rating": 3,
+      "ratingReason": "Fun saloon setting.",
+      "location": {
+        "lat": 48.871646,
+        "lng": 2.776365
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "04123960-2968-4bea-ac47-c9aeba4ed581",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.the-old-mill",
+      "name": "The Old Mill",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Snack stop in a windmill in Fantasyland.",
+      "rating": 2,
+      "ratingReason": "Handy snack stop.",
+      "location": {
+        "lat": 48.874859,
+        "lng": 2.775106
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "4459f001-9dfe-4ddc-844a-6ae0e7bc36d5",
+      "type": "restaurant",
+      "service": "snack"
+    },
+    {
+      "id": "dlp.toad-hall-restaurant",
+      "name": "Toad Hall Restaurant",
+      "parkId": "dlp",
+      "areaId": "fantasyland",
+      "description": "Counter-service restaurant in an English manor house, serving fish and chips.",
+      "rating": 3,
+      "ratingReason": "Quick meal in Fantasyland.",
+      "location": {
+        "lat": 48.874154,
+        "lng": 2.773769
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "d0f981f2-9813-45a4-a623-a34380247b62",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.victorias-home-style-restaurant",
+      "name": "Victoria's Home-Style Restaurant",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Counter-service restaurant on Main Street, U.S.A.",
+      "rating": 3,
+      "ratingReason": "Quick meal near the entrance.",
+      "location": {
+        "lat": 48.872234,
+        "lng": 2.777902
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "f47b8d8b-a5a7-4f8c-a1ef-759621a5ee81",
+      "type": "restaurant",
+      "service": "counter"
+    },
+    {
+      "id": "dlp.walts",
+      "name": "Walt's – An American Restaurant",
+      "parkId": "dlp",
+      "areaId": "main-street",
+      "description": "Elegant table-service restaurant on Main Street, U.S.A., with rooms themed to the lands of the park.",
+      "rating": 4,
+      "ratingReason": "Calm sit-down meal with good food.",
+      "location": {
+        "lat": 48.871732,
+        "lng": 2.777713
+      },
+      "sources": [
+        {
+          "label": "ThemeParks.wiki entity list",
+          "url": "https://api.themeparks.wiki/v1/entity/e8d0207f-da8a-4048-bec8-117aa946b2c2/children"
+        },
+        {
+          "label": "Service type and rating: planner editorial judgement"
+        }
+      ],
+      "review": "draft",
+      "themeparksId": "ca17a056-3f23-41d2-babb-af6b178a9456",
+      "type": "restaurant",
+      "service": "table",
+      "mealMin": 75
+    }
+  ]
+}

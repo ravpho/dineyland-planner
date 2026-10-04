@@ -11,7 +11,9 @@
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "data:collect": "NODE_USE_ENV_PROXY=1 tsx scripts/data/collect.ts",
+    "data": "tsx scripts/data/build.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

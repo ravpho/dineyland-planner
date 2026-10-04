@@ -1,0 +1,23 @@
+park:
+  id: daw
+  name: Disney Adventure World
+  themeparksId: ca888437-ebb4-4d50-aed2-d227f7096968
+  entrance: { lat: 48.868391, lng: 2.780802 }
+  areas:
+    - { id: avengers-campus, name: Avengers Campus }
+  hours:
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+    - { open: "09:30", close: "21:00" }
+  hoursSources:
+    - { label: Test fixture }
+items: []
