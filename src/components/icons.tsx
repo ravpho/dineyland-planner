@@ -79,3 +79,13 @@ export const ClockIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M12 6v6l4 2" />
   </svg>
 )
+export const MinusIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M5 12h14" />
+  </svg>
+)
+export const ExternalIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base({ width: 14, height: 14, ...p })}>
+    <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+  </svg>
+)

@@ -6,6 +6,7 @@ import {
   MAX_ZOOM,
   areaWalkTable,
   areaZones,
+  bestLabelSpot,
   buildRoute,
   convexHull,
   inBounds,
@@ -63,6 +64,13 @@ describe('projection (Decision 1)', () => {
     expect(Math.hypot(pa.x - pb.x, pa.y - pb.y)).toBeCloseTo(distanceMetres(a, b), -1)
   })
 
+  test.each(PARK_IDS)('the %s map is turned so the entrance is straight below the centre', (parkId) => {
+    const projection = parkProjection(real, parkId)
+    const e = projection.project(entranceOf(real, parkId))
+    expect(e.x).toBeCloseTo(0, 6)
+    expect(e.y).toBeGreaterThan(0)
+  })
+
   test.each(PARK_IDS)('the %s entrance and every item fall inside the bounds', (parkId) => {
     const projection = parkProjection(real, parkId)
     expect(inBounds(projection.project(entranceOf(real, parkId)), projection.bounds)).toBe(true)
@@ -109,6 +117,16 @@ describe('label placement (Decision 3)', () => {
 
   test('labels that do not overlap are all shown', () => {
     expect(placeLabels([label('a', 0, 3), label('b', 60, 3)])).toEqual(new Set(['a', 'b']))
+  })
+
+  test('an area name moves off the markers but stays inside the view', () => {
+    const view = { width: 300, height: 300 }
+    const free = bestLabelSpot({ x: 150, y: 150 }, 80, 12, [], view)
+    expect(free).toEqual({ x: 110, y: 144, width: 80, height: 12 })
+    const crowded = bestLabelSpot({ x: 150, y: 150 }, 80, 12, [{ x: 140, y: 150 }, { x: 170, y: 152 }], view)
+    expect(crowded.y).not.toBe(144)
+    const edge = bestLabelSpot({ x: 5, y: 150 }, 80, 12, [], view)
+    expect(edge.x).toBe(2)
   })
 
   test('the selected item always keeps its label', () => {

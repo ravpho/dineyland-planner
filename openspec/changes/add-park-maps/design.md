@@ -30,6 +30,11 @@ Each park is projected locally (equirectangular around the park's centre, with x
 - **Input:** buttons; pinch via two active pointers (ratio of their distance); drag via one pointer; wheel on desktop.
 - The map box has a fixed height (about 60 % of the screen on phones) and `touch-action: none`, so gestures don't scroll the page.
 
+*Added during implementation:*
+- Each map is turned so the park entrance is at the bottom, as on the official park maps. Rotation keeps every distance, so walking estimates are unaffected.
+- Markers are 13 px apart at full-park zoom, so invisible tap areas around markers would catch taps meant for a neighbour. Instead a tap on a marker selects it, and a tap beside the markers selects the nearest one within 22 px.
+- Area names are placed at whichever of a few spots near the area centre covers the fewest markers, and item labels avoid them and the zoom buttons.
+
 *Alternatives:*
 - Leaflet or MapLibre with tiles: rejected because they need the network, a new dependency and tile usage terms.
 - `d3-zoom`: rejected because it's a dependency for about 80 lines of pointer handling.

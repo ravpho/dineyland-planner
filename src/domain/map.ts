@@ -7,6 +7,8 @@ import { areaCentres, entranceOf, locate, walkBetween, walkMinutes, type ParkPoi
 export const METRES_PER_DEGREE = (2 * Math.PI * 6_371_000) / 360
 /** Space around the outermost items, so zones and labels fit (design Decision 2). */
 export const MAP_MARGIN_M = 60
+/** Extra room below the entrance for its label and the park-change markers. */
+export const MAP_BOTTOM_MARGIN_M = 130
 
 /** A position on the map in metres from the park's centre; x points east, y points south (SVG). */
 export interface Point {
@@ -24,6 +26,8 @@ export interface Bounds {
 export interface ParkProjection {
   parkId: ParkId
   origin: Coordinates
+  /** Rotation applied so the entrance is at the bottom, in radians. */
+  rotation: number
   project: (c: Coordinates) => Point
   /** Every item and the entrance, plus the margin. */
   bounds: Bounds
@@ -43,20 +47,34 @@ export function parkPositions(catalog: Catalog, parkId: ParkId, centres = areaCe
   return new Map(catalog.items.filter((i) => i.parkId === parkId).map((i) => [i.id, locate(i, catalog, centres)]))
 }
 
+/**
+ * The park's map projection. The map is turned so the entrance is at the bottom, as on the official
+ * park maps; rotation keeps every distance, so walking estimates are unaffected.
+ */
 export function parkProjection(catalog: Catalog, parkId: ParkId, centres = areaCentres(catalog)): ParkProjection {
-  const coords = [...parkPositions(catalog, parkId, centres).values(), entranceOf(catalog, parkId)]
+  const entrance = entranceOf(catalog, parkId)
+  const coords = [...parkPositions(catalog, parkId, centres).values(), entrance]
   const lats = coords.map((c) => c.lat)
   const lngs = coords.map((c) => c.lng)
   const origin = { lat: (Math.min(...lats) + Math.max(...lats)) / 2, lng: (Math.min(...lngs) + Math.max(...lngs)) / 2 }
-  const project = projectionAround(origin)
+  const flat = projectionAround(origin)
+  const e = flat(entrance)
+  // Turn the entrance's direction from the centre to straight down (+y).
+  const rotation = e.x === 0 && e.y === 0 ? 0 : Math.PI / 2 - Math.atan2(e.y, e.x)
+  const cos = Math.cos(rotation)
+  const sin = Math.sin(rotation)
+  const project = (c: Coordinates): Point => {
+    const p = flat(c)
+    return { x: p.x * cos - p.y * sin, y: p.x * sin + p.y * cos }
+  }
   const points = coords.map(project)
   const bounds = {
     minX: Math.min(...points.map((p) => p.x)) - MAP_MARGIN_M,
     minY: Math.min(...points.map((p) => p.y)) - MAP_MARGIN_M,
     maxX: Math.max(...points.map((p) => p.x)) + MAP_MARGIN_M,
-    maxY: Math.max(...points.map((p) => p.y)) + MAP_MARGIN_M,
+    maxY: Math.max(...points.map((p) => p.y)) + MAP_BOTTOM_MARGIN_M,
   }
-  return { parkId, origin, project, bounds }
+  return { parkId, origin, rotation, project, bounds }
 }
 
 export const inBounds = (p: Point, b: Bounds) => p.x >= b.minX && p.x <= b.maxX && p.y >= b.minY && p.y <= b.maxY
@@ -147,6 +165,34 @@ export function placeLabels(candidates: LabelCandidate[]): Set<string> {
     if (c.always || !placed.some((p) => overlaps(p, c))) placed.push(c)
   }
   return new Set(placed.map((c) => c.id))
+}
+
+export interface ScreenBox {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+/** Offsets in pixels tried for an area name, nearest first. */
+const AREA_LABEL_OFFSETS: [number, number][] = [
+  [0, 0], [0, -22], [0, 22], [-40, 0], [40, 0], [0, -44], [0, 44], [-40, -22], [40, -22], [-40, 22], [40, 22],
+]
+
+/**
+ * Where to put an area name (screen pixels): of a few spots around the area centre, the one inside
+ * the view that covers the fewest markers, preferring spots near the centre.
+ */
+export function bestLabelSpot(centre: Point, width: number, height: number, obstacles: Point[], view: { width: number; height: number }): ScreenBox {
+  let best: { box: ScreenBox; score: number } | undefined
+  for (const [dx, dy] of AREA_LABEL_OFFSETS) {
+    const x = Math.min(Math.max(centre.x + dx - width / 2, 2), Math.max(2, view.width - width - 2))
+    const y = Math.min(Math.max(centre.y + dy - height / 2, 2), Math.max(2, view.height - height - 2))
+    const covered = obstacles.filter((p) => p.x > x - 6 && p.x < x + width + 6 && p.y > y - 6 && p.y < y + height + 6).length
+    const score = covered + Math.hypot(dx, dy) / 100
+    if (!best || score < best.score) best = { box: { x, y, width, height }, score }
+  }
+  return best!.box
 }
 
 /** Rough width of a label in pixels, without measuring text. */

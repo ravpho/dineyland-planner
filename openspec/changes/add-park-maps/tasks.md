@@ -22,10 +22,10 @@
 
 ## 4. Map UI
 
-- [ ] 4.1 Add `catalogView` and `mapParkId` session state and the "List | Map" switch in the catalog header (Decision 6). Verify a component test: switching to Map shows the map and keeps the current filters
-- [ ] 4.2 Build the map view: park switch, area zones and labels, markers by type, greyed unsuitable items, emphasised search matches, dashed approximate markers, zoom buttons, pinch, drag and wheel, and the official map link. Verify component tests for the zone count (five per park), an attraction filter hiding restaurants, and a greyed 120 cm ride with a 110 cm profile
-- [ ] 4.3 Build the item card (name, park and area, key facts, walk from the last stop, walks to areas, Add, Details, the approximate note) and the area walking times sheet. Verify component tests for "No day yet" (no last-stop line), "Add from the map", and the table rows for Disneyland Park
-- [ ] 4.4 Draw the selected day's route (numbered stops, solid and dashed segments, other-park marker). Verify a component test with a cross-park day showing stops 1 and 3 on Disneyland Park and the "to Disney Adventure World" marker
+- [x] 4.1 Add `catalogView` and `mapParkId` session state and the "List | Map" switch in the catalog header (Decision 6). Verify a component test: switching to Map shows the map and keeps the current filters
+- [x] 4.2 Build the map view: park switch, area zones and labels, markers by type, greyed unsuitable items, emphasised search matches, dashed approximate markers, zoom buttons, pinch, drag and wheel, and the official map link. Verify component tests for the zone count (five per park), an attraction filter hiding restaurants, and a greyed 120 cm ride with a 110 cm profile
+- [x] 4.3 Build the item card (name, park and area, key facts, walk from the last stop, walks to areas, Add, Details, the approximate note) and the area walking times sheet. Verify component tests for "No day yet" (no last-stop line), "Add from the map", and the table rows for Disneyland Park
+- [x] 4.4 Draw the selected day's route (numbered stops, solid and dashed segments, other-park marker). Verify a component test with a cross-park day showing stops 1 and 3 on Disneyland Park and the "to Disney Adventure World" marker
 
 ## 5. Catalog details
 

@@ -4,10 +4,12 @@ import type { CatalogItem, Show } from '../domain/catalog'
 import { filterCatalog, type ListedItem, type SortOrder } from '../domain/filters'
 import { MONTH_NAMES, useIsWide, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
+import { mapPark, type CatalogView } from '../state/store'
 import { useAddToDay } from '../app/useAddToDay'
 import { FilterPanel } from './FilterPanel'
 import { FilterIcon, GripIcon, PlusIcon } from './icons'
 import { ItemDetail } from './ItemDetail'
+import { ParkMap } from './ParkMap'
 import { itemFacts, TYPE_LABELS } from './labels'
 import { ShowTimePicker } from './ShowTimePicker'
 import { Badge, IconButton, inputClass, Stars } from './ui'
@@ -63,13 +65,18 @@ export function CatalogList() {
   const [open, setOpen] = useState<CatalogItem | null>(null)
   const [picking, setPicking] = useState<Show | null>(null)
   const [showFilters, setShowFilters] = useState(false)
+  const view = usePlanner((s) => s.catalogView)
+  const setView = usePlanner((s) => s.setCatalogView)
+  const shownPark = usePlanner((s) => mapPark(s, catalog))
 
-  const listed = useMemo(() => filterCatalog(catalog, filters, profile, month), [catalog, filters, profile, month])
+  // The map shows one park at a time with the same filters (design Decision 6).
+  const listFilters = useMemo(() => (view === 'map' ? { ...filters, parkId: shownPark } : filters), [view, filters, shownPark])
+  const listed = useMemo(() => filterCatalog(catalog, listFilters, profile, month), [catalog, listFilters, profile, month])
   const places = useMemo(
     () => new Map(catalog.parks.flatMap((p) => p.areas.map((a) => [`${p.id}/${a.id}`, `${p.name} · ${a.name}`] as const))),
     [catalog],
   )
-  const parkName = filters.parkId === 'all' ? undefined : catalog.parks.find((p) => p.id === filters.parkId)?.name
+  const parkName = listFilters.parkId === 'all' ? undefined : catalog.parks.find((p) => p.id === listFilters.parkId)?.name
   const activeFilters =
     (filters.parkId === 'all' ? 0 : 1) + filters.areaIds.length + filters.types.length + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
 
@@ -97,33 +104,52 @@ export function CatalogList() {
           <FilterIcon /> Filters{activeFilters > 0 && <span className="rounded-full bg-indigo-700 px-1.5 text-xs text-white">{activeFilters}</span>}
         </button>
       </div>
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <p className="text-sm text-slate-600" aria-live="polite" data-testid="match-count">
+      <div className="mb-2 flex items-center gap-2">
+        <div role="group" aria-label="Catalog view" className="flex shrink-0 overflow-hidden rounded-lg border border-slate-300 bg-white">
+          {(['list', 'map'] as CatalogView[]).map((v) => (
+            <button
+              key={v}
+              type="button"
+              aria-pressed={view === v}
+              onClick={() => setView(v)}
+              className={`min-h-11 min-w-14 px-3 text-sm font-medium ${view === v ? 'bg-indigo-700 text-white' : 'text-slate-700'}`}
+            >
+              {v === 'list' ? 'List' : 'Map'}
+            </button>
+          ))}
+        </div>
+        <p className="min-w-0 flex-1 text-sm text-slate-600" aria-live="polite" data-testid="match-count">
           {listed.length} {listed.length === 1 ? 'item' : 'items'}
           {parkName ? ` in ${parkName}` : ''}
         </p>
-        <label className="flex items-center gap-2 text-sm text-slate-700">
-          Sort
-          <select aria-label="Sort by" className={`${inputClass} text-sm`} value={filters.sort} onChange={(e) => setFilters({ sort: e.target.value as SortOrder })}>
-            <option value="name">Name</option>
-            <option value="rating">Rating</option>
-            <option value="wait">Busiest wait</option>
-            <option value="duration">Duration</option>
-          </select>
-        </label>
+        {view === 'list' && (
+          <label className="flex items-center gap-2 text-sm text-slate-700">
+            <span className="hidden sm:inline">Sort</span>
+            <select aria-label="Sort by" className={`${inputClass} text-sm`} value={filters.sort} onChange={(e) => setFilters({ sort: e.target.value as SortOrder })}>
+              <option value="name">Name</option>
+              <option value="rating">Rating</option>
+              <option value="wait">Busiest wait</option>
+              <option value="duration">Duration</option>
+            </select>
+          </label>
+        )}
       </div>
-      <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
-        {listed.map((l) => (
-          <li key={l.item.id} data-testid="catalog-row" data-unsuitable={l.unsuitable ? 'true' : undefined} className={`flex items-center gap-1 px-2 ${l.unsuitable ? 'bg-slate-50' : ''}`}>
-            {wide && <DragHandle item={l.item} />}
-            <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} onOpen={() => setOpen(l.item)} />
-            <IconButton label={`Add ${l.item.name} to day`} onClick={() => add(l.item)} className="text-indigo-700">
-              <PlusIcon />
-            </IconButton>
-          </li>
-        ))}
-        {listed.length === 0 && <li className="p-4 text-sm text-slate-600">Nothing matches these filters.</li>}
-      </ul>
+      {view === 'map' ? (
+        <ParkMap listed={listed} onAdd={add} onOpen={setOpen} />
+      ) : (
+        <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+          {listed.map((l) => (
+            <li key={l.item.id} data-testid="catalog-row" data-unsuitable={l.unsuitable ? 'true' : undefined} className={`flex items-center gap-1 px-2 ${l.unsuitable ? 'bg-slate-50' : ''}`}>
+              {wide && <DragHandle item={l.item} />}
+              <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} onOpen={() => setOpen(l.item)} />
+              <IconButton label={`Add ${l.item.name} to day`} onClick={() => add(l.item)} className="text-indigo-700">
+                <PlusIcon />
+              </IconButton>
+            </li>
+          ))}
+          {listed.length === 0 && <li className="p-4 text-sm text-slate-600">Nothing matches these filters.</li>}
+        </ul>
+      )}
       {open && (
         <ItemDetail
           item={open}
