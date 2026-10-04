@@ -29,7 +29,7 @@
 
 ## 5. Catalog details
 
-- [ ] 5.1 Add the "Official page" link (only when `officialUrl` is set), "Open in Maps" (Decision 9, with the approximate wording), and the height check level with the posted-signs advice to item details. Verify component tests: Big Thunder Mountain's official link, the Maps link containing Phantom Manor's coordinates, Autopia marked official, and an unverified ride marked not yet verified
+- [x] 5.1 Add the "Official page" link (only when `officialUrl` is set), "Open in Maps" (Decision 9, with the approximate wording), and the height check level with the posted-signs advice to item details. Verify component tests: Big Thunder Mountain's official link, the Maps link containing Phantom Manor's coordinates, Autopia marked official, and an unverified ride marked not yet verified
 
 ## 6. Integration checks
 

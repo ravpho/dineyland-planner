@@ -1,7 +1,8 @@
 import { DndContext } from '@dnd-kit/core'
 import { fireEvent, screen, within } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
-import type { CatalogItem } from '../../domain/catalog'
+import catalogJson from '../../data/catalog.json'
+import { parseCatalog, type CatalogItem } from '../../domain/catalog'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
 import { ToastProvider } from '../Toast'
@@ -105,5 +106,49 @@ describe('item details (park-catalog spec)', () => {
     expect(within(d).getByText('30 min')).toBeInTheDocument()
     expect(within(d).getByText('20 min before')).toBeInTheDocument()
     expect(within(d).getByText('Test fixture')).toBeInTheDocument()
+  })
+})
+
+describe('official links, maps and height checks (park-catalog spec)', () => {
+  const real = parseCatalog(catalogJson)
+  const open = (id: string, catalog = sampleCatalog) =>
+    renderWithPlanner(<ItemDetail item={catalog.items.find((i) => i.id === id)!} onClose={() => {}} onAdd={() => {}} />, { catalog })
+
+  test('Big Thunder Mountain links to its official page in a new tab', () => {
+    open('dlp.big-thunder-mountain')
+    const link = within(screen.getByRole('dialog')).getByRole('link', { name: 'Official page' })
+    expect(link).toHaveAttribute('href', 'https://www.disneylandparis.com/en-int/attractions/disneyland-park/big-thunder-mountain')
+    expect(link).toHaveAttribute('target', '_blank')
+  })
+
+  test('an item without a confirmed official page shows no official link', () => {
+    open('dlp.phantom-manor')
+    expect(within(screen.getByRole('dialog')).queryByRole('link', { name: /Official page/ })).toBeNull()
+  })
+
+  test('Open in Maps is centred on Phantom Manor’s coordinates', () => {
+    open('dlp.phantom-manor')
+    const link = within(screen.getByRole('dialog')).getByRole('link', { name: 'Open in Maps' })
+    expect(link).toHaveAttribute('href', 'https://www.google.com/maps/search/?api=1&query=48.8716,2.7718')
+    expect(link).toHaveAttribute('target', '_blank')
+  })
+
+  test('an approximate position says so on the Maps link', () => {
+    open('dlp.meet-mickey-mouse', real)
+    expect(within(screen.getByRole('dialog')).getByRole('link', { name: 'Open in Maps (approximate)' })).toBeInTheDocument()
+  })
+
+  test('Autopia’s height is marked as confirmed by an official source', () => {
+    open('dlp.autopia', real)
+    const d = screen.getByRole('dialog')
+    expect(within(d).getByTestId('height-source')).toHaveTextContent('Confirmed by an official Disneyland Paris source')
+    expect(within(d).getByRole('note')).toHaveTextContent('follow the signs posted at the attraction')
+  })
+
+  test('an unverified height is marked not yet verified, with the posted-signs advice', () => {
+    open('dlp.phantom-manor')
+    const d = screen.getByRole('dialog')
+    expect(within(d).getByTestId('height-source')).toHaveTextContent('Not yet verified')
+    expect(within(d).getByRole('note')).toHaveTextContent('always follow the signs posted at the attraction')
   })
 })
