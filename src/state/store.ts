@@ -1,25 +1,25 @@
 import { createStore, type StoreApi } from 'zustand/vanilla'
-import type { Catalog, ParkId } from '../domain/catalog'
+import type { Catalog } from '../domain/catalog'
 import { DEFAULT_FILTERS, type CatalogFilters } from '../domain/filters'
 import type { GroupProfile } from '../domain/suitability'
 import { monthOf } from '../domain/time'
 import { MAX_TRIP_DAYS, addDays, newId, type Day, type PlanItem, type Trip } from '../domain/trip'
 import { loadState, saveState, type KeyValueStorage, type LoadResult, type SavedState } from './persistence'
 
-export type AddResult = { ok: true; key: string } | { ok: false; reason: 'other-park' | 'unknown-item' | 'no-day' }
+export type AddResult = { ok: true; key: string } | { ok: false; reason: 'unknown-item' | 'no-day' }
 
 export interface PlannerState extends SavedState {
   filters: CatalogFilters
   lastRemoved?: { tripId: string; dayId: string; entry: PlanItem; index: number }
   storage: LoadResult['status'] | 'ok'
 
-  createTrip(name: string, startDate: string, dayCount: number): string
+  /** `dayCount` defaults to 1. */
+  createTrip(name: string, startDate: string, dayCount?: number): string
   renameTrip(tripId: string, name: string): void
   deleteTrip(tripId: string): void
   selectTrip(tripId: string): void
   selectDay(dayId: string): void
   setTripLength(tripId: string, dayCount: number): void
-  setDayPark(dayId: string, parkId: ParkId): void
   setDayWindow(dayId: string, start: string, end: string): void
   addItem(dayId: string, itemId: string, options?: { index?: number; showTime?: string }): AddResult
   removeItem(dayId: string, key: string): void
@@ -29,8 +29,8 @@ export interface PlannerState extends SavedState {
   importTrip(trip: Trip): void
   setProfile(profile: GroupProfile | undefined): void
   setFilters(filters: Partial<CatalogFilters>): void
-  /** Resets park (to `parkId`, normally the selected day's park), area, type and search. Keeps the profile. */
-  clearFilters(parkId?: ParkId): void
+  /** Resets park (back to both parks), area, type and search. Keeps the profile, sort and hide setting. */
+  clearFilters(): void
 }
 
 export type PlannerStore = StoreApi<PlannerState>
@@ -42,10 +42,12 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
   const loaded = loadState(storage)
   const saved: SavedState = loaded.status === 'loaded' ? loaded.state : { trips: [] }
 
-  function newDay(date: string, parkId: ParkId = 'dlp'): Day {
-    const park = catalog.parks.find((p) => p.id === parkId)!
-    const hours = park.hours[monthOf(date) - 1]!
-    return { id: newId(), date, parkId, start: hours.open, end: hours.close, items: [] }
+  /** A new day's window spans both parks: earliest opening to latest closing that month. */
+  function newDay(date: string): Day {
+    const hours = catalog.parks.map((p) => p.hours[monthOf(date) - 1]!)
+    const start = hours.map((h) => h.open).sort()[0]!
+    const end = hours.map((h) => h.close).sort().at(-1)!
+    return { id: newId(), date, start, end, items: [] }
   }
 
   const store = createStore<PlannerState>()((set, get) => {
@@ -65,7 +67,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       filters: DEFAULT_FILTERS,
       storage: loaded.status === 'loaded' || loaded.status === 'empty' ? 'ok' : loaded.status,
 
-      createTrip(name, startDate, dayCount) {
+      createTrip(name, startDate, dayCount = 1) {
         const count = clamp(Math.round(dayCount), 1, MAX_TRIP_DAYS)
         const trip: Trip = { id: newId(), name: name.trim() || 'My trip', days: Array.from({ length: count }, (_, i) => newDay(addDays(startDate, i))) }
         set((s) => ({ trips: [...s.trips, trip], selectedTripId: trip.id, selectedDayId: trip.days[0]!.id }))
@@ -96,16 +98,13 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
             if (t.id !== tripId) return t
             if (count <= t.days.length) return { ...t, days: t.days.slice(0, count) }
             const last = t.days[t.days.length - 1]!
-            const extra = Array.from({ length: count - t.days.length }, (_, i) => newDay(addDays(last.date, i + 1), last.parkId))
+            const extra = Array.from({ length: count - t.days.length }, (_, i) => newDay(addDays(last.date, i + 1)))
             return { ...t, days: [...t.days, ...extra] }
           }),
         }))
         const s = get()
         const trip = s.trips.find((t) => t.id === tripId)
         if (trip && s.selectedTripId === tripId && !trip.days.some((d) => d.id === s.selectedDayId)) set({ selectedDayId: trip.days.at(-1)!.id })
-      },
-      setDayPark(dayId, parkId) {
-        updateDay(dayId, (d) => (d.parkId === parkId ? d : { ...d, parkId, items: d.items.filter((e) => items.get(e.itemId)?.parkId === parkId) }))
       },
       setDayWindow(dayId, start, end) {
         updateDay(dayId, (d) => ({ ...d, start, end }))
@@ -115,7 +114,6 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         if (!found) return { ok: false, reason: 'no-day' }
         const item = items.get(itemId)
         if (!item) return { ok: false, reason: 'unknown-item' }
-        if (item.parkId !== found.day.parkId) return { ok: false, reason: 'other-park' }
         const entry: PlanItem = { key: newId(), itemId }
         if (item.type === 'show') entry.showTime = options.showTime ?? item.times[0]
         updateDay(dayId, (d) => {
@@ -164,8 +162,8 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       setFilters(filters) {
         set((s) => ({ filters: { ...s.filters, ...filters } }))
       },
-      clearFilters(parkId) {
-        set((s) => ({ filters: { ...DEFAULT_FILTERS, parkId: parkId ?? DEFAULT_FILTERS.parkId, sort: s.filters.sort, hideUnsuitable: s.filters.hideUnsuitable } }))
+      clearFilters() {
+        set((s) => ({ filters: { ...DEFAULT_FILTERS, sort: s.filters.sort, hideUnsuitable: s.filters.hideUnsuitable } }))
       },
     }
   })

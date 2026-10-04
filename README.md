@@ -2,10 +2,10 @@
 
 Plan your days at Disneyland Paris. It covers both parks: Disneyland Park and Disney Adventure World.
 
-- Browse every attraction, restaurant and show. Each has a description, a "worth it" rating, duration, height limit, thrill level, scariness and typical waits by month and time of day.
+- Browse every attraction, restaurant and show of both parks in one list, each labelled with its park and area. Each has a description, a "worth it" rating, duration, height limit, thrill level, scariness and typical waits by month and time of day. Sort by name, rating, busiest wait or duration.
 - Filter by height, thrill and scariness, or save a group profile so unsuitable rides are greyed out automatically.
-- Build a multi-day trip: one park per day, items added by tap or drag and reordered by drag.
-- See a timeline with walking, typical queues and fixed show times, and whether the day **fits** your time or how far it runs **over**.
+- Build a day (or a multi-day trip) that **combines both parks**: items from Disneyland Park and Disney Adventure World in any order, added by tap or drag and reordered by drag.
+- See a timeline with walking (including park changes through both entrances), typical queues and fixed show times, and whether the day **fits** your time or how far it runs **over**. Days that use both parks remind you that you need a ticket valid for both.
 - Works on phones, installs to the home screen and works offline. Trips stay on your device; share links move them between devices.
 
 Waits are typical values built from real [Queue-Times.com](https://queue-times.com/en-US) statistics, not live data. Live in-park updates are planned next. This is an unofficial app, not affiliated with Disney.

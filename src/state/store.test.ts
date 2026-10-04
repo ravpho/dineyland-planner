@@ -27,11 +27,21 @@ describe('trips (trip-itinerary spec)', () => {
     expect(selectedTrip(s())!.days.map((d) => d.date)).toEqual(['2026-08-12', '2026-08-13', '2026-08-14'])
   })
 
-  test('new days default to Disneyland Park and its typical hours for the month', () => {
-    const { day } = setup()
-    expect(day().parkId).toBe('dlp')
-    expect(day().start).toBe(sampleCatalog.parks[0]!.hours[7]!.open)
-    expect(day().end).toBe(sampleCatalog.parks[0]!.hours[7]!.close)
+  test('a new day defaults to the earliest opening and latest closing of both parks', () => {
+    const catalog = structuredClone(sampleCatalog)
+    catalog.parks[0]!.hours[7] = { open: '09:30', close: '21:00' }
+    catalog.parks[1]!.hours[7] = { open: '10:00', close: '22:00' }
+    const store = createPlannerStore(catalog)
+    store.getState().createTrip('x', '2026-08-12', 1)
+    const d = selectedDay(store.getState())!
+    expect([d.start, d.end]).toEqual(['09:30', '22:00'])
+    expect('parkId' in d).toBe(false)
+  })
+
+  test('a trip has one day by default', () => {
+    const store = createPlannerStore(sampleCatalog)
+    const id = store.getState().createTrip('Day trip', '2026-08-12')
+    expect(store.getState().trips.find((t) => t.id === id)!.days).toHaveLength(1)
   })
 
   test('trip length is limited to 1-7 days, and shrinking drops the last days', () => {
@@ -73,10 +83,12 @@ describe('trips (trip-itinerary spec)', () => {
     expect(ids(day().items)).toEqual(['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.star-wars-hyperspace-mountain', 'dlp.peter-pans-flight'])
   })
 
-  test('an item from the other park is not added', () => {
+  test('items from both parks can be added to the same day, in order', () => {
     const { s, day } = setup()
-    expect(s().addItem(day().id, 'daw.avengers-flight-force')).toEqual({ ok: false, reason: 'other-park' })
-    expect(day().items).toHaveLength(0)
+    expect(s().addItem(day().id, 'dlp.big-thunder-mountain').ok).toBe(true)
+    expect(s().addItem(day().id, 'daw.avengers-flight-force').ok).toBe(true)
+    expect(ids(day().items)).toEqual(['dlp.big-thunder-mountain', 'daw.avengers-flight-force'])
+    expect(s().addItem(day().id, 'dlp.nope')).toEqual({ ok: false, reason: 'unknown-item' })
   })
 
   test('the same attraction can be added twice', () => {
@@ -95,14 +107,6 @@ describe('trips (trip-itinerary spec)', () => {
     expect(day().items[0]!.showTime).toBe('13:30')
     s().addItem(day().id, 'dlp.parade')
     expect(day().items[1]!.showTime).toBe('13:30') // first typical time by default
-  })
-
-  test('changing the park removes items from the previous park', () => {
-    const { s, day } = setup()
-    s().addItem(day().id, 'dlp.big-thunder-mountain')
-    s().setDayPark(day().id, 'daw')
-    expect(day().parkId).toBe('daw')
-    expect(day().items).toHaveLength(0)
   })
 
   test('move up, move down and drag reorder', () => {
@@ -127,7 +131,7 @@ describe('trips (trip-itinerary spec)', () => {
   test('importing adds a new trip and leaves existing trips unchanged', () => {
     const { s, tripId } = setup()
     const before = structuredClone(s().trips.find((t) => t.id === tripId))
-    s().importTrip({ id: 'imported', name: 'Shared', days: [{ id: 'x', date: '2026-09-01', parkId: 'daw', start: '09:30', end: '20:00', items: [] }] })
+    s().importTrip({ id: 'imported', name: 'Shared', days: [{ id: 'x', date: '2026-09-01', start: '09:30', end: '20:00', items: [] }] })
     expect(s().trips).toHaveLength(2)
     expect(s().trips.find((t) => t.id === tripId)).toEqual(before)
     expect(selectedTrip(s())!.id).toBe('imported')
@@ -146,11 +150,28 @@ describe('saving on the device', () => {
     expect(reopened.profile).toEqual({ heightCm: 110 })
   })
 
+  test('migrates v1 trips (one park per day) to park-free days', () => {
+    const storage = new MemoryStorage()
+    const v1Day = { id: 'd1', date: '2026-08-12', parkId: 'daw', start: '09:30', end: '22:00', items: [{ key: 'k1', itemId: 'daw.avengers-flight-force' }] }
+    storage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, state: { trips: [{ id: 't1', name: 'Old', days: [v1Day] }], selectedTripId: 't1', selectedDayId: 'd1', profile: { heightCm: 100 } } }))
+    const store = createPlannerStore(sampleCatalog, storage)
+    const state = store.getState()
+    expect(state.storage).toBe('ok')
+    expect(state.trips[0]!.days[0]).toEqual({ id: 'd1', date: '2026-08-12', start: '09:30', end: '22:00', items: [{ key: 'k1', itemId: 'daw.avengers-flight-force' }] })
+    expect(state.selectedDayId).toBe('d1')
+    expect(state.profile).toEqual({ heightCm: 100 })
+    // items from the other park can now be added to the migrated day
+    expect(state.addItem('d1', 'dlp.big-thunder-mountain').ok).toBe(true)
+    expect(JSON.parse(storage.getItem(STORAGE_KEY)!).version).toBe(2)
+  })
+
   test('migrates the unversioned v0 format', () => {
     const storage = new MemoryStorage()
-    storage.setItem(STORAGE_KEY, JSON.stringify({ trips: [{ id: 'old', name: 'Old trip', days: [] }], profile: { heightCm: 95 } }))
+    const v0Day = { id: 'd', date: '2026-08-12', parkId: 'dlp', start: '09:30', end: '22:00', items: [{ key: 'k', itemId: 'dlp.phantom-manor' }] }
+    storage.setItem(STORAGE_KEY, JSON.stringify({ trips: [{ id: 'old', name: 'Old trip', days: [v0Day] }], profile: { heightCm: 95 } }))
     const state = createPlannerStore(sampleCatalog, storage).getState()
     expect(state.trips.map((t) => t.name)).toEqual(['Old trip'])
+    expect(state.trips[0]!.days[0]).toEqual({ id: 'd', date: '2026-08-12', start: '09:30', end: '22:00', items: [{ key: 'k', itemId: 'dlp.phantom-manor' }] })
     expect(state.profile).toEqual({ heightCm: 95 })
     expect(state.storage).toBe('ok')
   })
@@ -172,7 +193,7 @@ describe('saving on the device', () => {
 
   test('data saved by a newer version is left alone', () => {
     const storage = new MemoryStorage()
-    const future = JSON.stringify({ version: 99, state: { trips: [], somethingNew: true } })
+    const future = JSON.stringify({ version: 3, state: { trips: [], somethingNew: true } })
     storage.setItem(STORAGE_KEY, future)
     const { s } = setup(storage)
     expect(s().storage).toBe('newer')
@@ -199,12 +220,12 @@ describe('group profile and filters', () => {
     expect(reopened.filters.query).toBe('')
   })
 
-  test('clear filters resets park, area, type and search and keeps the profile', () => {
+  test('clear filters returns to both parks, resets area, type and search and keeps the profile', () => {
     const { s } = setup()
     s().setProfile({ heightCm: 110 })
     s().setFilters({ parkId: 'daw', areaIds: ['avengers-campus'], types: ['attraction'], query: 'x', sort: 'rating' })
-    s().clearFilters('dlp')
-    expect(s().filters).toMatchObject({ parkId: 'dlp', areaIds: [], types: [], query: '', sort: 'rating' })
+    s().clearFilters()
+    expect(s().filters).toMatchObject({ parkId: 'all', areaIds: [], types: [], query: '', sort: 'rating' })
     expect(s().profile).toEqual({ heightCm: 110 })
   })
 

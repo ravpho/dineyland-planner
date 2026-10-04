@@ -1,5 +1,5 @@
 import { DndContext } from '@dnd-kit/core'
-import { screen, within } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
 import type { CatalogItem } from '../../domain/catalog'
 import { renderWithPlanner } from '../../test/render'
@@ -39,9 +39,24 @@ describe('catalog list (park-catalog spec)', () => {
     expect(within(walts).queryByText(/wait in/)).toBeNull()
   })
 
-  test('shows the match count for the selected day park', async () => {
+  test('lists both parks with a park and area label on every row', async () => {
     renderList()
-    expect(await screen.findByTestId('match-count')).toHaveTextContent(`${sampleCatalog.items.filter((i) => i.parkId === 'dlp').length} items in Disneyland Park`)
+    expect(await screen.findByTestId('match-count')).toHaveTextContent(new RegExp(`^${sampleCatalog.items.length} items$`))
+    const rows = await screen.findAllByTestId('catalog-row')
+    const label = (name: string) => within(rows.find((r) => r.textContent?.includes(name))!).getByTestId('row-place')
+    expect(label('Big Thunder Mountain')).toHaveTextContent('Disneyland Park · Frontierland')
+    expect(label('Avengers Assemble: Flight Force')).toHaveTextContent('Disney Adventure World · Avengers Campus')
+    expect(rows.every((r) => within(r).getByTestId('row-place').textContent!.includes(' · '))).toBe(true)
+  })
+
+  test('the sort control above the list reorders it without opening the filters', async () => {
+    const { store } = renderList()
+    const select = screen.getByLabelText('Sort by')
+    fireEvent.change(select, { target: { value: 'duration' } })
+    expect(store.getState().filters.sort).toBe('duration')
+    const names = (await screen.findAllByTestId('catalog-row')).map((r) => r.textContent)
+    expect(names.findIndex((n) => n?.includes('Hyperspace'))).toBeLessThan(names.findIndex((n) => n?.includes("Walt's")))
+    expect(screen.queryByRole('dialog')).toBeNull()
   })
 })
 

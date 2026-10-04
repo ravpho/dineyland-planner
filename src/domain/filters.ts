@@ -1,11 +1,12 @@
 import type { Catalog, CatalogItem, ItemType, Park, ParkId } from './catalog'
 import { unsuitableReason, type GroupProfile } from './suitability'
-import { waitRange } from './waits'
+import { mealMinutes, waitRange } from './waits'
 
-export type SortOrder = 'name' | 'rating' | 'wait'
+export type SortOrder = 'name' | 'rating' | 'wait' | 'duration'
 
 export interface CatalogFilters {
-  parkId: ParkId
+  /** 'all' lists both parks (the default). */
+  parkId: ParkId | 'all'
   /** Empty = all areas. */
   areaIds: string[]
   /** Empty = all types. */
@@ -16,7 +17,7 @@ export interface CatalogFilters {
 }
 
 export const DEFAULT_FILTERS: CatalogFilters = {
-  parkId: 'dlp',
+  parkId: 'all',
   areaIds: [],
   types: [],
   query: '',
@@ -43,26 +44,32 @@ export function matchesQuery(item: CatalogItem, query: string): boolean {
 }
 
 export function filterCatalog(catalog: Catalog, filters: CatalogFilters, profile: GroupProfile | undefined, month: number): ListedItem[] {
-  const park = catalog.parks.find((p) => p.id === filters.parkId) as Park
+  const parks = new Map(catalog.parks.map((p) => [p.id, p as Park]))
   const listed: ListedItem[] = []
   for (const item of catalog.items) {
-    if (item.parkId !== filters.parkId) continue
+    if (filters.parkId !== 'all' && item.parkId !== filters.parkId) continue
     if (filters.areaIds.length > 0 && !filters.areaIds.includes(item.areaId)) continue
     if (filters.types.length > 0 && !filters.types.includes(item.type)) continue
     if (!matchesQuery(item, filters.query)) continue
     const unsuitable = unsuitableReason(item, profile)
     if (unsuitable && filters.hideUnsuitable) continue
-    listed.push({ item, unsuitable, waitRange: item.type === 'attraction' ? waitRange(item, park, month) : undefined })
+    listed.push({ item, unsuitable, waitRange: item.type === 'attraction' ? waitRange(item, parks.get(item.parkId)!, month) : undefined })
   }
   return sortListed(listed, filters.sort)
 }
 
 const byName = (a: ListedItem, b: ListedItem) => a.item.name.localeCompare(b.item.name, 'en', { sensitivity: 'base' })
 
+/** Ride, meal or show length in minutes. */
+export function durationOf(item: CatalogItem): number {
+  return item.type === 'restaurant' ? mealMinutes(item) : item.durationMin
+}
+
 export function sortListed(listed: ListedItem[], sort: SortOrder): ListedItem[] {
   const copy = [...listed]
   if (sort === 'name') return copy.sort(byName)
   if (sort === 'rating') return copy.sort((a, b) => b.item.rating - a.item.rating || byName(a, b))
+  if (sort === 'duration') return copy.sort((a, b) => durationOf(a.item) - durationOf(b.item) || byName(a, b))
   // Shortest typical peak wait first; items without a queue estimate go last.
   return copy.sort((a, b) => (a.waitRange?.[1] ?? Infinity) - (b.waitRange?.[1] ?? Infinity) || byName(a, b))
 }

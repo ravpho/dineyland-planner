@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import type { Catalog } from './catalog'
 import { sampleCatalog } from '../test/sampleCatalog'
-import { DEFAULT_FILTERS, filterCatalog, normalizeText, type CatalogFilters } from './filters'
+import { DEFAULT_FILTERS, durationOf, filterCatalog, normalizeText, type CatalogFilters } from './filters'
 import { unsuitableReason } from './suitability'
 
 const f = (overrides: Partial<CatalogFilters>): CatalogFilters => ({ ...DEFAULT_FILTERS, ...overrides })
@@ -9,6 +9,23 @@ const names = (list: ReturnType<typeof filterCatalog>) => list.map((l) => l.item
 const item = (id: string) => sampleCatalog.items.find((i) => i.id === id)!
 
 describe('catalog filtering (catalog-filtering spec)', () => {
+  test('both parks are listed by default', () => {
+    const list = filterCatalog(sampleCatalog, f({}), undefined, 8)
+    expect(new Set(list.map((l) => l.item.parkId))).toEqual(new Set(['dlp', 'daw']))
+    expect(list).toHaveLength(sampleCatalog.items.length)
+    expect(DEFAULT_FILTERS.parkId).toBe('all')
+  })
+
+  test('sort by duration puts the shortest first (ride < boat ride < table-service meal)', () => {
+    const list = filterCatalog(sampleCatalog, f({ sort: 'duration' }), undefined, 8)
+    const pos = (id: string) => list.findIndex((l) => l.item.id === id)
+    expect(pos('dlp.star-wars-hyperspace-mountain')).toBeLessThan(pos('dlp.phantom-manor')) // 3 min < 7 min
+    expect(pos('dlp.phantom-manor')).toBeLessThan(pos('dlp.walts')) // 7 min < 75 min meal
+    expect(durationOf(item('dlp.walts'))).toBe(75)
+    expect(durationOf(item('dlp.cafe-hyperion'))).toBe(30)
+    expect(durationOf(item('dlp.parade'))).toBe(30)
+  })
+
   test('park, area and type filters', () => {
     const list = filterCatalog(sampleCatalog, f({ parkId: 'dlp', areaIds: ['frontierland'], types: ['attraction'] }), undefined, 8)
     expect(names(list).sort()).toEqual(['Big Thunder Mountain', 'Phantom Manor'])
@@ -42,7 +59,7 @@ describe('catalog filtering (catalog-filtering spec)', () => {
     expect(shown.find((l) => l.item.id === 'dlp.star-wars-hyperspace-mountain')?.unsuitable).toBe('Needs 120 cm')
     const hidden = filterCatalog(sampleCatalog, f({ hideUnsuitable: true }), profile, 8)
     expect(hidden.some((l) => l.item.id === 'dlp.star-wars-hyperspace-mountain')).toBe(false)
-    expect(hidden.length).toBe(shown.length - 1)
+    expect(hidden.length).toBe(shown.filter((l) => !l.unsuitable).length) // Hyperspace and Flight Force both need 120 cm
   })
 
   test('filters combine: an item must pass every one', () => {
@@ -50,6 +67,14 @@ describe('catalog filtering (catalog-filtering spec)', () => {
     expect(names(list).sort()).toEqual(['Big Thunder Mountain', 'Star Wars Hyperspace Mountain'])
     const strict = filterCatalog(sampleCatalog, f({ types: ['attraction'], query: 'mountain', hideUnsuitable: true }), { heightCm: 110 }, 8)
     expect(names(strict)).toEqual(['Big Thunder Mountain'])
+  })
+
+  test('waits in an all-parks list use each item\'s own park', () => {
+    const c = structuredClone(sampleCatalog)
+    c.parks[1]!.monthFactors[7] = 0.5
+    const [row] = filterCatalog(c, f({ query: 'flight force' }), undefined, 8)
+    const [rowDefault] = filterCatalog(sampleCatalog, f({ query: 'flight force' }), undefined, 8)
+    expect(row!.waitRange![1]).toBeLessThan(rowDefault!.waitRange![1])
   })
 
   test('search ignores case and accents', () => {

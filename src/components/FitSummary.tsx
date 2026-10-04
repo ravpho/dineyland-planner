@@ -47,3 +47,13 @@ export function Breakdown({ schedule }: { schedule: DaySchedule }) {
     </details>
   )
 }
+
+/** Shown when a day's items span both parks. */
+export function TicketReminder({ schedule }: { schedule: DaySchedule }) {
+  if (schedule.parks.length < 2) return null
+  return (
+    <p role="note" data-testid="ticket-reminder" className="rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-900">
+      This day uses both parks: you need a ticket valid for Disneyland Park and Disney Adventure World on the same day.
+    </p>
+  )
+}

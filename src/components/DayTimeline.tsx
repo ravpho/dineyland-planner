@@ -5,7 +5,7 @@ import type { Show } from '../domain/catalog'
 import type { DaySchedule, Slot } from '../domain/schedule'
 import { formatClock, formatDuration } from '../domain/time'
 import type { Day } from '../domain/trip'
-import { usePlanner } from '../app/PlannerContext'
+import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { useToast } from './Toast'
 import { DownIcon, GripIcon, TrashIcon, UpIcon, WalkIcon } from './icons'
 import { TYPE_LABELS } from './labels'
@@ -15,6 +15,7 @@ export const DAY_DROP_ID = 'day-drop'
 
 function SlotCard({ day, slot, index, count, windowEnd }: { day: Day; slot: Slot; index: number; count: number; windowEnd: string }) {
   const { moveItem, removeItem, undoRemove, setShowTime } = usePlanner((s) => s)
+  const catalog = useCatalog()
   const toast = useToast()
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: slot.entry.key })
   const style = { transform: CSS.Transform.toString(transform), transition }
@@ -27,6 +28,11 @@ function SlotCard({ day, slot, index, count, windowEnd }: { day: Day; slot: Slot
 
   return (
     <li ref={setNodeRef} style={style} className={`list-none ${isDragging ? 'relative z-20 opacity-80' : ''}`} data-testid="timeline-slot" data-item-id={slot.entry.itemId}>
+      {slot.kind === 'scheduled' && slot.parkChange && (
+        <p className="py-1 pl-14 text-xs font-medium text-indigo-800" data-testid="park-change">
+          Walk to {catalog.parks.find((p) => p.id === slot.item.parkId)?.name} · park change · {slot.walk} min
+        </p>
+      )}
       {slot.kind === 'scheduled' && slot.freeBefore > 0 && (
         <p className="py-1 pl-14 text-xs text-emerald-700" data-testid="free-time">
           Free time {formatDuration(slot.freeBefore)}

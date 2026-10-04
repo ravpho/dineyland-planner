@@ -6,7 +6,7 @@ import type { Day } from '../../domain/trip'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
 import { DayTimeline } from '../DayTimeline'
-import { Breakdown, FitBar } from '../FitSummary'
+import { Breakdown, FitBar, TicketReminder } from '../FitSummary'
 import { ToastProvider } from '../Toast'
 
 function renderDay(day: Day, profile?: { heightCm?: number }) {
@@ -14,6 +14,7 @@ function renderDay(day: Day, profile?: { heightCm?: number }) {
   renderWithPlanner(
     <ToastProvider>
       <DndContext>
+        <TicketReminder schedule={schedule} />
         <DayTimeline day={day} schedule={schedule} />
         <Breakdown schedule={schedule} />
         <FitBar schedule={schedule} />
@@ -24,7 +25,7 @@ function renderDay(day: Day, profile?: { heightCm?: number }) {
 }
 
 const day = (items: (string | [string, string])[], start = '09:30', end = '22:00'): Day => ({
-  id: 'd', date: '2026-08-12', parkId: 'dlp', start, end,
+  id: 'd', date: '2026-08-12', start, end,
   items: items.map((x, i) => (typeof x === 'string' ? { key: `k${i}`, itemId: x } : { key: `k${i}`, itemId: x[0], showTime: x[1] })),
 })
 const slots = () => screen.getAllByTestId('timeline-slot')
@@ -71,5 +72,20 @@ describe('timeline marks (day-schedule spec)', () => {
     expect(s.fits).toBe(true)
     const breakdown = screen.getByTestId('breakdown')
     for (const label of ['Queueing', 'Attractions', 'Meals', 'Shows', 'Walking', 'Free time']) expect(within(breakdown).getByText(label)).toBeInTheDocument()
+  })
+
+  test('park-hopping day: park change is labelled and the ticket reminder shows', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'daw.avengers-flight-force']))
+    const changes = screen.getAllByTestId('park-change')
+    expect(changes).toHaveLength(1)
+    expect(changes[0]).toHaveTextContent(/Walk to Disney Adventure World · park change · \d+ min/)
+    expect(within(slots()[1]!).getByTestId('park-change')).toBeInTheDocument()
+    expect(screen.getByTestId('ticket-reminder')).toHaveTextContent(/ticket valid for Disneyland Park and Disney Adventure World/)
+  })
+
+  test('single-park day: no park change and no ticket reminder', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'dlp.phantom-manor']))
+    expect(screen.queryByTestId('park-change')).toBeNull()
+    expect(screen.queryByTestId('ticket-reminder')).toBeNull()
   })
 })

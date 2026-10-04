@@ -11,9 +11,9 @@ test('6.1 typing "thunder" filters the list', async ({ page }) => {
   const before = await rows.count()
   await page.getByLabel('Search by name').fill('thunder')
   await expect(rows.filter({ hasText: 'Big Thunder Mountain' })).toHaveCount(1)
-  const names = await rows.locator('span.block').allTextContents()
+  const names = await rows.locator('span.block.font-medium').allTextContents()
   expect(names.every((n) => n.toLowerCase().includes('thunder'))).toBe(true)
-  await expect(page.getByTestId('match-count')).toHaveText(`${names.length} items in Disneyland Park`)
+  await expect(page.getByTestId('match-count')).toHaveText(`${names.length} items`)
   expect(before).toBeGreaterThan(50)
 })
 
@@ -40,3 +40,20 @@ test('6.2 a 110 cm profile greys out a 120 cm ride, then hides it', async ({ pag
   await page.getByLabel('Search by name').fill('hyperspace')
   await expect(page.getByTestId('catalog-row').first()).toContainText('Needs 120 cm')
 })
+
+test('3.2 both parks are listed with labels, and sorting works without opening the filters', async ({ page }) => {
+  const places = await page.getByTestId('row-place').allTextContents()
+  expect(places.some((p) => p.startsWith('Disneyland Park · '))).toBe(true)
+  expect(places.some((p) => p.startsWith('Disney Adventure World · '))).toBe(true)
+
+  await page.getByLabel('Sort by').selectOption('duration')
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  const names = await page.getByTestId('catalog-row').locator('span.block.font-medium').allTextContents()
+  expect(names.indexOf('RC Racer')).toBeLessThan(names.indexOf('Pirates of the Caribbean')) // 1 min < 10 min
+  expect(names.indexOf('Pirates of the Caribbean')).toBeLessThan(names.indexOf('Auberge de Cendrillon')) // < 90 min meal
+
+  await page.getByLabel('Sort by').selectOption('rating')
+  const top = await page.getByTestId('catalog-row').first().getByLabel(/Rated \d out of 5/).getAttribute('aria-label')
+  expect(top).toBe('Rated 5 out of 5')
+})
+

@@ -1,5 +1,3 @@
-import type { ParkId } from './catalog'
-
 /** One entry in a day. `key` is unique per entry, so the same attraction can appear twice. */
 export interface PlanItem {
   key: string
@@ -8,11 +6,11 @@ export interface PlanItem {
   showTime?: string
 }
 
+/** A day can hold items from both parks; it is not tied to one. */
 export interface Day {
   id: string
   /** ISO date, YYYY-MM-DD. */
   date: string
-  parkId: ParkId
   /** Available window, HH:MM. */
   start: string
   end: string
