@@ -28,7 +28,7 @@ export async function addFromCatalog(page: Page, name: string, showTime?: string
   await page.getByLabel('Search by name').fill('')
 }
 
-export const slotNames = (page: Page) => page.getByTestId('timeline-slot').locator('span.font-medium').allTextContents()
+export const slotNames = (page: Page) => page.getByTestId('slot-name').allTextContents()
 
 /** Long-press and drag with real touch events (dnd-kit TouchSensor needs a 200 ms press). */
 export async function touchDrag(page: Page, from: Locator, to: Locator, { offsetY = -8 } = {}) {

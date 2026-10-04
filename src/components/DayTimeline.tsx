@@ -56,7 +56,7 @@ function SlotCard({ day, slot, index, count, windowEnd }: { day: Day; slot: Slot
                 <span className="font-mono text-sm font-semibold text-slate-900" data-testid="slot-time">
                   {formatClock(slot.start)}–{formatClock(slot.end)}
                 </span>
-                <span className="font-medium text-slate-900">{slot.item.name}</span>
+                <span className="font-medium text-slate-900" data-testid="slot-name">{slot.item.name}</span>
               </p>
               <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-slate-600">
                 <span className="inline-flex items-center gap-1">

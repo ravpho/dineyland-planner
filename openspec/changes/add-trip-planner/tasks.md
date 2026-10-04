@@ -63,11 +63,11 @@
 
 ## 9. CI and deployment
 
-- [ ] 9.1 Add a GitHub Actions workflow that runs lint, type-check, unit tests and build on pull requests; verify it passes on the branch
+- [x] 9.1 Add a GitHub Actions workflow that runs lint, type-check, unit tests and build on pull requests; verify it passes on the branch
 - [ ] 9.2 Add the GitHub Pages deploy job on pushes to `main` (end-to-end tests, build with base `/dineyland-planner/`, `actions/deploy-pages`); verify, after the owner enables Pages, that https://ravpho.github.io/dineyland-planner/ loads and works offline after the first visit
 
 ## 10. Integration checks
 
-- [ ] 10.1 Run an end-to-end phone scenario at 390×844: create a 2-day August trip, save a group profile, filter, add 8 items including a show and a meal, reorder by drag, watch the fit summary change, share and import in a new context; verify the whole run passes
-- [ ] 10.2 Run `openspec validate add-trip-planner --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass
+- [x] 10.1 Run an end-to-end phone scenario at 390×844: create a 2-day August trip, save a group profile, filter, add 8 items including a show and a meal, reorder by drag, watch the fit summary change, share and import in a new context; verify the whole run passes
+- [x] 10.2 Run `openspec validate add-trip-planner --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`; verify all pass
 - [ ] 10.3 Owner checks the deployed app on a real phone (install to home screen, plan a day, airplane-mode reopen); verify issues found are fixed or recorded as follow-ups
