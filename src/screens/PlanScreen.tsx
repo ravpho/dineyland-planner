@@ -1,12 +1,24 @@
 import { useMemo } from 'react'
+import { PARK_IDS, type Catalog } from '../domain/catalog'
 import { scheduleDay } from '../domain/schedule'
+import type { Day } from '../domain/trip'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { selectedDay, selectedTrip } from '../state/store'
 import { CreateTripForm } from '../components/CreateTripForm'
 import { DaySettings } from '../components/DaySettings'
 import { DayTimeline } from '../components/DayTimeline'
-import { Breakdown, FitBar } from '../components/FitSummary'
+import { Breakdown, FitBar, TicketReminder } from '../components/FitSummary'
 import { TripBar } from '../components/TripBar'
+
+const PARK_SHORT = { dlp: 'DLP', daw: 'DAW' } as const
+
+/** Parks a day uses, from its items: "DLP", "DAW", "DLP + DAW", or "" when empty. */
+export function dayParksLabel(day: Day, catalog: Catalog): string {
+  const used = new Set(day.items.map((e) => catalog.items.find((i) => i.id === e.itemId)?.parkId))
+  return PARK_IDS.filter((id) => used.has(id))
+    .map((id) => PARK_SHORT[id])
+    .join(' + ')
+}
 
 const dayLabel = (date: string) => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
 
@@ -41,11 +53,13 @@ export default function PlanScreen() {
             onClick={() => selectDay(d.id)}
             className={`min-h-11 shrink-0 rounded-lg border px-3 text-left text-sm ${d.id === day.id ? 'border-indigo-700 bg-indigo-700 text-white' : 'border-slate-300 bg-white text-slate-800'}`}
           >
-            <span className="font-semibold">Day {i + 1}</span> · {dayLabel(d.date)} · {d.parkId === 'dlp' ? 'DLP' : 'DAW'}
+            <span className="font-semibold">Day {i + 1}</span> · {dayLabel(d.date)}
+            {dayParksLabel(d, catalog) && <> · {dayParksLabel(d, catalog)}</>}
           </button>
         ))}
       </div>
       <DaySettings day={day} />
+      <TicketReminder schedule={schedule} />
       <DayTimeline day={day} schedule={schedule} />
       <Breakdown schedule={schedule} />
       <FitBar schedule={schedule} />

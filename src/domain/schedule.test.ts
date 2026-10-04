@@ -4,7 +4,8 @@ import { sampleCatalog } from '../test/sampleCatalog'
 import { scheduleDay, type ScheduledSlot } from './schedule'
 import { formatClock } from './time'
 import type { Day } from './trip'
-import { walkMinutes } from './walking'
+import { PARK_CHANGE_MIN, distanceMetres, walkMinutes } from './walking'
+import { attractionWait } from './waits'
 
 const ENTRANCE = { lat: 48.87, lng: 2.78 }
 /** A point `metres` north of the entrance. */
@@ -40,7 +41,7 @@ function catalogWith(items: CatalogItem[]): Catalog {
 
 function day(start: string, end: string, itemIds: (string | [string, string])[], date = '2026-08-12'): Day {
   return {
-    id: 'd1', date, parkId: 'dlp', start, end,
+    id: 'd1', date, start, end,
     items: itemIds.map((x, i) => (typeof x === 'string' ? { key: `k${i}`, itemId: x } : { key: `k${i}`, itemId: x[0], showTime: x[1] })),
   }
 }
@@ -144,5 +145,35 @@ describe('day schedule (day-schedule spec)', () => {
     const s = scheduleDay(day('10:00', '18:00', []), sampleCatalog)
     expect(s.fits).toBe(true)
     expect(s.spare).toBe(480)
+  })
+
+  test('a day whose first item is in the second park starts at that park entrance', () => {
+    const s = scheduleDay(day('09:30', '18:00', ['daw.avengers-flight-force']), sampleCatalog)
+    const [slot] = scheduled(s)
+    expect(slot!.walk).toBe(walkMinutes(sampleCatalog.parks[1]!.entrance, slot!.item.location!))
+    expect(slot!.parkChange).toBe(false)
+    expect(s.parks).toEqual(['daw'])
+  })
+
+  test('switching parks routes via both entrances, adds the park-change time and is labelled', () => {
+    const s = scheduleDay(day('09:30', '18:00', ['dlp.big-thunder-mountain', 'daw.avengers-flight-force', 'daw.avengers-flight-force']), sampleCatalog)
+    const [thunder, flight, again] = scheduled(s)
+    const [dlp, daw] = sampleCatalog.parks
+    const metres = distanceMetres(thunder!.item.location!, dlp!.entrance) + distanceMetres(dlp!.entrance, daw!.entrance) + distanceMetres(daw!.entrance, flight!.item.location!)
+    expect(flight!.walk).toBe(Math.ceil((metres * 1.35) / 65) + 1 + PARK_CHANGE_MIN)
+    expect([thunder!.parkChange, flight!.parkChange, again!.parkChange]).toEqual([false, true, false])
+    expect(s.parks).toEqual(['dlp', 'daw'])
+  })
+
+  test("each item's wait uses its own park's crowd level for the month", () => {
+    const c = structuredClone(sampleCatalog)
+    c.parks[0]!.monthFactors[7] = 1.4 // busy August at Disneyland Park
+    c.parks[1]!.monthFactors[7] = 0.6 // quiet August at Disney Adventure World
+    const [dlpPark, dawPark] = c.parks
+    const s = scheduleDay(day('09:30', '20:00', ['dlp.big-thunder-mountain', 'daw.avengers-flight-force']), c)
+    const [thunder, flight] = scheduled(s)
+    expect(thunder!.wait).toBe(attractionWait(thunder!.item as never, dlpPark!, 8, thunder!.arrive).minutes)
+    expect(flight!.wait).toBe(attractionWait(flight!.item as never, dawPark!, 8, flight!.arrive).minutes)
+    expect(flight!.wait).not.toBe(attractionWait(flight!.item as never, dlpPark!, 8, flight!.arrive).minutes)
   })
 })

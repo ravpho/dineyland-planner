@@ -8,109 +8,6 @@
   ],
   "parks": [
     {
-      "id": "daw",
-      "name": "Disney Adventure World",
-      "entrance": {
-        "lat": 48.868391,
-        "lng": 2.780802
-      },
-      "areas": [
-        {
-          "id": "world-premiere-plaza",
-          "name": "World Premiere Plaza"
-        },
-        {
-          "id": "worlds-of-pixar",
-          "name": "Worlds of Pixar"
-        },
-        {
-          "id": "avengers-campus",
-          "name": "Marvel Avengers Campus"
-        },
-        {
-          "id": "adventure-way",
-          "name": "Adventure Way"
-        },
-        {
-          "id": "world-of-frozen",
-          "name": "World of Frozen"
-        }
-      ],
-      "hours": [
-        {
-          "open": "10:00",
-          "close": "20:00"
-        },
-        {
-          "open": "09:30",
-          "close": "21:00"
-        },
-        {
-          "open": "09:30",
-          "close": "21:00"
-        },
-        {
-          "open": "09:30",
-          "close": "22:00"
-        },
-        {
-          "open": "09:30",
-          "close": "22:00"
-        },
-        {
-          "open": "09:30",
-          "close": "23:00"
-        },
-        {
-          "open": "09:30",
-          "close": "23:00"
-        },
-        {
-          "open": "09:30",
-          "close": "23:00"
-        },
-        {
-          "open": "09:30",
-          "close": "22:00"
-        },
-        {
-          "open": "09:00",
-          "close": "22:00"
-        },
-        {
-          "open": "09:30",
-          "close": "21:00"
-        },
-        {
-          "open": "10:00",
-          "close": "21:00"
-        }
-      ],
-      "monthFactors": [
-        1.098,
-        1.115,
-        1.228,
-        1.159,
-        1.098,
-        1.081,
-        0.908,
-        1.003,
-        1.193,
-        0.994,
-        0.545,
-        0.579
-      ],
-      "hoursSources": [
-        {
-          "label": "ThemeParks.wiki schedule (October–November 2026)",
-          "url": "https://api.themeparks.wiki/v1/entity/ca888437-ebb4-4d50-aed2-d227f7096968/schedule"
-        },
-        {
-          "label": "Other months: planner estimate"
-        }
-      ]
-    },
-    {
       "id": "dlp",
       "name": "Disneyland Park",
       "entrance": {
@@ -207,6 +104,109 @@
         {
           "label": "ThemeParks.wiki schedule (October–November 2026)",
           "url": "https://api.themeparks.wiki/v1/entity/dae968d5-630d-4719-8b06-3d107e944401/schedule"
+        },
+        {
+          "label": "Other months: planner estimate"
+        }
+      ]
+    },
+    {
+      "id": "daw",
+      "name": "Disney Adventure World",
+      "entrance": {
+        "lat": 48.868391,
+        "lng": 2.780802
+      },
+      "areas": [
+        {
+          "id": "world-premiere-plaza",
+          "name": "World Premiere Plaza"
+        },
+        {
+          "id": "worlds-of-pixar",
+          "name": "Worlds of Pixar"
+        },
+        {
+          "id": "avengers-campus",
+          "name": "Marvel Avengers Campus"
+        },
+        {
+          "id": "adventure-way",
+          "name": "Adventure Way"
+        },
+        {
+          "id": "world-of-frozen",
+          "name": "World of Frozen"
+        }
+      ],
+      "hours": [
+        {
+          "open": "10:00",
+          "close": "20:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "23:00"
+        },
+        {
+          "open": "09:30",
+          "close": "22:00"
+        },
+        {
+          "open": "09:00",
+          "close": "22:00"
+        },
+        {
+          "open": "09:30",
+          "close": "21:00"
+        },
+        {
+          "open": "10:00",
+          "close": "21:00"
+        }
+      ],
+      "monthFactors": [
+        1.098,
+        1.115,
+        1.228,
+        1.159,
+        1.098,
+        1.081,
+        0.908,
+        1.003,
+        1.193,
+        0.994,
+        0.545,
+        0.579
+      ],
+      "hoursSources": [
+        {
+          "label": "ThemeParks.wiki schedule (October–November 2026)",
+          "url": "https://api.themeparks.wiki/v1/entity/ca888437-ebb4-4d50-aed2-d227f7096968/schedule"
         },
         {
           "label": "Other months: planner estimate"

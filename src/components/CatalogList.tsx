@@ -1,11 +1,10 @@
 import { useDraggable } from '@dnd-kit/core'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { CatalogItem, Show } from '../domain/catalog'
-import { filterCatalog, type ListedItem } from '../domain/filters'
+import { filterCatalog, type ListedItem, type SortOrder } from '../domain/filters'
 import { MONTH_NAMES, useIsWide, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { useAddToDay } from '../app/useAddToDay'
-import { selectedDay } from '../state/store'
 import { FilterPanel } from './FilterPanel'
 import { FilterIcon, GripIcon, PlusIcon } from './icons'
 import { ItemDetail } from './ItemDetail'
@@ -15,11 +14,14 @@ import { Badge, IconButton, inputClass, Stars } from './ui'
 
 export const CATALOG_DRAG_PREFIX = 'catalog:'
 
-function RowBody({ listed, month, onOpen }: { listed: ListedItem; month: number; onOpen: () => void }) {
+function RowBody({ listed, month, place, onOpen }: { listed: ListedItem; month: number; place: string; onOpen: () => void }) {
   const { item, unsuitable, waitRange } = listed
   return (
     <button type="button" onClick={onOpen} className="min-h-11 min-w-0 flex-1 py-2 text-left">
       <span className={`block font-medium ${unsuitable ? 'text-slate-500' : 'text-slate-900'}`}>{item.name}</span>
+      <span className="block text-xs text-slate-500" data-testid="row-place">
+        {place}
+      </span>
       <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-600">
         <Badge>{TYPE_LABELS[item.type]}</Badge>
         <Stars rating={item.rating} />
@@ -55,7 +57,6 @@ export function CatalogList() {
   const filters = usePlanner((s) => s.filters)
   const setFilters = usePlanner((s) => s.setFilters)
   const profile = usePlanner((s) => s.profile)
-  const dayPark = usePlanner((s) => selectedDay(s)?.parkId)
   const month = usePlanningMonth()
   const wide = useIsWide()
   const addToDay = useAddToDay()
@@ -63,13 +64,14 @@ export function CatalogList() {
   const [picking, setPicking] = useState<Show | null>(null)
   const [showFilters, setShowFilters] = useState(false)
 
-  // The catalog follows the park of the selected day.
-  useEffect(() => {
-    if (dayPark) setFilters({ parkId: dayPark, areaIds: [] })
-  }, [dayPark, setFilters])
-
   const listed = useMemo(() => filterCatalog(catalog, filters, profile, month), [catalog, filters, profile, month])
-  const activeFilters = filters.areaIds.length + filters.types.length + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
+  const places = useMemo(
+    () => new Map(catalog.parks.flatMap((p) => p.areas.map((a) => [`${p.id}/${a.id}`, `${p.name} · ${a.name}`] as const))),
+    [catalog],
+  )
+  const parkName = filters.parkId === 'all' ? undefined : catalog.parks.find((p) => p.id === filters.parkId)?.name
+  const activeFilters =
+    (filters.parkId === 'all' ? 0 : 1) + filters.areaIds.length + filters.types.length + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
 
   const add = (item: CatalogItem) => {
     if (item.type === 'show') setPicking(item)
@@ -95,14 +97,26 @@ export function CatalogList() {
           <FilterIcon /> Filters{activeFilters > 0 && <span className="rounded-full bg-indigo-700 px-1.5 text-xs text-white">{activeFilters}</span>}
         </button>
       </div>
-      <p className="mb-2 text-sm text-slate-600" aria-live="polite" data-testid="match-count">
-        {listed.length} {listed.length === 1 ? 'item' : 'items'} in {catalog.parks.find((p) => p.id === filters.parkId)?.name}
-      </p>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <p className="text-sm text-slate-600" aria-live="polite" data-testid="match-count">
+          {listed.length} {listed.length === 1 ? 'item' : 'items'}
+          {parkName ? ` in ${parkName}` : ''}
+        </p>
+        <label className="flex items-center gap-2 text-sm text-slate-700">
+          Sort
+          <select aria-label="Sort by" className={`${inputClass} text-sm`} value={filters.sort} onChange={(e) => setFilters({ sort: e.target.value as SortOrder })}>
+            <option value="name">Name</option>
+            <option value="rating">Rating</option>
+            <option value="wait">Busiest wait</option>
+            <option value="duration">Duration</option>
+          </select>
+        </label>
+      </div>
       <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
         {listed.map((l) => (
           <li key={l.item.id} data-testid="catalog-row" data-unsuitable={l.unsuitable ? 'true' : undefined} className={`flex items-center gap-1 px-2 ${l.unsuitable ? 'bg-slate-50' : ''}`}>
             {wide && <DragHandle item={l.item} />}
-            <RowBody listed={l} month={month} onOpen={() => setOpen(l.item)} />
+            <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} onOpen={() => setOpen(l.item)} />
             <IconButton label={`Add ${l.item.name} to day`} onClick={() => add(l.item)} className="text-indigo-700">
               <PlusIcon />
             </IconButton>

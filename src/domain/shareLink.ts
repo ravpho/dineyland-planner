@@ -9,13 +9,14 @@ import { MAX_TRIP_DAYS, newId, type Trip } from './trip'
  * know become "missing:<code>" entries that the plan shows as "No longer available".
  */
 const sharedTripSchema = z.object({
-  v: z.literal(1),
+  // v1 links (one park per day) carry `p`, which is ignored since days combine parks (v2).
+  v: z.union([z.literal(1), z.literal(2)]),
   n: z.string().max(200),
   d: z
     .array(
       z.object({
         t: z.iso.date(),
-        p: z.enum(PARK_IDS),
+        p: z.enum(PARK_IDS).optional(),
         s: z.string().regex(/^\d{2}:\d{2}$/),
         e: z.string().regex(/^\d{2}:\d{2}$/),
         i: z.array(z.union([z.tuple([z.string().min(1)]), z.tuple([z.string().min(1), z.string().regex(/^\d{2}:\d{2}$/)])])),
@@ -41,11 +42,10 @@ export const MISSING_PREFIX = 'missing:'
 
 export function encodeTrip(trip: Trip): string {
   const shared: SharedTrip = {
-    v: 1,
+    v: 2,
     n: trip.name,
     d: trip.days.map((day) => ({
       t: day.date,
-      p: day.parkId,
       s: day.start,
       e: day.end,
       i: day.items.map((entry) => {
@@ -71,7 +71,6 @@ export function decodeTrip(data: string, catalogIds: readonly string[]): Trip | 
       days: parsed.data.d.map((day) => ({
         id: newId(),
         date: day.t,
-        parkId: day.p,
         start: day.s,
         end: day.e,
         items: day.i.map(([code, showTime]) => ({

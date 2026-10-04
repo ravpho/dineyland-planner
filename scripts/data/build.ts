@@ -7,7 +7,7 @@ import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { parse as parseYaml } from 'yaml'
-import { catalogSchema, type Catalog, type CatalogItem, type ParkId } from '../../src/domain/catalog'
+import { PARK_IDS, catalogSchema, type Catalog, type CatalogItem, type ParkId } from '../../src/domain/catalog'
 import { parseParkYearStats, parseRideStats, type ParkYearStats } from './queueTimes'
 import {
   CATALOG_FILE,
@@ -150,6 +150,8 @@ export function buildCatalog(input: BuildInput): { catalog: unknown; report: Bui
     }
   }
 
+  // Fixed park order (Disneyland Park first), whatever the curated file names are.
+  parks.sort((a, b) => PARK_IDS.indexOf(a.id) - PARK_IDS.indexOf(b.id))
   return {
     catalog: { version: 1, collectedAt: input.collectedAt, statsYears: years, parks, items },
     report,

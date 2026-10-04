@@ -95,6 +95,11 @@ export const catalogSchema = z
     items: z.array(itemSchema),
   })
   .superRefine((catalog, ctx) => {
+    // Area ids are unique across parks, so filters can use plain area ids.
+    const areaIds = catalog.parks.flatMap((p) => p.areas.map((a) => a.id))
+    for (const id of new Set(areaIds.filter((a, i) => areaIds.indexOf(a) !== i))) {
+      ctx.addIssue({ code: 'custom', path: ['parks'], message: `area id ${id} is used in more than one park` })
+    }
     const seen = new Set<string>()
     for (const [i, item] of catalog.items.entries()) {
       if (seen.has(item.id)) ctx.addIssue({ code: 'custom', path: ['items', i, 'id'], message: `duplicate id ${item.id}` })

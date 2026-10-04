@@ -62,7 +62,8 @@ A day becomes `{ id, date, start, end, items }`. Everything the park used to sup
 - `CatalogFilters.parkId` becomes `ParkId | 'all'`, defaulting to `'all'`. `clearFilters()` returns to `'all'`. The effect that copied the day's park into the filter is removed.
 - **Areas:** with "All parks", the filter panel lists area chips grouped by park. Area ids are already unique across the parks; a catalog schema check enforces that, so `areaIds` can stay plain ids.
 - **Sort:** `SortOrder` gains `'duration'`, the ride, meal (`mealMinutes`) or show length, shortest first. The select moves from `FilterPanel` into the catalog header next to search. The wait option is labelled "Busiest wait".
-- **Row label:** a muted line "Disneyland Park · Frontierland" built from catalog park and area names. The match count reads "N items" plus the park name only when one park is selected.
+- **Row label:** a muted line "Disneyland Park · Frontierland" built from catalog park and area names.
+- *Added during implementation:* the data build now always lists Disneyland Park first. Before, it followed the curated file names, which put Adventure World first. Day labels ("DLP + DAW"), the park filter and area groups therefore show the parks in a consistent order. The match count reads "N items" plus the park name only when one park is selected.
 
 ### 7. Plan UI
 - `DaySettings` keeps only start and end. The day tab shows the parks the day uses ("DLP", "DAW", "DLP + DAW", or nothing when empty), derived from its items.

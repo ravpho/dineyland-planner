@@ -2,7 +2,7 @@ import type { Catalog } from '../domain/catalog'
 
 const src = [{ label: 'Test fixture' }]
 const hours = (close: string) => ({ open: '09:30', close })
-const yearHours = ['20:00', '20:00', '21:00', '21:00', '22:00', '23:00', '23:00', '23:00', '22:00', '21:00', '20:00', '21:00'].map(hours)
+const yearHours = () => ['20:00', '20:00', '21:00', '21:00', '22:00', '23:00', '23:00', '23:00', '22:00', '21:00', '20:00', '21:00'].map(hours)
 
 /** Small hand-made catalog for unit tests. Numbers are illustrative, not real data. */
 export const sampleCatalog: Catalog = {
@@ -20,7 +20,7 @@ export const sampleCatalog: Catalog = {
         { id: 'fantasyland', name: 'Fantasyland' },
         { id: 'discoveryland', name: 'Discoveryland' },
       ],
-      hours: yearHours,
+      hours: yearHours(),
       monthFactors: [0.8, 0.95, 0.9, 1.1, 1.0, 0.95, 1.15, 1.3, 0.9, 1.1, 0.85, 1.0],
       hoursSources: src,
     },
@@ -29,7 +29,7 @@ export const sampleCatalog: Catalog = {
       name: 'Disney Adventure World',
       entrance: { lat: 48.8682, lng: 2.7805 },
       areas: [{ id: 'avengers-campus', name: 'Avengers Campus' }],
-      hours: yearHours,
+      hours: yearHours(),
       monthFactors: [0.8, 0.95, 0.9, 1.1, 1.0, 0.95, 1.15, 1.3, 0.9, 1.1, 0.85, 1.0],
       hoursSources: src,
     },

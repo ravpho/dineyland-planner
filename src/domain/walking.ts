@@ -7,6 +7,8 @@ export const PATH_FACTOR = 1.35
 export const WALK_METRES_PER_MIN = 65
 /** Getting in and out of a queue or building. */
 export const WALK_OVERHEAD_MIN = 1
+/** Leaving one park and entering the other: exit and entry turnstiles (design Decision 2). */
+export const PARK_CHANGE_MIN = 5
 
 const EARTH_RADIUS_M = 6_371_000
 const rad = (deg: number) => (deg * Math.PI) / 180
@@ -18,8 +20,35 @@ export function distanceMetres(a: Coordinates, b: Coordinates): number {
   return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(h))
 }
 
+const metresToMinutes = (metres: number): Minutes => Math.ceil((metres * PATH_FACTOR) / WALK_METRES_PER_MIN) + WALK_OVERHEAD_MIN
+
 export function walkMinutes(a: Coordinates, b: Coordinates): Minutes {
-  return Math.ceil((distanceMetres(a, b) * PATH_FACTOR) / WALK_METRES_PER_MIN) + WALK_OVERHEAD_MIN
+  return metresToMinutes(distanceMetres(a, b))
+}
+
+export interface Walk {
+  minutes: Minutes
+  /** The walk leaves one park and enters the other. */
+  parkChange: boolean
+}
+
+/** Where a walk starts or ends: a position inside a given park. */
+export interface ParkPoint {
+  parkId: ParkId
+  location: Coordinates
+}
+
+/**
+ * Walking time between two points. Within a park it is the straight-line estimate; between parks
+ * the route goes out through the first park's entrance, across to the other entrance and in again,
+ * plus the park-change time. The distances are summed first so the overhead counts once.
+ */
+export function walkBetween(from: ParkPoint, to: ParkPoint, catalog: Catalog): Walk {
+  if (from.parkId === to.parkId) return { minutes: walkMinutes(from.location, to.location), parkChange: false }
+  const exit = entranceOf(catalog, from.parkId)
+  const entry = entranceOf(catalog, to.parkId)
+  const metres = distanceMetres(from.location, exit) + distanceMetres(exit, entry) + distanceMetres(entry, to.location)
+  return { minutes: metresToMinutes(metres) + PARK_CHANGE_MIN, parkChange: true }
 }
 
 /** Centre of each area, from the items in it that have coordinates. Key: `${parkId}/${areaId}`. */

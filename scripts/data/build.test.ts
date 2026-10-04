@@ -35,6 +35,10 @@ describe('data build with fixture curated files', () => {
     expect(thunder.location).toEqual({ lat: 48.871528, lng: 2.774787 })
   })
 
+  test('lists Disneyland Park first, whatever the file order', () => {
+    expect(catalog.parks.map((p) => p.id)).toEqual(['dlp', 'daw'])
+  })
+
   test('normalises monthly crowd factors to a mean of 1', () => {
     for (const park of catalog.parks) {
       const avg = park.monthFactors.reduce((a, b) => a + b, 0) / 12

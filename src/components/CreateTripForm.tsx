@@ -9,7 +9,7 @@ export function CreateTripForm({ onDone }: { onDone?: () => void }) {
   const createTrip = usePlanner((s) => s.createTrip)
   const [name, setName] = useState('')
   const [date, setDate] = useState(() => addDays(today(), 30))
-  const [days, setDays] = useState(2)
+  const [days, setDays] = useState(1)
   return (
     <form
       className="flex flex-col gap-3"

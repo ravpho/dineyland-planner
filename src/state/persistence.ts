@@ -2,7 +2,7 @@ import type { GroupProfile } from '../domain/suitability'
 import type { Trip } from '../domain/trip'
 
 export const STORAGE_KEY = 'dineyland-planner'
-export const SCHEMA_VERSION = 1
+export const SCHEMA_VERSION = 2
 
 /** What is saved on the device. Filters are session-only and not part of it. */
 export interface SavedState {
@@ -22,6 +22,20 @@ const MIGRATIONS: Record<number, (state: unknown) => unknown> = {
   0: (old) => {
     const o = (old ?? {}) as { trips?: Trip[]; profile?: GroupProfile }
     return { trips: Array.isArray(o.trips) ? o.trips : [], profile: o.profile }
+  },
+  // v2: days are no longer tied to one park.
+  1: (old) => {
+    const o = old as SavedState
+    return {
+      ...o,
+      trips: (o.trips ?? []).map((trip) => ({
+        ...trip,
+        days: (trip.days ?? []).map((day) => {
+          const { parkId: _dropped, ...rest } = day as typeof day & { parkId?: string }
+          return rest
+        }),
+      })),
+    }
   },
 }
 

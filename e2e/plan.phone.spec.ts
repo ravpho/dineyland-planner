@@ -9,25 +9,24 @@ test('7.1 a 3-day trip has the right dates, and its length can change', async ({
   await expect(tabs).toHaveText([/Day 1 · Wed,? 12 Aug/, /Day 2 · Thu,? 13 Aug/, /Day 3 · Fri,? 14 Aug/])
   await page.getByLabel('Number of days').selectOption('2')
   await expect(tabs).toHaveCount(2)
-  await page.getByLabel('Park').selectOption('daw')
-  await expect(tabs.first()).toContainText('DAW')
+  await expect(page.getByLabel('Park')).toHaveCount(0) // days are not tied to a park
+  await addFromCatalog(page, 'Frozen Ever After')
+  await addFromCatalog(page, 'Big Thunder Mountain')
+  await showTab(page, 'Plan')
+  await expect(tabs.first()).toContainText('DLP + DAW')
 })
 
-test('7.2 add, other-park message, remove with undo, move up', async ({ page }) => {
+test('7.2 add from both parks, remove with undo, move up', async ({ page }) => {
   await createTrip(page)
   await addFromCatalog(page, 'Big Thunder Mountain')
   await addFromCatalog(page, 'Phantom Manor')
   await addFromCatalog(page, "Peter Pan's Flight")
 
-  // item from the other park
-  await page.getByRole('button', { name: /Filters/ }).click()
-  await page.getByRole('dialog').getByLabel('Park').selectOption('daw')
-  await page.getByRole('dialog').getByRole('button', { name: 'Show results' }).click()
-  await page.getByLabel('Search by name').fill('frozen ever')
-  await page.getByRole('button', { name: 'Add Frozen Ever After to day' }).click()
-  await expect(page.getByRole('status').filter({ hasText: 'This day is set to Disneyland Park' })).toBeVisible()
-
+  // an item from the other park joins the same day
+  await addFromCatalog(page, 'Frozen Ever After')
   await showTab(page, 'Plan')
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", 'Frozen Ever After'])
+  await page.getByRole('button', { name: 'Remove Frozen Ever After' }).click()
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"])
 
   await page.getByRole('button', { name: 'Remove Phantom Manor' }).click()
@@ -78,7 +77,6 @@ test('7.6 share link imports an identical copy in a fresh browser', async ({ pag
   await addFromCatalog(page, 'Disney Stars on Parade', '11:30')
   await showTab(page, 'Plan')
   await page.getByRole('tab', { name: /^Day 2/ }).click()
-  await page.getByLabel('Park').selectOption('daw')
   await addFromCatalog(page, 'Frozen Ever After')
   await showTab(page, 'Plan')
   await page.getByRole('button', { name: 'Share' }).click()
@@ -101,3 +99,25 @@ test('7.6 share link imports an identical copy in a fresh browser', async ({ pag
   await expect(other.getByRole('alert')).toContainText('cannot be read')
   await fresh.close()
 })
+
+test('park-hopping day: two park changes, ticket reminder, and a share round trip', async ({ page, browser }) => {
+  await createTrip(page, { name: 'Hopper day' })
+  for (const n of ['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor']) await addFromCatalog(page, n)
+  await showTab(page, 'Plan')
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor'])
+  const changes = page.getByTestId('park-change')
+  await expect(changes).toHaveCount(2)
+  await expect(changes.nth(0)).toContainText('Walk to Disney Adventure World · park change')
+  await expect(changes.nth(1)).toContainText('Walk to Disneyland Park · park change')
+  await expect(page.getByTestId('ticket-reminder')).toBeVisible()
+  await expect(page.getByRole('tab', { name: /^Day 1/ })).toContainText('DLP + DAW')
+
+  await page.getByRole('button', { name: 'Share' }).click()
+  const url = await page.getByLabel('Share link').inputValue()
+  const other = await (await browser.newContext({ viewport: { width: 390, height: 844 } })).newPage()
+  await other.goto(url)
+  await other.getByRole('button', { name: 'Import trip' }).click()
+  expect(await slotNames(other)).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor'])
+  await expect(other.getByTestId('park-change')).toHaveCount(2)
+})
+

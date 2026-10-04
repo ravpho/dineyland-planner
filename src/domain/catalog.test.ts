@@ -36,6 +36,14 @@ describe('catalog schema', () => {
     expect(catalogSchema.safeParse(c).success).toBe(false)
   })
 
+  test('rejects an area id used in both parks', () => {
+    const c = clone()
+    c.parks[1]!.areas.push({ id: 'frontierland', name: 'Copy' })
+    const result = catalogSchema.safeParse(c)
+    expect(result.success).toBe(false)
+    expect(result.error!.issues.map((i) => i.message).join()).toMatch(/area id frontierland is used in more than one park/)
+  })
+
   test('rejects an unknown area and duplicate ids', () => {
     const c = clone()
     c.items[0]!.areaId = 'nowhere'
