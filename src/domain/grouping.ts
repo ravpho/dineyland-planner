@@ -1,33 +1,36 @@
 import type { Catalog, CatalogItem, ParkId } from './catalog'
-import { scheduleDay, type DaySchedule } from './schedule'
+import { dayModel, simulate } from './route'
+import { scheduleDay } from './schedule'
 import type { Day, PlanItem } from './trip'
 import { areaCentres, entranceOf, locate, walkBetween, type ParkPoint } from './walking'
 
+export interface GroupOptions {
+  /** Start in this park instead of the park of the day's first item (optimize-day-route Decision 4). */
+  firstPark?: ParkId
+}
+
 /**
  * Reorders a day so each park's attractions are together and, inside a park, each area's attractions
- * are together (design Decisions 1-3). Returns the day's own entries in the new order.
+ * are together (design Decisions 1-3). Returns the day's own entries in the new order. Meals and shows
+ * are placed by time with the shared day model (optimize-day-route design Decision 3).
  */
-export function groupByArea(day: Day, catalog: Catalog): PlanItem[] {
-  const items = new Map(catalog.items.map((i) => [i.id, i]))
-  const attractions: PlanItem[] = []
-  const anchors: PlanItem[] = []
-  const missing: PlanItem[] = []
-  for (const entry of day.items) {
-    const item = items.get(entry.itemId)
-    if (!item) missing.push(entry)
-    else if (item.type === 'attraction') attractions.push(entry)
-    else anchors.push(entry)
-  }
+export function groupByArea(day: Day, catalog: Catalog, options: GroupOptions = {}): PlanItem[] {
+  const model = dayModel(day, catalog)
+  return simulate(model, groupAttractions(day, catalog, model.attractions, options)).items
+}
 
-  const before = scheduleDay(day, catalog)
+/** The day's attractions grouped by park, then area. */
+export function groupAttractions(day: Day, catalog: Catalog, attractions: readonly PlanItem[], options: GroupOptions = {}): PlanItem[] {
+  const items = new Map(catalog.items.map((i) => [i.id, i]))
+  const used = scheduleDay(day, catalog).parks
+  const parks = options.firstPark && used.includes(options.firstPark) ? [options.firstPark, ...used.filter((p) => p !== options.firstPark)] : used
   const centres = areaCentres(catalog)
-  const grouped = before.parks.flatMap((parkId, i) => {
+  return parks.flatMap((parkId, i) => {
     const inPark = attractions.filter((e) => items.get(e.itemId)!.parkId === parkId)
     // A park the day later leaves is exited through its entrance (design Decision 2).
-    const leaves = i < before.parks.length - 1
+    const leaves = i < parks.length - 1
     return orderAreas(inPark, parkId, leaves, (e) => items.get(e.itemId)!, catalog, centres)
   })
-  return [...placeAnchors(grouped, anchors, day, before, catalog), ...missing]
 }
 
 /** Every order of `blocks`, starting with the given order. */
@@ -72,32 +75,4 @@ function orderAreas(
     }
   }
   return best
-}
-
-/**
- * Restaurants and shows go back into the grouped order by time, in their own order (design Decision 3).
- * A restaurant goes where its arrival is closest to its arrival before grouping; a show goes before the
- * first attraction that would make the user late for it.
- */
-function placeAnchors(grouped: PlanItem[], anchors: PlanItem[], day: Day, before: DaySchedule, catalog: Catalog): PlanItem[] {
-  if (anchors.length === 0) return grouped
-  const slots = new Map(before.slots.flatMap((s) => (s.kind === 'scheduled' ? [[s.entry.key, s] as const] : [])))
-  /** Arrival at the last entry of `list` when the day is `list`. */
-  const arrival = (list: PlanItem[]) => {
-    const last = scheduleDay({ ...day, items: list }, catalog).slots.at(-1)!
-    return last.kind === 'scheduled' ? last.arrive : 0
-  }
-  const goesBefore = (anchor: PlanItem, next: PlanItem, out: PlanItem[]) => {
-    const slot = slots.get(anchor.key)!
-    if (slot.item.type === 'show') return arrival([...out, next, anchor]) > slot.start - slot.item.arriveEarlyMin
-    return Math.abs(arrival([...out, anchor]) - slot.arrive) <= Math.abs(arrival([...out, next, anchor]) - slot.arrive)
-  }
-
-  const out: PlanItem[] = []
-  let pending = 0
-  for (const next of grouped) {
-    while (pending < anchors.length && goesBefore(anchors[pending]!, next, out)) out.push(anchors[pending++]!)
-    out.push(next)
-  }
-  return [...out, ...anchors.slice(pending)]
 }

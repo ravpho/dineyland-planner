@@ -1,8 +1,12 @@
 import { describe, expect, test } from 'vitest'
+import catalogJson from '../data/catalog.json'
+import { parseCatalog } from '../domain/catalog'
 import { scheduleDay } from '../domain/schedule'
+import { formatClock } from '../domain/time'
+import type { PlanItem } from '../domain/trip'
 import { sampleCatalog } from '../test/sampleCatalog'
 import { STORAGE_KEY, type KeyValueStorage } from './persistence'
-import { createPlannerStore, mapPark, selectedDay, selectedTrip } from './store'
+import { createPlannerStore, mapPark, selectedDay, selectedTrip, type PlannerState } from './store'
 
 class MemoryStorage implements KeyValueStorage {
   data = new Map<string, string>()
@@ -110,6 +114,31 @@ describe('trips (trip-itinerary spec)', () => {
     expect(day().items[1]!.showTime).toBe('13:30') // first typical time by default
   })
 
+  test('lunch at 12:00: a restaurant takes the chosen meal time, which can be changed and cleared', () => {
+    const { s, day } = setup()
+    const added = s().addItem(day().id, 'dlp.cafe-hyperion', { mealTime: '12:00' })
+    const key = (added as { key: string }).key
+    expect(day().items[0]!.mealTime).toBe('12:00')
+    s().setMealTime(day().id, key, '12:30')
+    expect(day().items[0]!.mealTime).toBe('12:30')
+    s().setMealTime(day().id, key, undefined)
+    expect('mealTime' in day().items[0]!).toBe(false)
+    // "Any time" (no meal time), and meal times only apply to restaurants
+    s().addItem(day().id, 'dlp.walts')
+    s().addItem(day().id, 'dlp.big-thunder-mountain', { mealTime: '12:00' })
+    expect(day().items.slice(1).map((e) => e.mealTime)).toEqual([undefined, undefined])
+  })
+
+  test('a show time can be locked and unlocked', () => {
+    const { s, day } = setup()
+    const key = (s().addItem(day().id, 'dlp.parade', { showTime: '17:30' }) as { key: string }).key
+    expect(day().items[0]!.timeLocked).toBeUndefined()
+    s().setShowLock(day().id, key, true)
+    expect(day().items[0]).toMatchObject({ showTime: '17:30', timeLocked: true })
+    s().setShowLock(day().id, key, false)
+    expect('timeLocked' in day().items[0]!).toBe(false)
+  })
+
   test('move up, move down and drag reorder', () => {
     const { s, day } = setup()
     for (const id of ['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight']) s().addItem(day().id, id)
@@ -149,6 +178,27 @@ describe('saving on the device', () => {
     expect(reopened.trips).toEqual(s().trips)
     expect(reopened.selectedDayId).toBe(s().selectedDayId)
     expect(reopened.profile).toEqual({ heightCm: 110 })
+  })
+
+  test('meal times and show locks are saved, and trips saved before them load without either', () => {
+    const storage = new MemoryStorage()
+    const { s, day } = setup(storage)
+    s().addItem(day().id, 'dlp.cafe-hyperion', { mealTime: '12:00' })
+    const show = (s().addItem(day().id, 'dlp.parade', { showTime: '17:30' }) as { key: string }).key
+    s().setShowLock(day().id, show, true)
+    const reopened = selectedDay(createPlannerStore(sampleCatalog, storage).getState())!
+    expect(reopened.items.map(({ mealTime, timeLocked }) => ({ mealTime, timeLocked }))).toEqual([
+      { mealTime: '12:00', timeLocked: undefined },
+      { mealTime: undefined, timeLocked: true },
+    ])
+
+    const older = new MemoryStorage()
+    const oldDay = { id: 'd1', date: '2026-08-12', start: '09:30', end: '22:00', items: [{ key: 'k1', itemId: 'dlp.walts' }, { key: 'k2', itemId: 'dlp.parade', showTime: '13:30' }] }
+    older.setItem(STORAGE_KEY, JSON.stringify({ version: 2, state: { trips: [{ id: 't1', name: 'Old', days: [oldDay] }], selectedTripId: 't1', selectedDayId: 'd1' } }))
+    const state = createPlannerStore(sampleCatalog, older).getState()
+    expect(state.storage).toBe('ok')
+    expect(state.trips[0]!.days[0]!.items).toEqual(oldDay.items)
+    expect(state.trips[0]!.days[0]!.items.some((e) => 'mealTime' in e || 'timeLocked' in e)).toBe(false)
   })
 
   test('migrates v1 trips (one park per day) to park-free days', () => {
@@ -306,9 +356,9 @@ describe('group by area (route-optimization spec)', () => {
   test('undo restores the order before grouping', () => {
     const { s, day } = setupZigzag()
     s().groupDayByArea(day().id)
-    s().undoGroup()
+    s().undoRouteChange()
     expect(ids(day().items)).toEqual(zigzag)
-    expect(s().lastGrouped).toBeUndefined()
+    expect(s().lastRouteChange).toBeUndefined()
   })
 
   test('undo does nothing after an item was moved', () => {
@@ -316,7 +366,7 @@ describe('group by area (route-optimization spec)', () => {
     s().groupDayByArea(day().id)
     s().moveItem(day().id, 0, 1)
     const moved = ids(day().items)
-    s().undoGroup()
+    s().undoRouteChange()
     expect(ids(day().items)).toEqual(moved)
   })
 
@@ -326,7 +376,7 @@ describe('group by area (route-optimization spec)', () => {
     const parade = day().items.find((e) => e.itemId === 'dlp.parade')!
     s().setShowTime(day().id, parade.key, '17:30')
     const edited = day().items
-    s().undoGroup()
+    s().undoRouteChange()
     expect(day().items).toBe(edited)
     expect(ids(edited)).not.toEqual(zigzag)
   })
@@ -343,8 +393,121 @@ describe('group by area (route-optimization spec)', () => {
     const storage = new MemoryStorage()
     const { s, day } = setupZigzag(storage)
     s().groupDayByArea(day().id)
-    expect(s().lastGrouped).toBeDefined()
-    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastGrouped')
-    expect(createPlannerStore(sampleCatalog, storage).getState().lastGrouped).toBeUndefined()
+    expect(s().lastRouteChange).toBeDefined()
+    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastRouteChange')
+    expect(createPlannerStore(sampleCatalog, storage).getState().lastRouteChange).toBeUndefined()
+  })
+})
+
+describe('optimize the route and swap restaurants (route-optimization spec)', () => {
+  const real = parseCatalog(catalogJson)
+  type Entry = string | readonly [string, { showTime?: string; mealTime?: string; timeLocked?: boolean }]
+  const setupReal = (itemIds: readonly Entry[], storage?: KeyValueStorage) => {
+    const store = createPlannerStore(real, storage)
+    store.getState().createTrip('Real', '2026-08-12')
+    const day = () => selectedDay(store.getState())!
+    for (const x of itemIds) {
+      const [itemId, extra] = typeof x === 'string' ? [x, {}] : x
+      const added = store.getState().addItem(day().id, itemId, extra)
+      if (extra.timeLocked && added.ok) store.getState().setShowLock(day().id, added.key, true)
+    }
+    return { s: () => store.getState(), day }
+  }
+  const zigzag = ['dlp.big-thunder-mountain', 'daw.frozen-ever-after', 'dlp.phantom-manor', 'daw.crushs-coaster']
+  const LION_KING = 'dlp.the-lion-king-rhythms-of-the-pride-lands'
+  const lionKingDay: Entry[] = [
+    'daw.crushs-coaster', 'daw.frozen-ever-after', ['dlp.au-chalet-de-la-marionnette', { mealTime: '12:00' }], 'dlp.big-thunder-mountain',
+    'dlp.phantom-manor', 'dlp.peter-pans-flight', [LION_KING, { showTime: '16:45' }], 'dlp.star-wars-hyperspace-mountain',
+  ]
+
+  test('optimizing reports the end and queueing plus walking before and after, from the timeline', () => {
+    const { s, day } = setupReal(zigzag)
+    const before = day()
+    const result = s().optimizeDayRoute(day().id)
+    expect(ids(day().items)).toEqual(['daw.crushs-coaster', 'daw.frozen-ever-after', 'dlp.phantom-manor', 'dlp.big-thunder-mountain'])
+    const [b, a] = [scheduleDay(before, real), scheduleDay(day(), real)]
+    expect(result).toEqual({
+      changed: true,
+      endBefore: b.end,
+      endAfter: a.end,
+      queueWalkBefore: b.breakdown.queueing + b.breakdown.walking,
+      queueWalkAfter: a.breakdown.queueing + a.breakdown.walking,
+      showTimes: [],
+    })
+    expect(result.changed && [formatClock(result.endBefore), formatClock(result.endAfter), result.queueWalkBefore, result.queueWalkAfter]).toEqual(['14:29', '13:19', 280, 210])
+  })
+
+  test('changed show times are listed, and undo restores the order and the show time', () => {
+    const { s, day } = setupReal(lionKingDay)
+    const before = day().items
+    const result = s().optimizeDayRoute(day().id)
+    expect(result.changed && result.showTimes).toEqual([{ name: 'The Lion King: Rhythms of the Pride Lands', before: '16:45', after: '13:10' }])
+    s().undoRouteChange()
+    expect(day().items).toBe(before)
+    expect(day().items.find((e) => e.itemId === LION_KING)!.showTime).toBe('16:45')
+    expect(s().lastRouteChange).toBeUndefined()
+  })
+
+  test('an unchanged day returns changed: false and is left alone', () => {
+    const { s, day } = setupReal(['daw.crushs-coaster', 'daw.frozen-ever-after'])
+    const items = day().items
+    expect(s().optimizeDayRoute(day().id)).toEqual({ changed: false })
+    expect(day().items).toBe(items)
+    expect(s().lastRouteChange).toBeUndefined()
+  })
+
+  test('optimize after grouping: undo returns the grouped order', () => {
+    const { s, day } = setupReal(zigzag)
+    expect(s().groupDayByArea(day().id).changed).toBe(true)
+    const grouped = day().items
+    expect(s().optimizeDayRoute(day().id).changed).toBe(true)
+    s().undoRouteChange()
+    expect(day().items).toBe(grouped)
+  })
+
+  test('edited after optimizing: undo leaves the day as it is', () => {
+    const edits: ((s: PlannerState, dayId: string, items: PlanItem[]) => void)[] = [
+      (s, dayId) => s.moveItem(dayId, 0, 1),
+      (s, dayId, items) => s.setShowTime(dayId, items.find((e) => e.itemId === LION_KING)!.key, '16:45'),
+      (s, dayId, items) => s.setMealTime(dayId, items.find((e) => e.itemId === 'dlp.au-chalet-de-la-marionnette')!.key, '12:30'),
+    ]
+    for (const edit of edits) {
+      const { s, day } = setupReal(lionKingDay)
+      expect(s().optimizeDayRoute(day().id).changed).toBe(true)
+      edit(s(), day().id, day().items)
+      const edited = day().items
+      s().undoRouteChange()
+      expect(day().items).toBe(edited)
+    }
+  })
+
+  test('items added after optimizing go to the end', () => {
+    const { s, day } = setupReal(zigzag)
+    s().optimizeDayRoute(day().id)
+    const optimized = ids(day().items)
+    s().addItem(day().id, 'dlp.peter-pans-flight')
+    expect(ids(day().items)).toEqual([...optimized, 'dlp.peter-pans-flight'])
+  })
+
+  test('swap and undo: a restaurant is replaced in place with its meal time, and undo restores it', () => {
+    const { s, day } = setupReal(['daw.crushs-coaster', 'daw.frozen-ever-after', 'daw.twilight-zone-tower-of-terror', ['dlp.au-chalet-de-la-marionnette', { mealTime: '12:00' }], 'daw.spider-man-web-adventure'])
+    const before = day().items
+    const lunch = before[3]!
+    expect(s().swapRestaurant(day().id, lunch.key, 'daw.stark-factory')).toBe(true)
+    expect(day().items[3]).toEqual({ ...lunch, itemId: 'daw.stark-factory' })
+    expect(day().items.filter((_, i) => i !== 3)).toEqual(before.filter((_, i) => i !== 3))
+    s().undoRouteChange()
+    expect(day().items).toBe(before)
+    // Only restaurants swap, and only for restaurants.
+    expect(s().swapRestaurant(day().id, lunch.key, 'daw.crushs-coaster')).toBe(false)
+    expect(s().swapRestaurant(day().id, before[0]!.key, 'daw.stark-factory')).toBe(false)
+  })
+
+  test('the route undo state is not saved on the device', () => {
+    const storage = new MemoryStorage()
+    const { s, day } = setupReal(zigzag, storage)
+    s().optimizeDayRoute(day().id)
+    expect(s().lastRouteChange).toBeDefined()
+    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastRouteChange')
   })
 })

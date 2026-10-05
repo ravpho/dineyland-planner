@@ -7,7 +7,7 @@ import { Button } from '../components/ui'
 export default function ImportScreen({ data }: { data: string }) {
   const catalog = useCatalog()
   const importTrip = usePlanner((s) => s.importTrip)
-  const trip = useMemo(() => decodeTrip(data, catalog.items.map((i) => i.id)), [data, catalog])
+  const trip = useMemo(() => decodeTrip(data, catalog.items), [data, catalog])
 
   return (
     <section className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-4">

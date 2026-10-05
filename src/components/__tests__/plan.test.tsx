@@ -1,5 +1,8 @@
 import { act, fireEvent, screen, within } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+import catalogJson from '../../data/catalog.json'
+import { parseCatalog } from '../../domain/catalog'
+import type { PlanItem } from '../../domain/trip'
 import type { Day } from '../../domain/trip'
 import PlanScreen, { dayParksLabel } from '../../screens/PlanScreen'
 import { createPlannerStore } from '../../state/store'
@@ -82,5 +85,84 @@ describe('group by area (route-optimization spec)', () => {
     fireEvent.click(button())
     expect(within(message('Already grouped by area')).queryByRole('button')).toBeNull()
     expect(names()).toEqual(['Big Thunder Mountain', 'Phantom Manor'])
+  })
+})
+
+describe('optimize route (route-optimization spec)', () => {
+  const real = parseCatalog(catalogJson)
+  afterEach(() => vi.useRealTimers())
+
+  function renderPlan(entries: (string | Omit<PlanItem, 'key'>)[], catalog = real) {
+    const store = createPlannerStore(catalog)
+    store.getState().createTrip('Trip', '2026-08-12')
+    const dayId = store.getState().trips[0]!.days[0]!.id
+    for (const e of entries) {
+      const entry = typeof e === 'string' ? { itemId: e } : e
+      store.getState().addItem(dayId, entry.itemId, entry)
+    }
+    renderWithPlanner(
+      <ToastProvider>
+        <DndContext>
+          <PlanScreen />
+        </DndContext>
+      </ToastProvider>,
+      { store, catalog },
+    )
+    return store
+  }
+  const names = () => screen.getAllByTestId('slot-name').map((n) => n.textContent)
+  const button = () => screen.getByRole('button', { name: 'Optimize route' })
+  const message = (text: RegExp | string) => screen.getByText(text).closest('[role="status"]') as HTMLElement
+  /** Taps Optimize route and runs the deferred search, but not the toast's own timer. */
+  const optimize = () => {
+    vi.useFakeTimers()
+    fireEvent.click(button())
+    act(() => vi.advanceTimersByTime(1))
+  }
+
+  test('nothing to optimize with fewer than two items', () => {
+    const store = renderPlan([])
+    expect(button()).toBeDisabled()
+    act(() => void store.getState().addItem(store.getState().trips[0]!.days[0]!.id, 'dlp.big-thunder-mountain'))
+    expect(button()).toBeDisabled()
+  })
+
+  test('optimizing shows the end and queueing and walking before and after, and Undo restores the order', () => {
+    renderPlan(['dlp.big-thunder-mountain', 'daw.frozen-ever-after', 'dlp.phantom-manor', 'daw.crushs-coaster'])
+    optimize()
+    expect(names()).toEqual(["Crush's Coaster", 'Frozen Ever After', 'Phantom Manor', 'Big Thunder Mountain'])
+    const toast = message(/^Route optimized · ends \d{2}:\d{2} → \d{2}:\d{2} · queues and walking \d+ → \d+ min$/)
+    expect(toast).toHaveTextContent('Route optimized · ends 14:29 → 13:19 · queues and walking 280 → 210 min')
+    fireEvent.click(within(toast).getByRole('button', { name: 'Undo' }))
+    expect(names()).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"])
+  })
+
+  test('a changed show time is named in the message', () => {
+    renderPlan([
+      'daw.crushs-coaster', 'daw.frozen-ever-after', { itemId: 'dlp.au-chalet-de-la-marionnette', mealTime: '12:00' }, 'dlp.big-thunder-mountain',
+      'dlp.phantom-manor', 'dlp.peter-pans-flight', { itemId: 'dlp.the-lion-king-rhythms-of-the-pride-lands', showTime: '16:45' }, 'dlp.star-wars-hyperspace-mountain',
+    ])
+    optimize()
+    expect(message(/^Route optimized/)).toHaveTextContent(/ · The Lion King: Rhythms of the Pride Lands 16:45 → 13:10Undo$/)
+    expect(screen.getByRole('combobox', { name: 'Start time for The Lion King: Rhythms of the Pride Lands' })).toHaveValue('13:10')
+  })
+
+  test('no quicker order: says so, without Undo', () => {
+    renderPlan(['daw.crushs-coaster', 'daw.frozen-ever-after'])
+    optimize()
+    expect(within(message('No quicker order found')).queryByRole('button')).toBeNull()
+    expect(names()).toEqual(["Crush's Coaster", 'Frozen Ever After'])
+  })
+
+  test('the button says Optimizing… until the search has run', () => {
+    renderPlan(['dlp.big-thunder-mountain', 'daw.frozen-ever-after', 'dlp.phantom-manor', 'daw.crushs-coaster'])
+    vi.useFakeTimers()
+    fireEvent.click(button())
+    expect(screen.getByRole('button', { name: 'Optimizing…' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Group by area' })).toBeDisabled()
+    expect(names()).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"])
+    act(() => vi.advanceTimersByTime(1))
+    expect(button()).toBeEnabled()
+    expect(names()[0]).toBe("Crush's Coaster")
   })
 })

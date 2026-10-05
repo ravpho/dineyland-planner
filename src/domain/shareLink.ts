@@ -1,25 +1,31 @@
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string'
 import { z } from 'zod'
-import { PARK_IDS } from './catalog'
+import { PARK_IDS, type CatalogItem } from './catalog'
 import { MAX_TRIP_DAYS, newId, type Trip } from './trip'
 
 /**
  * Compact share format (design Decision 9). Each item id is replaced by a 5-character code
  * (a hash of the id), which the receiving app maps back using its catalog. Codes it does not
  * know become "missing:<code>" entries that the plan shows as "No longer available".
+ *
+ * v3 (optimize-day-route design Decision 6): an item is [code], [code, time] or [code, time, 1].
+ * The time is a show's start or a restaurant's meal time, told apart by the item's type, and 1 marks
+ * a locked show time.
  */
+const clock = z.string().regex(/^\d{2}:\d{2}$/)
+
 const sharedTripSchema = z.object({
   // v1 links (one park per day) carry `p`, which is ignored since days combine parks (v2).
-  v: z.union([z.literal(1), z.literal(2)]),
+  v: z.union([z.literal(1), z.literal(2), z.literal(3)]),
   n: z.string().max(200),
   d: z
     .array(
       z.object({
         t: z.iso.date(),
         p: z.enum(PARK_IDS).optional(),
-        s: z.string().regex(/^\d{2}:\d{2}$/),
-        e: z.string().regex(/^\d{2}:\d{2}$/),
-        i: z.array(z.union([z.tuple([z.string().min(1)]), z.tuple([z.string().min(1), z.string().regex(/^\d{2}:\d{2}$/)])])),
+        s: clock,
+        e: clock,
+        i: z.array(z.union([z.tuple([z.string().min(1)]), z.tuple([z.string().min(1), clock]), z.tuple([z.string().min(1), clock, z.literal(1)])])),
       }),
     )
     .min(1)
@@ -42,7 +48,7 @@ export const MISSING_PREFIX = 'missing:'
 
 export function encodeTrip(trip: Trip): string {
   const shared: SharedTrip = {
-    v: 2,
+    v: 3,
     n: trip.name,
     d: trip.days.map((day) => ({
       t: day.date,
@@ -50,7 +56,9 @@ export function encodeTrip(trip: Trip): string {
       e: day.end,
       i: day.items.map((entry) => {
         const code = entry.itemId.startsWith(MISSING_PREFIX) ? entry.itemId.slice(MISSING_PREFIX.length) : itemCode(entry.itemId)
-        return entry.showTime ? [code, entry.showTime] : [code]
+        const time = entry.showTime ?? entry.mealTime
+        if (!time) return [code]
+        return entry.timeLocked ? [code, time, 1] : [code, time]
       }),
     })),
   }
@@ -58,8 +66,9 @@ export function encodeTrip(trip: Trip): string {
 }
 
 /** Returns a new trip with fresh ids, or null when the data cannot be read. */
-export function decodeTrip(data: string, catalogIds: readonly string[]): Trip | null {
-  const byCode = new Map(catalogIds.map((id) => [itemCode(id), id]))
+export function decodeTrip(data: string, catalogItems: readonly Pick<CatalogItem, 'id' | 'type'>[]): Trip | null {
+  const byCode = new Map(catalogItems.map((i) => [itemCode(i.id), i.id]))
+  const restaurants = new Set(catalogItems.filter((i) => i.type === 'restaurant').map((i) => i.id))
   try {
     const json = decompressFromEncodedURIComponent(data)
     if (!json) return null
@@ -73,11 +82,12 @@ export function decodeTrip(data: string, catalogIds: readonly string[]): Trip | 
         date: day.t,
         start: day.s,
         end: day.e,
-        items: day.i.map(([code, showTime]) => ({
-          key: newId(),
-          itemId: byCode.get(code) ?? `${MISSING_PREFIX}${code}`,
-          ...(showTime ? { showTime } : {}),
-        })),
+        items: day.i.map(([code, time, locked]) => {
+          const itemId = byCode.get(code) ?? `${MISSING_PREFIX}${code}`
+          // A missing entry keeps its time as a show time, so it survives another round trip.
+          if (restaurants.has(itemId)) return { key: newId(), itemId, ...(time ? { mealTime: time } : {}) }
+          return { key: newId(), itemId, ...(time ? { showTime: time } : {}), ...(locked ? { timeLocked: true as const } : {}) }
+        }),
       })),
     }
   } catch {

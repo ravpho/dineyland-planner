@@ -53,7 +53,7 @@ test('7.5 summary turns from Over by to Fits, and stays visible while scrolling'
   await page.getByLabel('Start').fill('10:00')
   await page.getByLabel('End').fill('11:00')
   await addFromCatalog(page, 'Big Thunder Mountain')
-  await addFromCatalog(page, "Walt's – An American Restaurant")
+  await addFromCatalog(page, "Walt's – An American Restaurant", 'Any time')
   await showTab(page, 'Plan')
   const summary = page.getByTestId('fit-summary')
   await expect(summary).toContainText('Over by')
@@ -137,4 +137,52 @@ test('group by area: one park change, areas shown, and undo', async ({ page }) =
   await page.getByRole('button', { name: 'Undo' }).click()
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"])
   await expect(page.getByTestId('park-change')).toHaveCount(3)
+})
+
+test('optimize route: the other park first, one park change, the message and undo', async ({ page }) => {
+  await createTrip(page, { name: 'Queue day' })
+  for (const n of ['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"]) await addFromCatalog(page, n)
+  await showTab(page, 'Plan')
+
+  // Both route buttons fit on a phone without horizontal page scroll.
+  for (const name of ['Group by area', 'Optimize route']) {
+    const box = (await page.getByRole('button', { name }).boundingBox())!
+    expect(box.x).toBeGreaterThanOrEqual(0)
+    expect(box.x + box.width).toBeLessThanOrEqual(390)
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+
+  await page.getByRole('button', { name: 'Optimize route' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Route optimized' })).toHaveText(/Route optimized · ends 14:29 → 13:19 · queues and walking 280 → 210 min/)
+  expect(await slotNames(page)).toEqual(["Crush's Coaster", 'Frozen Ever After', 'Phantom Manor', 'Big Thunder Mountain'])
+  await expect(page.getByTestId('park-change')).toHaveCount(1)
+
+  await page.getByRole('button', { name: 'Undo' }).click()
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"])
+  await expect(page.getByTestId('park-change')).toHaveCount(3)
+})
+
+test('meal time and restaurant suggestion: lunch at 12:00 in the other park, swap and undo', async ({ page }) => {
+  await createTrip(page, { name: 'Lunch day' })
+  for (const n of ["Crush's Coaster", 'Frozen Ever After', 'The Twilight Zone Tower of Terror']) await addFromCatalog(page, n)
+  await addFromCatalog(page, 'Au Chalet de la Marionnette', '12:00')
+  await addFromCatalog(page, 'Spider-Man W.E.B. Adventure')
+  await showTab(page, 'Plan')
+
+  const lunch = page.getByTestId('timeline-slot').filter({ hasText: 'Au Chalet de la Marionnette' })
+  await expect(lunch.getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
+  const suggestions = lunch.getByTestId('restaurant-suggestions').getByRole('button')
+  await expect(suggestions).toHaveCount(3)
+  const names = (await suggestions.allTextContents()).map((t) => t.split(' · ')[0])
+  expect(names).toEqual(['Stark Factory', 'The Hollywood Gardens Restaurant', 'Café Luminosity'])
+
+  await suggestions.first().click()
+  const stark = page.getByTestId('timeline-slot').filter({ hasText: 'Stark Factory' })
+  await expect(stark.getByLabel('Meal time for Stark Factory')).toHaveValue('12:00')
+  expect(await slotNames(page)).toEqual(["Crush's Coaster", 'Frozen Ever After', 'The Twilight Zone Tower of Terror', 'Stark Factory', 'Spider-Man W.E.B. Adventure'])
+  await expect(page.getByTestId('park-change')).toHaveCount(0)
+
+  await page.getByRole('status').filter({ hasText: 'Swapped to Stark Factory' }).getByRole('button', { name: 'Undo' }).click()
+  expect(await slotNames(page)).toEqual(["Crush's Coaster", 'Frozen Ever After', 'The Twilight Zone Tower of Terror', 'Au Chalet de la Marionnette', 'Spider-Man W.E.B. Adventure'])
+  await expect(page.getByTestId('timeline-slot').filter({ hasText: 'Au Chalet de la Marionnette' }).getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
 })

@@ -31,7 +31,7 @@ test('10.1 full phone journey: plan a 2-day August trip, then share it', async (
     'Star Wars Hyperspace Mountain',
     '"it\'s a small world"',
   ]
-  for (const name of plan) await addFromCatalog(page, name)
+  for (const name of plan) await addFromCatalog(page, name, name.startsWith('Walt') ? 'Any time' : undefined)
   await addFromCatalog(page, 'Disney Tales of Magic', '22:00')
   await showTab(page, 'Plan')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(8)

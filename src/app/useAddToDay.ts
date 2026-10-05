@@ -9,7 +9,7 @@ export function useAddToDay() {
   const store = usePlannerStore()
   const toast = useToast()
   return useCallback(
-    (item: CatalogItem, options: { index?: number; showTime?: string } = {}): boolean => {
+    (item: CatalogItem, options: { index?: number; showTime?: string; mealTime?: string } = {}): boolean => {
       const day = selectedDay(store.getState())
       if (!day) {
         toast('Create a trip first, then add items to a day.')
