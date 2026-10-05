@@ -3,6 +3,7 @@ import type { Catalog, ParkId } from '../domain/catalog'
 import { DEFAULT_FILTERS, type CatalogFilters } from '../domain/filters'
 import { groupByArea } from '../domain/grouping'
 import { searchRoute } from '../domain/optimize'
+import { switchParks } from '../domain/parkOrder'
 import { scheduleDay } from '../domain/schedule'
 import type { GroupProfile } from '../domain/suitability'
 import { monthOf } from '../domain/time'
@@ -10,6 +11,7 @@ import { MAX_TRIP_DAYS, addDays, newId, type Day, type PlanItem, type Trip } fro
 import { loadState, saveState, type KeyValueStorage, type LoadResult, type SavedState } from './persistence'
 
 export type CatalogView = 'list' | 'map'
+export type PlanView = 'timeline' | 'map'
 
 export type AddResult = { ok: true; key: string } | { ok: false; reason: 'unknown-item' | 'no-day' }
 
@@ -28,12 +30,15 @@ export type OptimizeResult =
   | { changed: false }
   | { changed: true; endBefore: number; endAfter: number; queueWalkBefore: number; queueWalkAfter: number; showTimes: ShowTimeChange[] }
 
+/** The park now first and how many restaurants and shows the switch removed. */
+export type SwitchResult = { changed: false } | { changed: true; firstPark: ParkId; removed: number }
+
 export interface PlannerState extends SavedState {
   filters: CatalogFilters
   lastRemoved?: { tripId: string; dayId: string; entry: PlanItem; index: number }
   /**
-   * Session only (optimize-day-route design Decision 7). Written by grouping, optimizing and swapping a
-   * restaurant; `changed` is the day's items array right after the change.
+   * Session only (optimize-day-route design Decision 7). Written by grouping, optimizing, swapping a
+   * restaurant and switching the park order; `changed` is the day's items array right after the change.
    */
   lastRouteChange?: { dayId: string; previous: PlanItem[]; changed: PlanItem[] }
   storage: LoadResult['status'] | 'ok'
@@ -41,6 +46,10 @@ export interface PlannerState extends SavedState {
   catalogView: CatalogView
   /** The park chosen on the map while the filter lists both parks. */
   mapParkId?: ParkId
+  /** Session only, not saved (plan-ui-improvements design Decision 6). */
+  planView: PlanView
+  /** Session only: the entry "Show in timeline" brings into view once the timeline is shown (design Decision 7). */
+  planFocusKey?: string
 
   /** `dayCount` defaults to 1. */
   createTrip(name: string, startDate: string, dayCount?: number): string
@@ -65,7 +74,12 @@ export interface PlannerState extends SavedState {
   optimizeDayRoute(dayId: string): OptimizeResult
   /** Replaces a restaurant in place, keeping its key and meal time. Returns false when nothing changed. */
   swapRestaurant(dayId: string, key: string, itemId: string): boolean
-  /** Undoes the last grouping, optimizing or restaurant swap, unless the day's items changed since. */
+  /**
+   * Puts the other park's attractions first and removes the day's restaurants and shows, when each
+   * park's attractions are together (plan-ui-improvements design Decision 10).
+   */
+  switchParkOrder(dayId: string): SwitchResult
+  /** Undoes the last grouping, optimizing, restaurant swap or park switch, unless the day's items changed since. */
   undoRouteChange(): void
   importTrip(trip: Trip): void
   setProfile(profile: GroupProfile | undefined): void
@@ -75,6 +89,10 @@ export interface PlannerState extends SavedState {
   setCatalogView(view: CatalogView): void
   /** Shows `parkId` on the map; a single-park filter follows it. */
   setMapPark(parkId: ParkId): void
+  setPlanView(view: PlanView): void
+  /** Shows the timeline and asks it to bring the entry with `key` into view. */
+  showInTimeline(key: string): void
+  clearPlanFocus(): void
 }
 
 export type PlannerStore = StoreApi<PlannerState>
@@ -110,6 +128,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       ...saved,
       filters: DEFAULT_FILTERS,
       catalogView: 'list',
+      planView: 'timeline',
       storage: loaded.status === 'loaded' || loaded.status === 'empty' ? 'ok' : loaded.status,
 
       createTrip(name, startDate, dayCount = 1) {
@@ -263,6 +282,14 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         set({ lastRouteChange: { dayId, previous: day.items, changed: swapped } })
         return true
       },
+      switchParkOrder(dayId) {
+        const day = findDay(dayId)?.day
+        const result = day && switchParks(day, catalog)
+        if (!day || !result) return { changed: false }
+        updateDay(dayId, (d) => ({ ...d, items: result.items }))
+        set({ lastRouteChange: { dayId, previous: day.items, changed: result.items } })
+        return { changed: true, firstPark: result.firstPark, removed: result.removed.length }
+      },
       undoRouteChange() {
         const last = get().lastRouteChange
         if (!last) return
@@ -285,6 +312,15 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       },
       setCatalogView(view) {
         set({ catalogView: view })
+      },
+      setPlanView(view) {
+        set({ planView: view })
+      },
+      showInTimeline(key) {
+        set({ planView: 'timeline', planFocusKey: key })
+      },
+      clearPlanFocus() {
+        set({ planFocusKey: undefined })
       },
       setMapPark(parkId) {
         set((s) => {

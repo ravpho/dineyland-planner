@@ -151,6 +151,14 @@ describe('item card on the map (park-map spec)', () => {
     expect(selectedDay(r.store.getState())!.items.map((e) => e.itemId)).toEqual(['dlp.big-thunder-mountain', 'dlp.phantom-manor'])
   })
 
+  test('details and map card: a planned item shows its day and stop (park-catalog spec)', () => {
+    renderMap({ items: ['dlp.big-thunder-mountain', 'dlp.phantom-manor'] })
+    fireEvent.click(marker('Phantom Manor'))
+    expect(within(card()).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stop 2')
+    fireEvent.click(within(card()).getByRole('button', { name: 'Details' }))
+    expect(within(screen.getByRole('dialog', { name: 'Phantom Manor' })).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stop 2')
+  })
+
   test('Details opens the item details', () => {
     renderMap()
     fireEvent.click(marker('Phantom Manor'))

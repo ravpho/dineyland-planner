@@ -24,7 +24,9 @@ export async function showTab(page: Page, tab: 'Catalog' | 'Plan') {
 export async function addFromCatalog(page: Page, name: string, time?: string) {
   await showTab(page, 'Catalog')
   await page.getByLabel('Search by name').fill(name)
-  await page.getByRole('button', { name: `Add ${name} to day`, exact: true }).click()
+  // A planned item's button reads "… to day again" (park-catalog spec: the add button stays).
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  await page.getByRole('button', { name: new RegExp(`^Add ${escaped} to day( again)?$`) }).click()
   if (time) await page.getByRole('dialog').getByRole('button', { name: time, exact: true }).click()
   await page.getByLabel('Search by name').fill('')
 }

@@ -1,8 +1,9 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useMemo, useState } from 'react'
 import type { CatalogItem, Restaurant, Show } from '../domain/catalog'
+import type { PlannedMark } from '../domain/stops'
 import { filterCatalog, type ListedItem, type SortOrder } from '../domain/filters'
-import { MONTH_NAMES, useIsWide, usePlanningMonth } from '../app/hooks'
+import { MONTH_NAMES, useIsWide, usePlannedMarks, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { mapPark, type CatalogView } from '../state/store'
 import { useAddToDay } from '../app/useAddToDay'
@@ -12,12 +13,13 @@ import { ItemDetail } from './ItemDetail'
 import { ParkMap } from './ParkMap'
 import { itemFacts, TYPE_LABELS } from './labels'
 import { MealTimePicker } from './MealTimePicker'
+import { PlannedLabel } from './PlannedLabel'
 import { ShowTimePicker } from './ShowTimePicker'
 import { Badge, IconButton, inputClass, Stars } from './ui'
 
 export const CATALOG_DRAG_PREFIX = 'catalog:'
 
-function RowBody({ listed, month, place, onOpen }: { listed: ListedItem; month: number; place: string; onOpen: () => void }) {
+function RowBody({ listed, month, place, mark, dayNumber, onOpen }: { listed: ListedItem; month: number; place: string; mark?: PlannedMark; dayNumber: number; onOpen: () => void }) {
   const { item, unsuitable, waitRange } = listed
   return (
     <button type="button" onClick={onOpen} className="min-h-11 min-w-0 flex-1 py-2 text-left">
@@ -37,9 +39,10 @@ function RowBody({ listed, month, place, onOpen }: { listed: ListedItem; month: 
           </span>
         )}
       </span>
-      {unsuitable && (
-        <span className="mt-1 inline-block">
-          <Badge tone="amber">{unsuitable}</Badge>
+      {(unsuitable || mark) && (
+        <span className="mt-1 flex flex-wrap gap-1">
+          {unsuitable && <Badge tone="amber">{unsuitable}</Badge>}
+          <PlannedLabel mark={mark} dayNumber={dayNumber} />
         </span>
       )}
     </button>
@@ -63,6 +66,7 @@ export function CatalogList() {
   const month = usePlanningMonth()
   const wide = useIsWide()
   const addToDay = useAddToDay()
+  const { marks, dayNumber } = usePlannedMarks()
   const [open, setOpen] = useState<CatalogItem | null>(null)
   const [picking, setPicking] = useState<Show | null>(null)
   const [pickingMeal, setPickingMeal] = useState<Restaurant | null>(null)
@@ -141,15 +145,26 @@ export function CatalogList() {
         <ParkMap listed={listed} onAdd={add} onOpen={setOpen} />
       ) : (
         <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
-          {listed.map((l) => (
-            <li key={l.item.id} data-testid="catalog-row" data-unsuitable={l.unsuitable ? 'true' : undefined} className={`flex items-center gap-1 px-2 ${l.unsuitable ? 'bg-slate-50' : ''}`}>
-              {wide && <DragHandle item={l.item} />}
-              <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} onOpen={() => setOpen(l.item)} />
-              <IconButton label={`Add ${l.item.name} to day`} onClick={() => add(l.item)} className="text-indigo-700">
-                <PlusIcon />
-              </IconButton>
-            </li>
-          ))}
+          {listed.map((l) => {
+            const mark = marks.get(l.item.id)
+            // A planned row is tinted with an emerald accent, which wins over the unsuitable grey (design Decision 2).
+            const planned = mark?.stops.length ? 'selected' : mark?.otherDays.length ? 'other' : undefined
+            return (
+              <li
+                key={l.item.id}
+                data-testid="catalog-row"
+                data-unsuitable={l.unsuitable ? 'true' : undefined}
+                data-planned={planned}
+                className={`flex items-center gap-1 px-2 ${planned === 'selected' ? 'bg-emerald-50 shadow-[inset_4px_0_0_var(--color-emerald-600)]' : l.unsuitable ? 'bg-slate-50' : ''}`}
+              >
+                {wide && <DragHandle item={l.item} />}
+                <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} mark={mark} dayNumber={dayNumber} onOpen={() => setOpen(l.item)} />
+                <IconButton label={`Add ${l.item.name} to day${planned === 'selected' ? ' again' : ''}`} onClick={() => add(l.item)} className="text-indigo-700">
+                  <PlusIcon />
+                </IconButton>
+              </li>
+            )
+          })}
           {listed.length === 0 && <li className="p-4 text-sm text-slate-600">Nothing matches these filters.</li>}
         </ul>
       )}

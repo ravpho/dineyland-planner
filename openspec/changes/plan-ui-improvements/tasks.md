@@ -2,20 +2,20 @@
 
 ## 1. Stop numbers and planned marks
 
-- [ ] 1.1 Add `src/domain/stops.ts` with `stopNumbers(day, catalog)` (entry key → number, catalog-known entries counted from 1 in day order) and `plannedMarks(trip, selectedDayId, catalog)` (item id → `{ stops, otherDays }`) (design Decision 1). Verify `stops.test.ts`:
+- [x] 1.1 Add `src/domain/stops.ts` with `stopNumbers(day, catalog)` (entry key → number, catalog-known entries counted from 1 in day order) and `plannedMarks(trip, selectedDayId, catalog)` (item id → `{ stops, otherDays }`) (design Decision 1). Verify `stops.test.ts`:
   - "Numbers in plan order": three items get 1, 2 and 3.
   - "Entry no longer available": it has no number and isn't counted.
   - A repeated item in the selected day gets both stop numbers.
   - An item in Day 3 only has `otherDays: [3]` and no stops; an item in Day 1 and Day 3 with Day 1 selected has its stops and `otherDays: [3]`.
   - Items in another trip aren't marked.
   - "Same number on the map": on a day with a repeat and an unknown entry, `buildRoute`'s stop numbers equal `stopNumbers`.
-- [ ] 1.2 Add `plannedLabel(mark, selectedDayNumber)` and `formatStops(numbers)` to `src/components/labels.ts` (design Decisions 2 and 5). Verify unit tests:
+- [x] 1.2 Add `plannedLabel(mark, selectedDayNumber)` and `formatStops(numbers)` to `src/components/labels.ts` (design Decisions 2 and 5). Verify unit tests:
   - `plannedLabel` gives "In Day 1 · stop 4", "In Day 1 · stops 4, 9", "Also in Day 3", "In Day 3" and "In Days 2, 3".
   - `formatStops` gives "stop 3", "stops 1, 2", "stops 1–4", "stops 1, 2, 5" and "no stops". Runs of three or more consecutive numbers become a range.
 
 ## 2. Planned items in the catalog
 
-- [ ] 2.1 Add a `CheckIcon`, a `PlannedLabel` component and a `usePlannedMarks()` hook, and use them in `CatalogList` (design Decision 2):
+- [x] 2.1 Add a `CheckIcon`, a `PlannedLabel` component and a `usePlannedMarks()` hook, and use them in `CatalogList` (design Decision 2):
   - an item in the selected day gets an emerald-tinted row with a left accent and a strong label, and `data-planned="selected"`;
   - an item only on other days gets a muted label without the tint, and `data-planned="other"`;
   - an unsuitable item keeps its grey name and amber badge;
@@ -25,20 +25,20 @@
   - "Just added": tint, "In Day 1 · stop 4", and the "Added" toast still shows.
   - "Planned twice", "Add again", "Unsuitable and planned", "Removed from the day".
   - "Only on another day", "In the selected day and another", "Select another day", "Another trip".
-- [ ] 2.2 Show `PlannedLabel` in `ItemDetail` and in the catalog map's `MapItemCard`. Verify:
+- [x] 2.2 Show `PlannedLabel` in `ItemDetail` and in the catalog map's `MapItemCard`. Verify:
   - component tests for "Details and map card": both show "In Day 1 · stop 2" for Phantom Manor as the second item of Day 1;
   - all existing `map.test.tsx` tests pass unchanged.
-- [ ] 2.3 Add a Playwright test at 390×844 to `e2e/catalog.phone.spec.ts`: create a trip, add Peter Pan's Flight, and check its row shows "In Day 1 · stop 1" while the next row has no label. Add "Planned items are marked in the catalog, with their day and stop number" to the README feature list. Verify `npm run e2e` passes and the README reads correctly.
+- [x] 2.3 Add a Playwright test at 390×844 to `e2e/catalog.phone.spec.ts`: create a trip, add Peter Pan's Flight, and check its row shows "In Day 1 · stop 1" while the next row has no label. Add "Planned items are marked in the catalog, with their day and stop number" to the README feature list. Verify `npm run e2e` passes and the README reads correctly.
 
 ## 3. Stop numbers in the timeline
 
-- [ ] 3.1 Show each scheduled item's stop number in `SlotCard`, as a small circle in the map's route colour before the time, with "Stop N" for screen readers. `DayTimeline` computes `stopNumbers` once, and missing entries get no circle (design Decision 3). Verify component tests in `timeline.test.tsx`:
+- [x] 3.1 Show each scheduled item's stop number in `SlotCard`, as a small circle in the map's route colour before the time, with "Stop N" for screen readers. `DayTimeline` computes `stopNumbers` once, and missing entries get no circle (design Decision 3). Verify component tests in `timeline.test.tsx`:
   - "Numbers in plan order", "Entry no longer available" and "Reorder": moving the third item up shows 2 on it and 3 on the item it passed.
   - All existing timeline tests pass unchanged.
 
 ## 4. Park order and switch logic
 
-- [ ] 4.1 Add `src/domain/parkOrder.ts` with `parkOrder(day, catalog)` and `switchParks(day, catalog)` (design Decision 9). Verify `parkOrder.test.ts` on the bundled catalog:
+- [x] 4.1 Add `src/domain/parkOrder.ts` with `parkOrder(day, catalog)` and `switchParks(day, catalog)` (design Decision 9). Verify `parkOrder.test.ts` on the bundled catalog:
   - "One visit to each park": `['dlp', 'daw']`.
   - "Back and forth": `['dlp', 'daw', 'dlp']`.
   - "Lunch in the other park": `['dlp']`.
@@ -47,7 +47,7 @@
   - Every restaurant and show, with or without a meal time, is in `removed`, in day order.
   - "Entry no longer available": it goes to the end.
   - "Not grouped" and a single-park day: the result is `undefined`.
-- [ ] 4.2 Add the store action `switchParkOrder(dayId)` returning `{ changed: false } | { changed: true; firstPark; removed }`. It writes `lastRouteChange` so `undoRouteChange` reverts it (design Decision 10). Verify `store.test.ts`:
+- [x] 4.2 Add the store action `switchParkOrder(dayId)` returning `{ changed: false } | { changed: true; firstPark; removed }`. It writes `lastRouteChange` so `undoRouteChange` reverts it (design Decision 10). Verify `store.test.ts`:
   - switching a grouped day reorders it and reports `firstPark: 'daw'` and the removed count;
   - `undoRouteChange` restores the previous order, including the removed restaurant and show;
   - "Edited after switching": moving an item first makes Undo leave the day unchanged;
@@ -56,7 +56,7 @@
 
 ## 5. Park order box on the Plan
 
-- [ ] 5.1 Turn `TicketReminder` into the park-order box (design Decision 11). It keeps its test id and reminder sentence and becomes a `<div role="note">`. When `parkOrder` has two or more parks, it adds:
+- [x] 5.1 Turn `TicketReminder` into the park-order box (design Decision 11). It keeps its test id and reminder sentence and becomes a `<div role="note">`. When `parkOrder` has two or more parks, it adds:
   - the order, with full park names joined by " → ";
   - a "Switch order" button, disabled unless `switchParks` has a result, with the "Group by area first…" hint linked by `aria-describedby`.
 
@@ -65,7 +65,7 @@
   - "Not grouped": button disabled, with the hint.
   - "Grouped after the hint": after "Group by area" the button is enabled.
   - The existing ticket-reminder tests pass unchanged.
-- [ ] 5.2 Add the warning sheet and the result message:
+- [x] 5.2 Add the warning sheet and the result message:
   - when the preview removes items, "Switch order" opens a `Sheet` titled "Start in <park>?", listing each one with its meal or show time, with "Cancel" and "Switch and remove N";
   - otherwise it switches at once;
   - then the toast reads "<park> first" plus " · N removed" when N > 0, with Undo calling `undoRouteChange`.
@@ -77,7 +77,7 @@
   - "Only attractions": no sheet.
   - "See the result and undo": "Disney Adventure World first · 2 removed", and Undo restores all items.
   - "Nothing removed": the message reads "Disney Adventure World first".
-- [ ] 5.3 Add a Playwright test at 390×844 to `e2e/plan.phone.spec.ts`:
+- [x] 5.3 Add a Playwright test at 390×844 to `e2e/plan.phone.spec.ts`:
   - add Big Thunder Mountain, Crush's Coaster and Phantom Manor; "Switch order" is disabled with the hint;
   - tap "Group by area", then add Au Chalet de la Marionnette at 12:00;
   - tap "Switch order": the sheet lists the restaurant; confirm;
@@ -88,11 +88,11 @@
 
 ## 6. Map in the plan
 
-- [ ] 6.1 Add session-only `planView: 'timeline' | 'map'` (default `'timeline'`), `setPlanView`, `planFocusKey` and `showInTimeline(key)` to the store (design Decisions 6 and 7). Verify `store.test.ts`:
+- [x] 6.1 Add session-only `planView: 'timeline' | 'map'` (default `'timeline'`), `setPlanView`, `planFocusKey` and `showInTimeline(key)` to the store (design Decisions 6 and 7). Verify `store.test.ts`:
   - the default is `'timeline'`;
   - `showInTimeline` sets the view to timeline and the focus key;
   - saved state contains neither `planView` nor `planFocusKey`.
-- [ ] 6.2 Export `MapCanvas` and add `src/components/PlanMap.tsx` (design Decisions 4 and 5):
+- [x] 6.2 Export `MapCanvas` and add `src/components/PlanMap.tsx` (design Decisions 4 and 5):
   - the markers are the day's scheduled items, deduplicated, with `emphasise` on;
   - the park starts on the first scheduled item's park, or Disneyland Park;
   - the park switch is labelled with `formatStops`;
@@ -106,11 +106,11 @@
   - "Map follows the plan", "Park change on the plan map", "Day that starts in the second park", "Stops in each park", "Empty day".
   - "Back from the catalog" and "Another day" through the store.
   - All existing map tests pass unchanged.
-- [ ] 6.3 Add `StopCard` (design Decision 8): name, park and area, then one line per occurrence with the stop number, arrival, wait (not for shows), start–end, and late or after-window badges. "Show in timeline" calls `showInTimeline`. `DayTimeline` scrolls the focused slot into view (when `scrollIntoView` exists), focuses its handle, highlights it briefly and clears the key. Verify component tests:
+- [x] 6.3 Add `StopCard` (design Decision 8): name, park and area, then one line per occurrence with the stop number, arrival, wait (not for shows), start–end, and late or after-window badges. "Show in timeline" calls `showInTimeline`. `DayTimeline` scrolls the focused slot into view (when `scrollIntoView` exists), focuses its handle, highlights it briefly and clears the key. Verify component tests:
   - "Times of a stop": the card's times equal the timeline's third item.
   - "Planned twice": two lines.
   - "Show in timeline": the timeline is shown, the stubbed `scrollIntoView` is called on the sixth slot, and its handle has focus.
-- [ ] 6.4 Add Playwright tests:
+- [x] 6.4 Add Playwright tests:
   - at 390×844 in `e2e/map.phone.spec.ts`: plan a two-park day, choose "Map" on the Plan, check the numbered stops, the park switch labels and the visible fit bar, tap a stop, choose "Show in timeline", and check that item is in view;
   - in `e2e/map.desktop.spec.ts`: show the plan map next to the catalog map, with queries scoped by `plan-map`.
 

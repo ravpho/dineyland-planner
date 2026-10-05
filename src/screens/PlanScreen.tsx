@@ -3,11 +3,12 @@ import { PARK_IDS, type Catalog } from '../domain/catalog'
 import { scheduleDay } from '../domain/schedule'
 import type { Day } from '../domain/trip'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
-import { selectedDay, selectedTrip } from '../state/store'
+import { selectedDay, selectedTrip, type PlanView } from '../state/store'
 import { CreateTripForm } from '../components/CreateTripForm'
 import { DaySettings } from '../components/DaySettings'
 import { DayTimeline } from '../components/DayTimeline'
 import { Breakdown, FitBar, TicketReminder } from '../components/FitSummary'
+import { PlanMap } from '../components/PlanMap'
 import { RouteActions } from '../components/RouteActions'
 import { TripBar } from '../components/TripBar'
 
@@ -29,6 +30,8 @@ export default function PlanScreen() {
   const day = usePlanner(selectedDay)
   const profile = usePlanner((s) => s.profile)
   const selectDay = usePlanner((s) => s.selectDay)
+  const view = usePlanner((s) => s.planView)
+  const setView = usePlanner((s) => s.setPlanView)
   const schedule = useMemo(() => (day ? scheduleDay(day, catalog, profile) : null), [day, catalog, profile])
 
   if (!trip || !day || !schedule) {
@@ -60,9 +63,29 @@ export default function PlanScreen() {
         ))}
       </div>
       <DaySettings day={day} />
-      <TicketReminder schedule={schedule} />
-      <RouteActions day={day} />
-      <DayTimeline day={day} schedule={schedule} />
+      <TicketReminder schedule={schedule} day={day} />
+      <div role="group" aria-label="Plan view" className="flex self-start overflow-hidden rounded-lg border border-slate-300 bg-white">
+        {(['timeline', 'map'] as PlanView[]).map((v) => (
+          <button
+            key={v}
+            type="button"
+            aria-pressed={view === v}
+            onClick={() => setView(v)}
+            className={`min-h-11 min-w-14 px-3 text-sm font-medium ${view === v ? 'bg-indigo-700 text-white' : 'text-slate-700'}`}
+          >
+            {v === 'timeline' ? 'Timeline' : 'Map'}
+          </button>
+        ))}
+      </div>
+      {view === 'map' ? (
+        // Remounts per day so the map opens on the park of that day's first item (design Decision 5).
+        <PlanMap key={day.id} day={day} schedule={schedule} />
+      ) : (
+        <>
+          <RouteActions day={day} />
+          <DayTimeline day={day} schedule={schedule} />
+        </>
+      )}
       <Breakdown schedule={schedule} />
       <FitBar schedule={schedule} />
     </section>

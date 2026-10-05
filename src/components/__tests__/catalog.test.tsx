@@ -1,8 +1,9 @@
 import { DndContext } from '@dnd-kit/core'
-import { fireEvent, screen, within } from '@testing-library/react'
+import { act, fireEvent, screen, within } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
 import catalogJson from '../../data/catalog.json'
 import { parseCatalog, type CatalogItem } from '../../domain/catalog'
+import { selectedDay, selectedTrip } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
 import { ToastProvider } from '../Toast'
@@ -150,5 +151,97 @@ describe('official links, maps and height checks (park-catalog spec)', () => {
     const d = screen.getByRole('dialog')
     expect(within(d).getByTestId('height-source')).toHaveTextContent('Not yet verified')
     expect(within(d).getByRole('note')).toHaveTextContent('always follow the signs posted at the attraction')
+  })
+})
+
+describe('planned items in the catalog (park-catalog spec)', () => {
+  /** A trip of `days` days; each list of item ids fills the matching day. Day 1 stays selected. */
+  function renderPlanned(dayItems: string[][], days = dayItems.length) {
+    const r = renderList()
+    act(() => {
+      const s = r.store.getState()
+      s.setTripLength(selectedTrip(s)!.id, days)
+      const trip = selectedTrip(r.store.getState())!
+      dayItems.forEach((ids, i) => ids.forEach((id) => r.store.getState().addItem(trip.days[i]!.id, id)))
+    })
+    return { ...r, trip: () => selectedTrip(r.store.getState())! }
+  }
+  const row = (name: string) => screen.getAllByTestId('catalog-row').find((r) => within(r).getByTestId('row-place').previousSibling?.textContent === name)!
+
+  test('just added: the row is tinted and labelled with the day and stop, and the toast still shows', () => {
+    renderPlanned([['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.star-wars-hyperspace-mountain']])
+    expect(row("Peter Pan's Flight")).not.toHaveAttribute('data-planned')
+    fireEvent.click(screen.getByRole('button', { name: "Add Peter Pan's Flight to day" }))
+    expect(row("Peter Pan's Flight")).toHaveAttribute('data-planned', 'selected')
+    expect(row("Peter Pan's Flight").className).toContain('bg-emerald-50')
+    expect(within(row("Peter Pan's Flight")).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stop 4')
+    expect(screen.getByText("Added Peter Pan's Flight")).toBeInTheDocument()
+  })
+
+  test('planned twice: both stops are listed', () => {
+    renderPlanned([['dlp.phantom-manor', 'dlp.big-thunder-mountain', 'dlp.peter-pans-flight', 'dlp.phantom-manor', 'dlp.big-thunder-mountain']])
+    expect(within(row('Big Thunder Mountain')).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stops 2, 5')
+  })
+
+  test('add again: the add button stays and adds a second entry', () => {
+    const { store } = renderPlanned([['dlp.big-thunder-mountain', 'dlp.phantom-manor']])
+    fireEvent.click(screen.getByRole('button', { name: 'Add Phantom Manor to day again' }))
+    expect(selectedDay(store.getState())!.items.map((e) => e.itemId)).toEqual(['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.phantom-manor'])
+    expect(within(row('Phantom Manor')).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stops 2, 3')
+  })
+
+  test('unsuitable and planned: both marks show', () => {
+    const { store } = renderPlanned([['dlp.star-wars-hyperspace-mountain']])
+    act(() => store.getState().setProfile({ heightCm: 110 }))
+    const hyperspace = row('Star Wars Hyperspace Mountain')
+    expect(hyperspace).toHaveAttribute('data-unsuitable', 'true')
+    expect(within(hyperspace).getByText('Needs 120 cm')).toBeInTheDocument()
+    expect(within(hyperspace).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stop 1')
+  })
+
+  test('removed from the day: the tint and label go', () => {
+    const { store, trip } = renderPlanned([['dlp.big-thunder-mountain', 'dlp.peter-pans-flight']])
+    const day = trip().days[0]!
+    act(() => store.getState().removeItem(day.id, day.items[1]!.key))
+    expect(row("Peter Pan's Flight")).not.toHaveAttribute('data-planned')
+    expect(within(row("Peter Pan's Flight")).queryByTestId('planned-label')).toBeNull()
+  })
+
+  test('only on another day: a muted label without the tint', () => {
+    renderPlanned([['dlp.big-thunder-mountain'], [], ['dlp.phantom-manor']])
+    const manor = row('Phantom Manor')
+    expect(manor).toHaveAttribute('data-planned', 'other')
+    expect(manor.className).not.toContain('bg-emerald-50')
+    expect(within(manor).queryByTestId('planned-label')).toBeNull()
+    expect(within(manor).getByTestId('planned-other-days')).toHaveTextContent('In Day 3')
+  })
+
+  test('in the selected day and another: the day label, then the other day', () => {
+    renderPlanned([['dlp.big-thunder-mountain', 'dlp.phantom-manor'], [], ['dlp.phantom-manor']])
+    const manor = row('Phantom Manor')
+    expect(manor).toHaveAttribute('data-planned', 'selected')
+    expect(within(manor).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stop 2')
+    expect(within(manor).getByTestId('planned-other-days')).toHaveTextContent('Also in Day 3')
+  })
+
+  test('select another day: the label follows the selected day', () => {
+    const { store, trip } = renderPlanned([['dlp.big-thunder-mountain'], [], ['dlp.big-thunder-mountain', 'dlp.phantom-manor']])
+    act(() => store.getState().selectDay(trip().days[2]!.id))
+    expect(row('Phantom Manor')).toHaveAttribute('data-planned', 'selected')
+    expect(within(row('Phantom Manor')).getByTestId('planned-label')).toHaveTextContent('In Day 3 · stop 2')
+    expect(within(row('Big Thunder Mountain')).getByTestId('planned-other-days')).toHaveTextContent('Also in Day 1')
+  })
+
+  test('another trip: items planned only there are not marked', () => {
+    const { store, trip } = renderPlanned([['dlp.big-thunder-mountain']])
+    const first = trip().id
+    act(() => {
+      store.getState().createTrip('Other', '2026-09-01', 1)
+      const other = selectedTrip(store.getState())!
+      store.getState().addItem(other.days[0]!.id, 'dlp.phantom-manor')
+      store.getState().selectTrip(first)
+    })
+    expect(row('Phantom Manor')).not.toHaveAttribute('data-planned')
+    expect(row('Big Thunder Mountain')).toHaveAttribute('data-planned', 'selected')
   })
 })

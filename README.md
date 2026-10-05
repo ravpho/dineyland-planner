@@ -4,10 +4,13 @@ Plan your days at Disneyland Paris. It covers both parks: Disneyland Park and Di
 
 - Browse every attraction, restaurant and show of both parks in one list, each labelled with its park and area. Each has a description, a "worth it" rating, duration, height limit, thrill level, scariness and typical waits by month and time of day. Sort by name, rating, busiest wait or duration.
 - Switch the catalog to a **map** of either park: area zones, every item at its position, zoom and drag, the walk from your last planned stop, walking times between areas, and your day's route with numbered stops.
+- The plan has its own **map of the day**: only your stops, numbered and named, park by park. Tap a stop to see its times, or jump to it in the timeline, which numbers stops the same way.
 - Each item links to its official Disneyland Paris page (where one was found) and opens in your maps app. Heights say how they were checked: official, matching independent sources, or not yet verified.
 - Filter by height, thrill and scariness, or save a group profile so unsuitable rides are greyed out automatically.
 - Build a day (or a multi-day trip) that **combines both parks**: items from Disneyland Park and Disney Adventure World in any order, added by tap or drag and reordered by drag.
+- Planned items are marked in the catalog, with their day and stop number, such as "In Day 1 · stop 4". Items planned on another day of the trip get a quieter "In Day 3".
 - **Group by area** in one tap. The day is reordered so each park's rides are together and the areas follow the shortest walk. Meals and shows keep their time. A message shows the walking saved, with Undo.
+- **Switch which park comes first** on a grouped two-park day. Meals and shows are removed, with a warning that names them first and Undo afterwards.
 - **Optimize route** in one tap. The day is reordered so it ends as early as possible:
   - the busiest rides go to the quietest times, such as Crush's Coaster at opening;
   - the day may start in either park;
@@ -66,7 +69,7 @@ To build for that path locally: `BASE_PATH=/dineyland-planner/ npm run build`.
 
 | Path | What |
 |---|---|
-| `src/domain/` | Framework-free logic: catalog schema, wait model, walking, scheduler (with meal times), shared day model, grouping by area, route search, restaurant suggestions, filters, map geometry and route, share links |
+| `src/domain/` | Framework-free logic: catalog schema, wait model, walking, scheduler (with meal times), shared day model, grouping by area, route search, restaurant suggestions, park order and switch, stop numbers and planned marks, filters, map geometry and route, share links |
 | `src/state/` | Zustand store and device storage |
 | `src/components/`, `src/screens/` | React UI |
 | `scripts/data/` | Data collection and catalog build |

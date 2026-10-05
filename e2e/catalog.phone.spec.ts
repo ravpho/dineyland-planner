@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { createTrip, showTab } from './helpers'
+import { addFromCatalog, createTrip, showTab } from './helpers'
 
 test.beforeEach(async ({ page }) => {
   await createTrip(page)
@@ -57,3 +57,13 @@ test('3.2 both parks are listed with labels, and sorting works without opening t
   expect(top).toBe('Rated 5 out of 5')
 })
 
+
+test('a planned item is tinted and labelled with its day and stop (park-catalog spec)', async ({ page }) => {
+  await addFromCatalog(page, "Peter Pan's Flight")
+  const peter = page.getByTestId('catalog-row').filter({ hasText: "Peter Pan's Flight" })
+  await expect(peter).toHaveAttribute('data-planned', 'selected')
+  await expect(peter.getByTestId('planned-label')).toHaveText('In Day 1 · stop 1')
+  const manor = page.getByTestId('catalog-row').filter({ hasText: 'Phantom Manor' })
+  await expect(manor).not.toHaveAttribute('data-planned')
+  await expect(manor.getByTestId('planned-label')).toHaveCount(0)
+})

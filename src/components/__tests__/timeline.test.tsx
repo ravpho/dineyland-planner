@@ -1,10 +1,14 @@
 import { DndContext } from '@dnd-kit/core'
-import { screen, within } from '@testing-library/react'
+import { act, fireEvent, screen, within } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
+import catalogJson from '../../data/catalog.json'
+import { parseCatalog } from '../../domain/catalog'
 import { scheduleDay } from '../../domain/schedule'
-import type { Day } from '../../domain/trip'
+import type { Day, PlanItem } from '../../domain/trip'
+import { createPlannerStore, selectedDay } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
+import PlanScreen from '../../screens/PlanScreen'
 import { DayTimeline } from '../DayTimeline'
 import { Breakdown, FitBar, TicketReminder } from '../FitSummary'
 import { ToastProvider } from '../Toast'
@@ -14,7 +18,7 @@ function renderDay(day: Day, profile?: { heightCm?: number }) {
   renderWithPlanner(
     <ToastProvider>
       <DndContext>
-        <TicketReminder schedule={schedule} />
+        <TicketReminder schedule={schedule} day={day} />
         <DayTimeline day={day} schedule={schedule} />
         <Breakdown schedule={schedule} />
         <FitBar schedule={schedule} />
@@ -102,5 +106,141 @@ describe('timeline marks (day-schedule spec)', () => {
     renderDay(day(['dlp.big-thunder-mountain', 'dlp.phantom-manor']))
     expect(screen.queryByTestId('park-change')).toBeNull()
     expect(screen.queryByTestId('ticket-reminder')).toBeNull()
+  })
+})
+
+describe('stop numbers in the timeline (day-schedule spec)', () => {
+  const stopsShown = () => slots().map((s) => within(s).queryByTestId('slot-stop')?.textContent ?? null)
+
+  test('numbers in plan order', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight']))
+    expect(stopsShown()).toEqual(['Stop 1', 'Stop 2', 'Stop 3'])
+  })
+
+  test('an entry no longer available has no number and is not counted', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'dlp.retired', 'dlp.phantom-manor']))
+    expect(stopsShown()).toEqual(['Stop 1', null, 'Stop 2'])
+  })
+
+  test('reorder: the moved item and the one it passed swap numbers', () => {
+    const { store } = renderWithPlanner(
+      <ToastProvider>
+        <DndContext>
+          <PlanScreen />
+        </DndContext>
+      </ToastProvider>,
+    )
+    act(() => {
+      store.getState().createTrip('Trip', '2026-08-12', 1)
+      const id = selectedDay(store.getState())!.id
+      for (const item of ['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight']) store.getState().addItem(id, item)
+    })
+    fireEvent.click(screen.getByRole('button', { name: "Move Peter Pan's Flight up" }))
+    const byName = (name: string) => within(slots().find((s) => within(s).queryByTestId('slot-name')?.textContent === name)!).getByTestId('slot-stop')
+    expect(byName("Peter Pan's Flight")).toHaveTextContent('Stop 2')
+    expect(byName('Phantom Manor')).toHaveTextContent('Stop 3')
+  })
+})
+
+describe('park order and switch (trip-itinerary spec)', () => {
+  const real = parseCatalog(catalogJson)
+  const THUNDER = 'dlp.big-thunder-mountain'
+  const MANOR = 'dlp.phantom-manor'
+  const CRUSH = 'daw.crushs-coaster'
+  const FROZEN = 'daw.frozen-ever-after'
+  const CHALET = 'dlp.au-chalet-de-la-marionnette'
+  const PARADE = 'dlp.disney-stars-on-parade'
+
+  function renderPlan(entries: (string | Omit<PlanItem, 'key'>)[]) {
+    const store = createPlannerStore(real)
+    store.getState().createTrip('Trip', '2026-08-12')
+    const dayId = selectedDay(store.getState())!.id
+    for (const e of entries) {
+      const { itemId, ...options } = typeof e === 'string' ? { itemId: e } : e
+      store.getState().addItem(dayId, itemId, options)
+    }
+    renderWithPlanner(
+      <ToastProvider>
+        <DndContext>
+          <PlanScreen />
+        </DndContext>
+      </ToastProvider>,
+      { store, catalog: real },
+    )
+    return { store, ids: () => selectedDay(store.getState())!.items.map((e) => e.itemId) }
+  }
+  const switchButton = () => screen.getByRole('button', { name: 'Switch order' })
+  const lunchAndParade = [THUNDER, { itemId: CHALET, mealTime: '12:00' }, MANOR, CRUSH, { itemId: PARADE, showTime: '17:30' }]
+
+  test('one visit to each park: the order is shown and the switch is available', () => {
+    renderPlan([THUNDER, MANOR, CRUSH, FROZEN])
+    expect(screen.getByTestId('park-order-text')).toHaveTextContent('Disneyland Park → Disney Adventure World')
+    expect(switchButton()).toBeEnabled()
+    expect(screen.queryByTestId('park-order-hint')).toBeNull()
+  })
+
+  test('back and forth: the switch is unavailable, with a hint to group by area first', () => {
+    renderPlan([THUNDER, CRUSH, MANOR])
+    expect(screen.getByTestId('park-order-text')).toHaveTextContent('Disneyland Park → Disney Adventure World → Disneyland Park')
+    expect(switchButton()).toBeDisabled()
+    expect(switchButton()).toHaveAccessibleDescription(/Group by area first so each park's attractions are together/)
+  })
+
+  test('grouped after the hint: grouping by area makes the switch available', () => {
+    renderPlan([THUNDER, CRUSH, MANOR])
+    fireEvent.click(screen.getByRole('button', { name: 'Group by area' }))
+    expect(screen.getByTestId('park-order-text')).toHaveTextContent('Disneyland Park → Disney Adventure World')
+    expect(switchButton()).toBeEnabled()
+  })
+
+  test('lunch in the other park: the reminder shows, without a park order', () => {
+    renderPlan([THUNDER, MANOR, { itemId: 'daw.regal-view-restaurant', mealTime: '12:00' }])
+    expect(screen.getByTestId('ticket-reminder')).toBeInTheDocument()
+    expect(screen.queryByTestId('park-order')).toBeNull()
+  })
+
+  test('lunch and a parade: the warning names both with their times', () => {
+    renderPlan(lunchAndParade)
+    fireEvent.click(switchButton())
+    const sheet = screen.getByRole('dialog', { name: 'Start in Disney Adventure World?' })
+    expect(within(within(sheet).getByTestId('switch-removed')).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
+      'Au Chalet de la Marionnette (12:00)',
+      'Disney Stars on Parade (17:30)',
+    ])
+    expect(within(sheet).getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
+    expect(within(sheet).getByRole('button', { name: 'Switch and remove 2' })).toBeInTheDocument()
+  })
+
+  test('confirm: the parks are switched and the restaurant and parade are removed', () => {
+    const { ids } = renderPlan(lunchAndParade)
+    fireEvent.click(switchButton())
+    fireEvent.click(screen.getByRole('button', { name: 'Switch and remove 2' }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(ids()).toEqual([CRUSH, THUNDER, MANOR])
+  })
+
+  test('cancel: the day keeps its order, restaurant and parade', () => {
+    const { ids } = renderPlan(lunchAndParade)
+    fireEvent.click(switchButton())
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(ids()).toEqual([THUNDER, CHALET, MANOR, CRUSH, PARADE])
+  })
+
+  test('only attractions: switched at once without a warning, and the message has no count', () => {
+    const { ids } = renderPlan([THUNDER, MANOR, CRUSH, FROZEN])
+    fireEvent.click(switchButton())
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(ids()).toEqual([CRUSH, FROZEN, THUNDER, MANOR])
+    expect(screen.getByText('Disney Adventure World first')).toBeInTheDocument()
+  })
+
+  test('see the result and undo: the message counts the removed items, and Undo restores them', () => {
+    const { ids } = renderPlan(lunchAndParade)
+    fireEvent.click(switchButton())
+    fireEvent.click(screen.getByRole('button', { name: 'Switch and remove 2' }))
+    expect(screen.getByText('Disney Adventure World first · 2 removed')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(ids()).toEqual([THUNDER, CHALET, MANOR, CRUSH, PARADE])
   })
 })

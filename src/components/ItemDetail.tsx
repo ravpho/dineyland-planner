@@ -1,10 +1,11 @@
 import { SERVICE_LABELS, scareLabel, thrillLabel, type CatalogItem } from '../domain/catalog'
 import { waitRange, mealMinutes, RESTAURANT_WAITS } from '../domain/waits'
-import { MONTH_NAMES, usePlanningMonth } from '../app/hooks'
+import { MONTH_NAMES, usePlannedMarks, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { unsuitableReason } from '../domain/suitability'
 import { ExternalIcon } from './icons'
 import { areaName, HEIGHT_SOURCE_LABELS, heightLabel, mapsUrl, TYPE_LABELS } from './labels'
+import { PlannedLabel } from './PlannedLabel'
 import { Badge, Button, Sheet, Stars } from './ui'
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -33,6 +34,7 @@ export function ItemDetail({ item, onClose, onAdd }: { item: CatalogItem; onClos
   const park = catalog.parks.find((p) => p.id === item.parkId)!
   const area = areaName(item, catalog)
   const reason = unsuitableReason(item, profile)
+  const { marks, dayNumber } = usePlannedMarks()
 
   return (
     <Sheet title={item.name} onClose={onClose}>
@@ -41,6 +43,7 @@ export function ItemDetail({ item, onClose, onAdd }: { item: CatalogItem; onClos
         <span className="text-sm text-slate-600">
           {park.name} · {area}
         </span>
+        <PlannedLabel mark={marks.get(item.id)} dayNumber={dayNumber} />
       </div>
       {reason && (
         <p className="mb-2 rounded bg-amber-50 px-2 py-1 text-sm text-amber-900" role="note">
