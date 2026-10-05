@@ -1,10 +1,11 @@
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import type { Show } from '../domain/catalog'
 import { restaurantSuggestions, type RestaurantSuggestion } from '../domain/restaurants'
 import type { DaySchedule, Slot } from '../domain/schedule'
+import { stopNumbers } from '../domain/stops'
 import { formatClock, formatDuration, parseClock } from '../domain/time'
 import type { Day } from '../domain/trip'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
@@ -22,12 +23,67 @@ function mealTimeOptions(day: Day, current?: string): string[] {
   return [...new Set([...steps, ...(current ? [current] : [])])].sort()
 }
 
-function SlotCard({ day, slot, index, count, windowEnd, suggestions = [] }: { day: Day; slot: Slot; index: number; count: number; windowEnd: string; suggestions?: RestaurantSuggestion[] }) {
-  const { moveItem, removeItem, undoRemove, setShowTime, setMealTime, setShowLock, swapRestaurant, undoRouteChange } = usePlanner((s) => s)
+function SlotCard({
+  day,
+  slot,
+  index,
+  count,
+  stop,
+  focused = false,
+  windowEnd,
+  suggestions = [],
+}: {
+  day: Day
+  slot: Slot
+  index: number
+  count: number
+  /** The same number the map's route and the catalog's planned label use; none for a missing entry. */
+  stop?: number
+  /** "Show in timeline" asked for this item: bring it into view, focus it and highlight it briefly. */
+  focused?: boolean
+  windowEnd: string
+  suggestions?: RestaurantSuggestion[]
+}) {
+  const { moveItem, removeItem, undoRemove, setShowTime, setMealTime, setShowLock, swapRestaurant, undoRouteChange, clearPlanFocus } = usePlanner((s) => s)
   const catalog = useCatalog()
   const toast = useToast()
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: slot.entry.key })
   const style = { transform: CSS.Transform.toString(transform), transition }
+  const itemRef = useRef<HTMLLIElement | null>(null)
+  const handleRef = useRef<HTMLButtonElement | null>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const highlightTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  // Stable, so dnd-kit's nodes aren't detached and re-attached on every render during a drag.
+  const setItemNode = useCallback(
+    (el: HTMLLIElement | null) => {
+      setNodeRef(el)
+      itemRef.current = el
+    },
+    [setNodeRef],
+  )
+  const setHandleNode = useCallback(
+    (el: HTMLButtonElement | null) => {
+      setActivatorNodeRef(el)
+      handleRef.current = el
+    },
+    [setActivatorNodeRef],
+  )
+  useEffect(() => () => clearTimeout(highlightTimer.current), [])
+
+  // plan-ui-improvements design Decision 7. The highlight is a DOM attribute React doesn't manage, so
+  // it outlives clearing the focus key. jsdom has no scrollIntoView, hence the optional call.
+  useEffect(() => {
+    if (!focused) return
+    itemRef.current?.scrollIntoView?.({ block: 'center' })
+    handleRef.current?.focus({ preventScroll: true })
+    const card = cardRef.current
+    if (card) {
+      card.dataset.highlight = 'true'
+      clearTimeout(highlightTimer.current)
+      highlightTimer.current = setTimeout(() => delete card.dataset.highlight, 2000)
+    }
+    clearPlanFocus()
+  }, [focused, clearPlanFocus])
   const name = slot.kind === 'scheduled' ? slot.item.name : 'No longer available'
 
   const remove = () => {
@@ -39,7 +95,13 @@ function SlotCard({ day, slot, index, count, windowEnd, suggestions = [] }: { da
   }
 
   return (
-    <li ref={setNodeRef} style={style} className={`list-none ${isDragging ? 'relative z-20 opacity-80' : ''}`} data-testid="timeline-slot" data-item-id={slot.entry.itemId}>
+    <li
+      ref={setItemNode}
+      style={style}
+      className={`list-none ${isDragging ? 'relative z-20 opacity-80' : ''}`}
+      data-testid="timeline-slot"
+      data-item-id={slot.entry.itemId}
+    >
       {slot.kind === 'scheduled' && slot.parkChange && (
         <p className="py-1 pl-14 text-xs font-medium text-indigo-800" data-testid="park-change">
           Walk to {catalog.parks.find((p) => p.id === slot.item.parkId)?.name} · park change · {slot.walk} min
@@ -50,10 +112,13 @@ function SlotCard({ day, slot, index, count, windowEnd, suggestions = [] }: { da
           Free time {formatDuration(slot.freeBefore)}
         </p>
       )}
-      <div className={`flex flex-wrap items-start gap-x-1 rounded-xl border bg-white p-1 shadow-sm sm:flex-nowrap ${slot.kind === 'scheduled' && slot.afterWindow ? 'border-red-300' : 'border-slate-200'}`}>
+      <div
+        ref={cardRef}
+        className={`flex flex-wrap items-start gap-x-1 rounded-xl border bg-white p-1 shadow-sm transition-shadow data-[highlight=true]:ring-2 data-[highlight=true]:ring-amber-400 sm:flex-nowrap ${slot.kind === 'scheduled' && slot.afterWindow ? 'border-red-300' : 'border-slate-200'}`}
+      >
         <button
           type="button"
-          ref={setActivatorNodeRef}
+          ref={setHandleNode}
           {...attributes}
           {...listeners}
           aria-label={`Reorder ${name}`}
@@ -71,6 +136,13 @@ function SlotCard({ day, slot, index, count, windowEnd, suggestions = [] }: { da
           ) : (
             <>
               <p className="flex flex-wrap items-baseline gap-x-2">
+                {stop !== undefined && (
+                  // Drawn like the map's numbered stops (plan-ui-improvements design Decision 3).
+                  <span className="inline-flex h-5 min-w-5 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 px-1.5 text-xs font-bold text-white" data-testid="slot-stop">
+                    <span className="sr-only">Stop </span>
+                    {stop}
+                  </span>
+                )}
                 <span className="font-mono text-sm font-semibold text-slate-900" data-testid="slot-time">
                   {formatClock(slot.start)}–{formatClock(slot.end)}
                 </span>
@@ -182,6 +254,8 @@ function SlotCard({ day, slot, index, count, windowEnd, suggestions = [] }: { da
 export function DayTimeline({ day, schedule }: { day: Day; schedule: DaySchedule }) {
   const { setNodeRef, isOver } = useDroppable({ id: DAY_DROP_ID })
   const catalog = useCatalog()
+  const stops = useMemo(() => stopNumbers(day, catalog), [day, catalog])
+  const focusKey = usePlanner((s) => s.planFocusKey)
   // Restaurants that fit the day better (route-optimization spec, design Decision 5).
   const suggestions = useMemo(
     () => new Map(schedule.slots.flatMap((s) => (s.kind === 'scheduled' && s.item.type === 'restaurant' ? [[s.entry.key, restaurantSuggestions(day, catalog, s.entry.key)] as const] : []))),
@@ -191,7 +265,17 @@ export function DayTimeline({ day, schedule }: { day: Day; schedule: DaySchedule
     <SortableContext items={day.items.map((i) => i.key)} strategy={verticalListSortingStrategy}>
       <ol ref={setNodeRef} aria-label="Day plan" className={`flex min-h-24 flex-col gap-2 rounded-xl p-1 ${isOver ? 'bg-indigo-50 ring-2 ring-indigo-300' : ''}`}>
         {schedule.slots.map((slot, i) => (
-          <SlotCard key={slot.entry.key} day={day} slot={slot} index={i} count={schedule.slots.length} windowEnd={day.end} suggestions={suggestions.get(slot.entry.key)} />
+          <SlotCard
+            key={slot.entry.key}
+            day={day}
+            slot={slot}
+            index={i}
+            count={schedule.slots.length}
+            stop={stops.get(slot.entry.key)}
+            focused={slot.entry.key === focusKey}
+            windowEnd={day.end}
+            suggestions={suggestions.get(slot.entry.key)}
+          />
         ))}
         {schedule.slots.length === 0 && (
           <li className="list-none rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-600">

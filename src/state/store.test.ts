@@ -324,6 +324,37 @@ describe('map view state (park-map spec, Decision 6)', () => {
   })
 })
 
+describe('plan view state (park-map spec, plan-ui-improvements Decisions 6 and 7)', () => {
+  test('the plan starts on the timeline and can switch to the map', () => {
+    const { s } = setup()
+    expect(s().planView).toBe('timeline')
+    s().setPlanView('map')
+    expect(s().planView).toBe('map')
+  })
+
+  test('Show in timeline switches back and remembers the entry until cleared', () => {
+    const { s } = setup()
+    s().setPlanView('map')
+    s().showInTimeline('k3')
+    expect(s()).toMatchObject({ planView: 'timeline', planFocusKey: 'k3' })
+    s().clearPlanFocus()
+    expect(s().planFocusKey).toBeUndefined()
+  })
+
+  test('the plan view and focus are not saved on the device', () => {
+    const storage = new MemoryStorage()
+    const { s, day } = setup(storage)
+    s().setPlanView('map')
+    s().showInTimeline('k1')
+    s().addItem(day().id, 'dlp.phantom-manor')
+    const saved = storage.data.get(STORAGE_KEY) ?? ''
+    expect(saved).toContain('dlp.phantom-manor')
+    expect(saved).not.toContain('planView')
+    expect(saved).not.toContain('planFocusKey')
+    expect(createPlannerStore(sampleCatalog, storage).getState().planView).toBe('timeline')
+  })
+})
+
 describe('group by area (route-optimization spec)', () => {
   const zigzag = ['dlp.big-thunder-mountain', 'daw.avengers-flight-force', 'dlp.phantom-manor', 'dlp.parade']
   const setupZigzag = (storage?: KeyValueStorage) => {
@@ -396,6 +427,54 @@ describe('group by area (route-optimization spec)', () => {
     expect(s().lastRouteChange).toBeDefined()
     expect(storage.getItem(STORAGE_KEY)).not.toContain('lastRouteChange')
     expect(createPlannerStore(sampleCatalog, storage).getState().lastRouteChange).toBeUndefined()
+  })
+})
+
+describe('switch the park order (trip-itinerary spec)', () => {
+  const grouped = ['dlp.big-thunder-mountain', 'dlp.parade', 'dlp.phantom-manor', 'daw.avengers-flight-force', 'dlp.cafe-hyperion']
+  const setupGrouped = (storage?: KeyValueStorage, itemIds = grouped) => {
+    const t = setup(storage)
+    for (const id of itemIds) t.s().addItem(t.day().id, id)
+    return t
+  }
+
+  test('switching a grouped day puts the other park first and removes meals and shows', () => {
+    const { s, day } = setupGrouped()
+    expect(s().switchParkOrder(day().id)).toEqual({ changed: true, firstPark: 'daw', removed: 2 })
+    expect(ids(day().items)).toEqual(['daw.avengers-flight-force', 'dlp.big-thunder-mountain', 'dlp.phantom-manor'])
+  })
+
+  test('undo restores the previous order, the restaurant and the show', () => {
+    const { s, day } = setupGrouped()
+    const before = day().items
+    s().switchParkOrder(day().id)
+    s().undoRouteChange()
+    expect(day().items).toEqual(before)
+    expect(s().lastRouteChange).toBeUndefined()
+  })
+
+  test('edited after switching: undo leaves the day unchanged', () => {
+    const { s, day } = setupGrouped()
+    s().switchParkOrder(day().id)
+    s().moveItem(day().id, 0, 1)
+    const moved = ids(day().items)
+    s().undoRouteChange()
+    expect(ids(day().items)).toEqual(moved)
+  })
+
+  test('a day that is not grouped is left alone', () => {
+    const { s, day } = setupGrouped(undefined, ['dlp.big-thunder-mountain', 'daw.avengers-flight-force', 'dlp.phantom-manor'])
+    const before = day().items
+    expect(s().switchParkOrder(day().id)).toEqual({ changed: false })
+    expect(day().items).toBe(before)
+    expect(s().lastRouteChange).toBeUndefined()
+  })
+
+  test('the switched order is saved on the device', () => {
+    const storage = new MemoryStorage()
+    const { s, day } = setupGrouped(storage)
+    s().switchParkOrder(day().id)
+    expect(ids(selectedDay(createPlannerStore(sampleCatalog, storage).getState())!.items)).toEqual(['daw.avengers-flight-force', 'dlp.big-thunder-mountain', 'dlp.phantom-manor'])
   })
 })
 

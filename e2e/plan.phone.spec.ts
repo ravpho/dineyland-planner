@@ -43,6 +43,8 @@ test('7.3 reorder by touch drag on a phone', async ({ page }) => {
   for (const n of ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"]) await addFromCatalog(page, n)
   await showTab(page, 'Plan')
   const handles = page.getByTestId('slot-handle')
+  // Scroll the items clear of the fit bar pinned to the bottom of the screen.
+  await handles.nth(1).evaluate((el) => el.scrollIntoView({ block: 'center' }))
   await touchDrag(page, handles.nth(2), handles.nth(1))
   await expect.poll(() => slotNames(page)).toEqual(['Big Thunder Mountain', "Peter Pan's Flight", 'Phantom Manor'])
 })
@@ -185,4 +187,37 @@ test('meal time and restaurant suggestion: lunch at 12:00 in the other park, swa
   await page.getByRole('status').filter({ hasText: 'Swapped to Stark Factory' }).getByRole('button', { name: 'Undo' }).click()
   expect(await slotNames(page)).toEqual(["Crush's Coaster", 'Frozen Ever After', 'The Twilight Zone Tower of Terror', 'Au Chalet de la Marionnette', 'Spider-Man W.E.B. Adventure'])
   await expect(page.getByTestId('timeline-slot').filter({ hasText: 'Au Chalet de la Marionnette' }).getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
+})
+
+test('switch park order: unavailable until grouped, warns about the lunch, and undo', async ({ page }) => {
+  await createTrip(page, { name: 'Two parks' })
+  for (const n of ['Big Thunder Mountain', "Crush's Coaster", 'Phantom Manor']) await addFromCatalog(page, n)
+  await showTab(page, 'Plan')
+  const box = page.getByTestId('ticket-reminder')
+  const switchOrder = box.getByRole('button', { name: 'Switch order' })
+  await expect(box.getByTestId('park-order-text')).toHaveText('Disneyland Park → Disney Adventure World → Disneyland Park')
+  await expect(switchOrder).toBeDisabled()
+  await expect(box.getByTestId('park-order-hint')).toContainText('Group by area first')
+
+  await page.getByRole('button', { name: 'Group by area' }).click()
+  await addFromCatalog(page, 'Au Chalet de la Marionnette', '12:00')
+  await showTab(page, 'Plan')
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Crush's Coaster", 'Au Chalet de la Marionnette'])
+  await expect(switchOrder).toBeEnabled()
+
+  // The box fits a phone without horizontal page scroll.
+  const b = (await box.boundingBox())!
+  expect(b.x).toBeGreaterThanOrEqual(0)
+  expect(b.x + b.width).toBeLessThanOrEqual(390)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+
+  await switchOrder.click()
+  const sheet = page.getByRole('dialog', { name: 'Start in Disney Adventure World?' })
+  await expect(sheet.getByTestId('switch-removed')).toHaveText('Au Chalet de la Marionnette (12:00)')
+  await sheet.getByRole('button', { name: 'Switch and remove 1' }).click()
+  expect(await slotNames(page)).toEqual(["Crush's Coaster", 'Big Thunder Mountain', 'Phantom Manor'])
+  await expect(page.getByRole('status').filter({ hasText: 'first' })).toHaveText(/Disney Adventure World first · 1 removed/)
+
+  await page.getByRole('button', { name: 'Undo' }).click()
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Crush's Coaster", 'Au Chalet de la Marionnette'])
 })

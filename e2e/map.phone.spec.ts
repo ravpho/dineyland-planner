@@ -90,3 +90,33 @@ test('6.1 the map works offline after the first visit', async ({ page, context }
   await expect(page.getByTestId('map-card').getByTestId('walk-from-last')).toContainText('walk from Big Thunder Mountain')
   await context.setOffline(false)
 })
+
+test('the plan’s own map: numbered stops, park switch, fit bar, and Show in timeline', async ({ page }) => {
+  await createTrip(page)
+  const day = ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", '"it\'s a small world"', "Crush's Coaster", 'Frozen Ever After', 'Ratatouille: L’Aventure Totalement Toquée de Rémy']
+  for (const n of day) await addFromCatalog(page, n)
+  await showTab(page, 'Plan')
+  await page.getByRole('group', { name: 'Plan view' }).getByRole('button', { name: 'Map' }).click()
+
+  const planMap = page.getByTestId('plan-map')
+  const parks = planMap.getByRole('group', { name: 'Park on the map' })
+  await expect(parks.getByRole('button', { name: /^Disneyland Park/ })).toHaveAttribute('aria-pressed', 'true')
+  await expect(parks.getByTestId('park-stops')).toHaveText(['stops 1–4', 'stops 5–7'])
+  await expect(planMap.getByTestId('route-stop')).toHaveText(['1', '2', '3', '4'])
+  await expect(planMap.getByTestId('map-marker')).toHaveCount(4)
+  await expect(page.getByTestId('fit-summary')).toBeInViewport()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+
+  await parks.getByRole('button', { name: /^Disney Adventure World/ }).click()
+  await expect(planMap.getByTestId('route-stop')).toHaveText(['5', '6', '7'])
+  await planMap.getByRole('button', { name: 'Ratatouille: L’Aventure Totalement Toquée de Rémy', exact: true }).click()
+  const card = page.getByTestId('stop-card')
+  await expect(card.getByTestId('stop-times')).toContainText('Stop 7')
+  await card.getByRole('button', { name: 'Show in timeline' }).click()
+
+  await expect(planMap).toHaveCount(0)
+  const seventh = page.getByTestId('timeline-slot').nth(6)
+  await expect(seventh.getByTestId('slot-name')).toHaveText('Ratatouille: L’Aventure Totalement Toquée de Rémy')
+  await expect(seventh).toBeInViewport()
+  await expect(seventh.getByTestId('slot-handle')).toBeFocused()
+})

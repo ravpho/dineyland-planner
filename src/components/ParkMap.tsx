@@ -22,10 +22,12 @@ import {
 } from '../domain/map'
 import { scheduleDay, type DaySchedule } from '../domain/schedule'
 import { areaCentres, entranceOf, locate } from '../domain/walking'
+import { usePlannedMarks } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { mapPark, selectedDay } from '../state/store'
 import { CloseIcon, ExternalIcon, MinusIcon, PlusIcon } from './icons'
 import { areaName, itemFacts, TYPE_LABELS } from './labels'
+import { PlannedLabel } from './PlannedLabel'
 import { Badge, Button, IconButton, Sheet, Stars } from './ui'
 
 /** Zone colours by area order: Main Street / Plaza, then the themed lands. */
@@ -63,11 +65,14 @@ interface CanvasProps {
   listed: ListedItem[]
   schedule: DaySchedule | undefined
   selectedId: string | undefined
+  /** Rings and labels every marker, for search matches. */
   emphasise: boolean
+  /** Labels restaurants and shows at any zoom, without rings (the plan map, plan-ui-improvements Decision 4). */
+  labelAll?: boolean
   onSelect: (item: CatalogItem | undefined) => void
 }
 
-function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, onSelect }: CanvasProps) {
+export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, labelAll = false, onSelect }: CanvasProps) {
   const catalog = useCatalog()
   const park = catalog.parks.find((p) => p.id === parkId)!
   const centres = useMemo(() => areaCentres(catalog), [catalog])
@@ -107,7 +112,7 @@ function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, onSelect }
       b.x >= 0 && b.x + b.width <= screen.width - 2 && !(b.x + b.width > controls.x && b.y < controls.height)
     for (const m of markers) {
       const selected = m.item.id === selectedId
-      if (!selected && !emphasise && m.item.type !== 'attraction' && view.zoom < SMALL_LABEL_ZOOM) continue
+      if (!selected && !emphasise && !labelAll && m.item.type !== 'attraction' && view.zoom < SMALL_LABEL_ZOOM) continue
       const p = toScreen(m.point)
       if (!selected && (p.x < -20 || p.y < -20 || p.x > screen.width + 20 || p.y > screen.height + 20)) continue
       const width = labelWidth(m.item.name, LABEL_PX)
@@ -117,7 +122,7 @@ function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, onSelect }
       candidates.push({ id: m.item.id, ...right, x: onLeft ? p.x - 9 - width : right.x, priority: m.item.rating, always: selected })
     }
     return { shown: placeLabels(candidates), left, areas }
-  }, [zones, markers, selectedId, emphasise, view.zoom, box.x, box.y, box.width, box.height, scale])
+  }, [zones, markers, selectedId, emphasise, labelAll, view.zoom, box.x, box.y, box.width, box.height, scale])
 
   // --- gestures (design Decision 1) -------------------------------------------------------
   const pointers = useRef(new Map<number, Point>())
@@ -384,6 +389,7 @@ function MapItemCard({
   const walk = walkFromLastStop(schedule, item, catalog, centres)
   const last = schedule?.slots.filter((s) => s.kind === 'scheduled').at(-1)?.item
   const areaWalks = walksToAreas(item, catalog, centres)
+  const { marks, dayNumber } = usePlannedMarks()
 
   return (
     <section aria-label={`${item.name} on the map`} data-testid="map-card" className="mt-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
@@ -405,9 +411,10 @@ function MapItemCard({
           <span key={f}>{f}</span>
         ))}
       </p>
-      {unsuitable && (
-        <p className="mt-1">
-          <Badge tone="amber">{unsuitable}</Badge>
+      {(unsuitable || marks.has(item.id)) && (
+        <p className="mt-1 flex flex-wrap gap-1">
+          {unsuitable && <Badge tone="amber">{unsuitable}</Badge>}
+          <PlannedLabel mark={marks.get(item.id)} dayNumber={dayNumber} />
         </p>
       )}
       {item.locationApproximate && (
