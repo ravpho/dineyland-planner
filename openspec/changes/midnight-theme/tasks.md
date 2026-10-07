@@ -179,7 +179,7 @@
 ## 9. Integration checks
 
 - [x] 9.1 Remove the guard test's allowlist, which should be empty by now, and run `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e` (phone and desktop projects). Verify all pass.
-- [ ] 9.2 Take screenshots at 360 × 740, 390 × 844 and 1280 × 800 of:
+- [x] 9.2 Take screenshots at 360 × 740, 390 × 844 and 1280 × 800 of:
   - the catalog list and the catalog map;
   - the Plan timeline (a two-park day) and the Plan map;
   - the item details, filters, trip options and share sheets;
