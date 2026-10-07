@@ -35,27 +35,27 @@ export function ParkOrder({ day }: { day: Day }) {
   }
 
   return (
-    <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1" data-testid="park-order">
-      <p className="min-w-0">
-        Park order: <strong data-testid="park-order-text">{order.map(parkName).join(' → ')}</strong>
+    <div className="mt-1.5 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1" data-testid="park-order">
+      <p className="min-w-0 text-ink-soft">
+        Park order: <strong className="text-ink" data-testid="park-order-text">{order.map(parkName).join(' → ')}</strong>
       </p>
       <Button
         onClick={() => (removed.length ? setConfirming(true) : switchOrder())}
         disabled={!preview}
         aria-describedby={preview ? undefined : hintId}
-        className="ml-auto disabled:cursor-not-allowed disabled:opacity-50"
+        className="disabled:cursor-not-allowed disabled:opacity-50"
       >
         Switch order
       </Button>
       {!preview && (
-        <p id={hintId} className="w-full text-xs text-indigo-800" data-testid="park-order-hint">
+        <p id={hintId} className="col-span-2 text-xs text-ink-soft" data-testid="park-order-hint">
           Group by area first so each park&apos;s attractions are together, then you can switch the order.
         </p>
       )}
       {confirming && preview && (
         <Sheet title={`Start in ${parkName(preview.firstPark)}?`} onClose={() => setConfirming(false)}>
-          <p className="text-sm text-slate-700">Meals and shows are removed when you switch the park order:</p>
-          <ul className="my-3 list-disc pl-5 text-sm text-slate-900" data-testid="switch-removed">
+          <p className="text-sm text-ink-soft">Meals and shows are removed when you switch the park order:</p>
+          <ul className="my-3 list-disc pl-5 text-sm text-ink" data-testid="switch-removed">
             {removed.map((r) => (
               <li key={r.key}>{r.text}</li>
             ))}

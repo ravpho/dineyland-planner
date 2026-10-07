@@ -41,6 +41,25 @@ describe('plan screens (trip-itinerary spec)', () => {
     expect(screen.getByLabelText('End')).toBeInTheDocument()
     expect(screen.queryByLabelText('Park')).toBeNull()
   })
+
+  test('change the hours in place (app-shell spec: Day first on the Plan)', () => {
+    const store = createPlannerStore(sampleCatalog)
+    store.getState().createTrip('Trip', '2026-08-12')
+    renderWithPlanner(
+      <ToastProvider>
+        <DndContext>
+          <PlanScreen />
+        </DndContext>
+      </ToastProvider>,
+      { store },
+    )
+    const hours = screen.getByRole('group', { name: 'Day hours' })
+    fireEvent.change(within(hours).getByLabelText('Start'), { target: { value: '10:00' } })
+    expect(store.getState().trips[0]!.days[0]!.start).toBe('10:00')
+    fireEvent.change(within(hours).getByLabelText('End'), { target: { value: '18:00' } })
+    expect(store.getState().trips[0]!.days[0]!.end).toBe('18:00')
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
 })
 
 describe('group by area (route-optimization spec)', () => {
@@ -164,5 +183,84 @@ describe('optimize route (route-optimization spec)', () => {
     act(() => vi.advanceTimersByTime(1))
     expect(button()).toBeEnabled()
     expect(names()[0]).toBe("Crush's Coaster")
+  })
+})
+
+describe('trip options (app-shell spec: Trip actions in a trip menu)', () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  function renderTrip() {
+    const store = createPlannerStore(sampleCatalog)
+    store.getState().createTrip('Summer trip', '2026-08-12', 2)
+    const view = renderWithPlanner(
+      <ToastProvider>
+        <DndContext>
+          <PlanScreen />
+        </DndContext>
+      </ToastProvider>,
+      { store },
+    )
+    return { ...view, store }
+  }
+  const options = () => screen.getByRole('dialog', { name: 'Trip options' })
+
+  test('open the menu: it offers New trip, Rename and Delete', () => {
+    renderTrip()
+    expect(screen.queryByRole('button', { name: /Rename/ })).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
+    expect(within(options()).getByRole('button', { name: /New trip/ })).toBeInTheDocument()
+    expect(within(options()).getByRole('button', { name: /Rename/ })).toBeInTheDocument()
+    expect(within(options()).getByRole('button', { name: /Delete/ })).toBeInTheDocument()
+  })
+
+  test('share in one tap: the share sheet opens from the trip row', () => {
+    renderTrip()
+    fireEvent.click(screen.getByRole('button', { name: 'Share' }))
+    expect(screen.getByRole('dialog', { name: 'Share this trip' })).toBeInTheDocument()
+  })
+
+  test('delete from the menu: the menu closes, then the app asks to confirm', () => {
+    const { store } = renderTrip()
+    let sheetOpenWhenAsked: boolean | undefined
+    const confirm = vi.spyOn(window, 'confirm').mockImplementation(() => {
+      sheetOpenWhenAsked = screen.queryByRole('dialog', { name: 'Trip options' }) !== null
+      return false
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
+    fireEvent.click(within(options()).getByRole('button', { name: /Delete/ }))
+    expect(confirm).toHaveBeenCalledOnce()
+    expect(sheetOpenWhenAsked).toBe(false)
+    expect(store.getState().trips).toHaveLength(1)
+
+    confirm.mockReturnValue(true)
+    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
+    fireEvent.click(within(options()).getByRole('button', { name: /Delete/ }))
+    expect(store.getState().trips).toHaveLength(0)
+  })
+
+  test('rename from the menu', () => {
+    const { store } = renderTrip()
+    vi.spyOn(window, 'prompt').mockReturnValue('Winter trip')
+    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
+    fireEvent.click(within(options()).getByRole('button', { name: /Rename/ }))
+    expect(store.getState().trips[0]!.name).toBe('Winter trip')
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+
+  test('new trip from the menu opens the new-trip form', () => {
+    renderTrip()
+    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
+    fireEvent.click(within(options()).getByRole('button', { name: /New trip/ }))
+    expect(screen.queryByRole('dialog', { name: 'Trip options' })).toBeNull()
+    expect(screen.getByRole('dialog', { name: 'New trip' })).toBeInTheDocument()
+  })
+
+  test('close without choosing: the trip is unchanged', () => {
+    const { store } = renderTrip()
+    const before = store.getState().trips
+    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
+    fireEvent.click(within(options()).getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(store.getState().trips).toBe(before)
   })
 })

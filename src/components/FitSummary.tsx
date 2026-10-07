@@ -1,7 +1,7 @@
 import type { DaySchedule } from '../domain/schedule'
 import { formatClock, formatDuration } from '../domain/time'
 import type { Day } from '../domain/trip'
-import { SparkleIcon } from './icons'
+import { SparkleIcon, TicketIcon } from './icons'
 import { ParkOrder } from './ParkOrder'
 
 export function fitText(schedule: DaySchedule): string {
@@ -58,12 +58,18 @@ export function Breakdown({ schedule }: { schedule: DaySchedule }) {
   )
 }
 
-/** Shown when a day's items span both parks, with the attractions' park order and "Switch order". */
+/**
+ * Compact note shown when a day's items span both parks, with the attractions' park order and "Switch order"
+ * (midnight-theme design Decision 7).
+ */
 export function TicketReminder({ schedule, day }: { schedule: DaySchedule; day: Day }) {
   if (schedule.parks.length < 2) return null
   return (
     <div role="note" data-testid="ticket-reminder" className="rounded-xl bg-accent-soft px-3 py-2 text-sm text-ink">
-      <p>This day uses both parks: you need a ticket valid for Disneyland Park and Disney Adventure World on the same day.</p>
+      <p className="flex gap-2">
+        <TicketIcon width={18} height={18} className="mt-px shrink-0 text-accent" />
+        <span>You need a ticket valid for Disneyland Park and Disney Adventure World on the same day.</span>
+      </p>
       <ParkOrder day={day} />
     </div>
   )

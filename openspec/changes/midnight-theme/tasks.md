@@ -105,7 +105,7 @@
 
 ## 6. Plan header
 
-- [ ] 6.1 Rebuild `TripBar` as the trip row (design Decision 7):
+- [x] 6.1 Rebuild `TripBar` as the trip row (design Decision 7):
   - the trip select styled as a title (label "Trip"), and the number-of-days select;
   - Share as an `IconButton` labelled "Share";
   - a "Trip options" `IconButton` with a new `MoreIcon`, opening a "Trip options" `Sheet` with New trip, Rename and Delete. Each closes the sheet first, then runs the current flow.
@@ -115,7 +115,7 @@
   - "Share in one tap": the share sheet opens.
   - "Delete from the menu": the sheet closes and `window.confirm` is asked; the trip is deleted only when confirmed.
   - "Close without choosing": the trips are unchanged.
-- [ ] 6.2 Replace `DaySettings` with `DayHours` (design Decision 7):
+- [x] 6.2 Replace `DaySettings` with `DayHours` (design Decision 7):
   - `role="group"` with the label "Day hours";
   - a `ClockIcon`, and the word "Hours" from 400 px wide;
   - two time inputs whose `<label>` text is an `sr-only` "Start" and "End";
@@ -124,7 +124,7 @@
   Verify:
   - a component test for "Change the hours in place": setting Start to 10:00 sets the day's window, with no other screen opened;
   - the e2e `getByLabel('Start')` and `getByLabel('End')` fills in `plan.phone` and `journey.phone` pass unchanged.
-- [ ] 6.3 Make the two-park note compact (design Decision 7):
+- [x] 6.3 Make the two-park note compact (design Decision 7):
   - `bg-accent-soft` with a `TicketIcon`;
   - the text "You need a ticket valid for Disneyland Park and Disney Adventure World on the same day.";
   - `ParkOrder` as a two-column grid, with the order text beside "Switch order" and the hint spanning both columns.
@@ -132,13 +132,13 @@
   Verify:
   - `timeline.test.tsx`'s reminder regex and every park-order and switch test pass unchanged;
   - a new "Two-park reminder kept" test: the note shows the ticket text, the park order and a "Switch order" button.
-- [ ] 6.4 In `PlanScreen`:
+- [x] 6.4 In `PlanScreen`:
   - put the Timeline | Map switch and `RouteActions` in one wrapping toolbar row;
   - style the day tabs, with the selected one in `accent` and a `star` sparkle;
   - give the empty Plan a short `NightSky` band headed "Plan your days" above the form.
 
   Take `PlanScreen.tsx`, `TripBar.tsx`, `DayHours.tsx`, `ParkOrder.tsx` and `RouteActions.tsx` off the allowlist. Verify `plan.test.tsx` and the guard test pass.
-- [ ] 6.5 Add e2e checks:
+- [x] 6.5 Add e2e checks:
   - **"Open a two-park day"** in `e2e/plan.phone.spec.ts`, at 390 × 844: a day with six items from both parks, at scroll position 0. The second `timeline-slot`'s bottom edge is at or above the top of `fit-summary`.
   - **Trip options:** Rename (answering the prompt) and Delete (accepting the confirm), both started from the trip options sheet.
   - **Shell 8.1:** in `e2e/shell.phone.spec.ts`, also open the trip options sheet and run `checkLayout` at 360 × 740.

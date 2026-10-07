@@ -113,3 +113,16 @@ export const SparkleIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d={SPARKLE_PATH} />
   </svg>
 )
+export const MoreIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="5" cy="12" r="1" />
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="19" cy="12" r="1" />
+  </svg>
+)
+export const TicketIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" />
+    <path d="M14 5v2M14 11v2M14 17v2" />
+  </svg>
+)

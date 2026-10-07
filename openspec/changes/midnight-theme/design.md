@@ -142,7 +142,10 @@ Each `SlotCard` `<li>` becomes a two-column grid: a 32 px rail, then the card.
   - Free time is a hollow `fits` circle with `fits` text.
 - **The card:**
   - Styles: `bg-surface`, a `line` hairline, `shadow-card`, `rounded-xl`. A `line` border becomes `over` when the item ends after the window.
-  - The grip handle (`slot-handle`), the move buttons and remove don't change place, size or accessible names. Only their colors change: grips `ink-faint`, remove `over`.
+  - The grip handle (`slot-handle`), the move buttons and remove keep their size, accessible names and source order. Their colors change: grips `ink-faint`, remove `over`.
+  - The card is a CSS grid: handle, then time, name, details, then the controls, in that source and Tab order.
+    - **On phones:** the controls sit at the top right, on the time's row, and the name gets its own line below. Before, the controls took a row of their own, which made cards about 150 px tall and left the fold check only 4 px to spare (measured).
+    - **From `sm` up:** time and name share one line, details sit below, and the controls are at the top right.
   - First line: time (`tabular-nums font-semibold text-ink`), then the name (`font-medium`).
   - Second line: area (`ink-soft`), walk, arrival and wait (`ink-muted`).
 - **The focus highlight** (`data-highlight`) changes from `ring-amber-400` to a 2 px `star-ink` ring, and the node's ring pulses once (Decision 6).
@@ -207,21 +210,21 @@ The **sparkle** is a new `Sparkle` component. `RouteActions` renders it over the
 
 *Alternative:* short visible labels ("Group", "Optimize") with `aria-label`s. Rejected: the visible text and accessible name would differ, and the busy label "Optimizing…" would need the same treatment.
 
-**Fold budget** at 390 × 844 for a two-park day. The spec's check is that the first two items are visible:
+**Fold budget** at 390 × 844 for a two-park day with six items, measured in Chromium after implementation. The spec's check is that the first two items are visible:
 
-| Block | px | Running total |
-|---|---|---|
-| Header: wordmark row + tabs | 48 + 44 | 92 |
-| `main` top padding | 12 | 104 |
-| Trip row | 44 + 10 gap | 158 |
-| Day tabs | 44 + 10 | 212 |
-| Hours row | 44 + 10 | 266 |
-| Two-park note (2 lines of text, then a 44 px row) | ~108 + 10 | 384 |
-| Toolbar (two rows on 390 px) | 96 + 10 | 490 |
-| Timeline items 1 and 2 (~80 each, 8 gap) | 168 | 658 |
-| Fit bar top (844 − 56) | | 788 |
+| Block | Top–bottom (px) |
+|---|---|
+| Header: wordmark row + tabs | 0–92 |
+| Trip row | 104–148 |
+| Day tabs | 156–204 |
+| Hours row | 212–256 |
+| Two-park note (2 lines of text, then the park order beside "Switch order") | 264–370 |
+| Toolbar: view switch, then the route buttons on a second row | 378–476 |
+| Timeline item 1 (128 px) | 488–616 |
+| Timeline item 2 (128 px) | 616–744 |
+| Fit bar | 796–844 |
 
-That leaves about 130 px of slack. The e2e check (Task 7) measures the real layout.
+That leaves about 50 px of slack. The Plan's blocks are 8 px apart. The e2e check (Task 6.5) measures the real layout on every run.
 
 **Selected day tab:** `bg-accent text-on-accent` with a small `star` sparkle before "Day N". Other tabs use `bg-surface border-line`.
 
@@ -313,7 +316,7 @@ Component notes:
 - [Every component changes, so a missed class silently loses its color] → The default palette is off, so a missed class has no CSS at all. The guard test names every leftover, and the screenshot review (Task 8) covers each screen.
 - [jsdom doesn't load CSS, so component tests can't see visual problems] → Contrast is tested on the actual theme values. The e2e checks and screenshots run in Chromium.
 - [The fonts add about 200 KB (Inter and Fraunces, Latin and Latin Extended) to the precache, and the text style shifts briefly on the first visit] → Only the Latin subsets are cached. `swap` keeps text readable, and later visits load from the cache.
-- [The fold budget is tight: a longer park order, larger system text or a new note above the timeline could push item 2 below the fit bar] → The e2e check measures the real layout at 390 × 844, so a regression fails CI. There is about 130 px of slack.
+- [The fold budget is tight: a longer park order, larger system text or a new note above the timeline could push item 2 below the fit bar] → The e2e check measures the real layout at 390 × 844, so a regression fails CI. There is about 50 px of slack, measured; the compact card layout (Decision 5) is what makes room for it.
 - [Phones narrower than 360 px, or with very large text, won't show two items without scrolling] → The spec's check is 390 × 844. The existing 360 px no-overflow and 44 px checks still hold.
 - [Starting animations with `@starting-style` doesn't work in older browsers] → They show the final state at once, which is also the reduced-motion behavior.
 - [A sheet for three trip actions is heavier on desktop than a dropdown] → It's a rare action, accessible and consistent with the rest of the app. A popover can replace it once anchor positioning is everywhere.

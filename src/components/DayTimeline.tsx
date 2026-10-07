@@ -192,7 +192,9 @@ function SlotCard({
       >
         <div
           ref={cardRef}
-          className={`flex flex-wrap items-start gap-x-1 rounded-xl border bg-surface p-1 shadow-card transition-shadow data-[highlight=true]:ring-2 data-[highlight=true]:ring-star-ink sm:flex-nowrap ${slot.kind === 'scheduled' && slot.afterWindow ? 'border-over/50' : 'border-line'}`}
+          // A grid keeps the source order (handle, time, name, details, controls) while phones show the controls on the
+          // time's row and the name below it, which keeps cards short (app-shell spec: Day first on the Plan).
+          className={`grid grid-cols-[2.75rem_minmax(0,1fr)_auto] items-start gap-x-1 rounded-xl border bg-surface p-1 shadow-card transition-shadow data-[highlight=true]:ring-2 data-[highlight=true]:ring-star-ink ${slot.kind === 'scheduled' && slot.afterWindow ? 'border-over/50' : 'border-line'}`}
         >
           <button
             type="button"
@@ -200,25 +202,30 @@ function SlotCard({
             {...attributes}
             {...listeners}
             aria-label={`Reorder ${name}`}
-            className="flex h-11 w-11 shrink-0 cursor-grab touch-none items-center justify-center rounded-lg text-ink-faint hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-focus"
+            className="col-start-1 row-span-3 row-start-1 flex h-11 w-11 cursor-grab touch-none items-center justify-center rounded-lg text-ink-faint hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-focus"
             data-testid="slot-handle"
           >
             <GripIcon />
           </button>
-          <div className="min-w-0 flex-1 basis-[calc(100%-3.25rem)] py-1 sm:basis-auto">
-            {slot.kind === 'missing' ? (
-              <>
-                <p className="font-medium text-ink-muted">No longer available</p>
-                <p className="text-xs text-ink-muted">This item is not in the current catalog and is left out of the schedule.</p>
-              </>
-            ) : (
-              <>
-                <p className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="text-sm font-semibold text-ink tabular-nums" data-testid="slot-time">
-                    {formatClock(slot.start)}–{formatClock(slot.end)}
-                  </span>
-                  <span className="font-medium text-ink" data-testid="slot-name">{slot.item.name}</span>
-                </p>
+          {slot.kind === 'missing' ? (
+            <>
+              <p className="col-start-2 row-start-1 self-center font-medium text-ink-muted">No longer available</p>
+              <p className="col-span-2 col-start-2 row-start-2 pb-1 text-xs text-ink-muted sm:col-span-1">
+                This item is not in the current catalog and is left out of the schedule.
+              </p>
+            </>
+          ) : (
+            <>
+              {/* Phones: the time sits beside the controls and the name gets its own line. Wider: one line. */}
+              <p className="contents sm:col-start-2 sm:row-start-1 sm:flex sm:min-h-11 sm:flex-wrap sm:items-center sm:gap-x-2">
+                <span className="col-start-2 row-start-1 self-center text-sm font-semibold text-ink tabular-nums" data-testid="slot-time">
+                  {formatClock(slot.start)}–{formatClock(slot.end)}
+                </span>
+                <span className="col-span-2 col-start-2 row-start-2 font-medium text-ink" data-testid="slot-name">
+                  {slot.item.name}
+                </span>
+              </p>
+              <div className="col-span-2 col-start-2 row-start-3 min-w-0 pb-1 sm:col-span-1 sm:row-start-2">
                 <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-ink-muted">
                   <span className="font-medium text-ink-soft" data-testid="slot-area">
                     {areaName(slot.item, catalog)}
@@ -303,10 +310,10 @@ function SlotCard({
                     </div>
                   </div>
                 )}
-              </>
-            )}
-          </div>
-          <div className="ml-auto flex shrink-0 sm:ml-0">
+              </div>
+            </>
+          )}
+          <div className="col-start-3 row-start-1 flex sm:row-span-2">
             <IconButton label={`Move ${name} up`} disabled={index === 0} onClick={() => moveItem(day.id, index, index - 1)}>
               <UpIcon />
             </IconButton>

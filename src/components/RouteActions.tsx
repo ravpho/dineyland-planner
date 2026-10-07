@@ -39,7 +39,7 @@ export function RouteActions({ day }: { day: Day }) {
   }
 
   return (
-    <div className="flex justify-end gap-2">
+    <div className="ml-auto flex justify-end gap-2">
       <Button onClick={group} disabled={tooFew || optimizing} className="disabled:cursor-not-allowed disabled:opacity-50">
         Group by area
       </Button>
