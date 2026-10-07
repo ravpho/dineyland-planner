@@ -312,7 +312,7 @@ Component notes:
 
 - [Every component changes, so a missed class silently loses its color] → The default palette is off, so a missed class has no CSS at all. The guard test names every leftover, and the screenshot review (Task 8) covers each screen.
 - [jsdom doesn't load CSS, so component tests can't see visual problems] → Contrast is tested on the actual theme values. The e2e checks and screenshots run in Chromium.
-- [The fonts add about 150 KB to the first load and the precache, and the text style shifts briefly on the first visit] → Only the Latin subsets are cached. `swap` keeps text readable, and later visits load from the cache.
+- [The fonts add about 200 KB (Inter and Fraunces, Latin and Latin Extended) to the precache, and the text style shifts briefly on the first visit] → Only the Latin subsets are cached. `swap` keeps text readable, and later visits load from the cache.
 - [The fold budget is tight: a longer park order, larger system text or a new note above the timeline could push item 2 below the fit bar] → The e2e check measures the real layout at 390 × 844, so a regression fails CI. There is about 130 px of slack.
 - [Phones narrower than 360 px, or with very large text, won't show two items without scrolling] → The spec's check is 390 × 844. The existing 360 px no-overflow and 44 px checks still hold.
 - [Starting animations with `@starting-style` doesn't work in older browsers] → They show the final state at once, which is also the reduced-motion behavior.

@@ -72,6 +72,8 @@ To build for that path locally: `BASE_PATH=/dineyland-planner/ npm run build`.
 | `src/domain/` | Framework-free logic: catalog schema, wait model, walking, scheduler (with meal times), shared day model, grouping by area, route search, restaurant suggestions, park order and switch, stop numbers and planned marks, filters, map geometry and route, share links |
 | `src/state/` | Zustand store and device storage |
 | `src/components/`, `src/screens/` | React UI |
+| `src/index.css` | Theme: the night-sky colors (raw palette and the roles components use), fonts and motion |
+| `src/theme/` | Theme tests: contrast between colors, and a guard against raw Tailwind colors in components |
 | `scripts/data/` | Data collection and catalog build |
 | `data/` | Raw source snapshots, curated YAML, build report, review checklist |
 | `e2e/` | Playwright tests |

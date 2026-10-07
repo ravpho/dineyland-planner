@@ -29,7 +29,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        // Fonts: only the Latin subsets, which cover English and French names (midnight-theme design Decision 3).
+        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}', '**/*-latin-*.woff2'],
         navigateFallback: 'index.html',
       },
     }),

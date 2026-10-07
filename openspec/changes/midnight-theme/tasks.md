@@ -2,23 +2,23 @@
 
 ## 1. Theme foundation
 
-- [ ] 1.1 Add `@fontsource-variable/inter` and `@fontsource-variable/fraunces` as dependencies, import their `wght.css` from `src/index.css`, and add `**/*-latin-*.woff2` to Workbox `globPatterns` in `vite.config.ts` (design Decision 3). Verify:
+- [x] 1.1 Add `@fontsource-variable/inter` and `@fontsource-variable/fraunces` as dependencies, import their `wght.css` from `src/index.css`, and add `**/*-latin-*.woff2` to Workbox `globPatterns` in `vite.config.ts` (design Decision 3). Verify:
   - `npm run build` succeeds;
   - `dist/sw.js` precaches the Inter and Fraunces `latin` and `latin-ext` `.woff2` files, and no `cyrillic`, `greek` or `vietnamese` ones.
-- [ ] 1.2 Write the theme in `src/index.css` (design Decisions 1 and 2):
+- [x] 1.2 Write the theme in `src/index.css` (design Decisions 1 and 2):
   - the raw palette as custom properties on `:root`;
   - `@theme`, starting with `--color-*: initial`, then `white` and `black`, every role from Decision 1 with its Decision 2 value, and the map roles from Decision 8;
   - `--font-sans`, `--font-display` and `--shadow-card`;
   - `:root { color-scheme: light; }`, and a base `body` style using `bg-page text-ink font-sans`.
 
   Verify `npm run build` succeeds, and that the built CSS defines `--color-ink` and `--color-accent` and no `--color-slate-` or `--color-indigo-` variables.
-- [ ] 1.3 Add `src/theme/contrast.test.ts`. It reads `src/index.css`, resolves each role to its hex value, and checks every pair in design Decision 2's contrast table against its threshold with the WCAG formula (Decision 11). Verify:
+- [x] 1.3 Add `src/theme/contrast.test.ts`. It reads `src/index.css`, resolves each role to its hex value, and checks every pair in design Decision 2's contrast table against its threshold with the WCAG formula (Decision 11). Verify:
   - `npm test` passes;
   - temporarily pointing `ink-muted` at silver-500 makes the test fail and name the pair. Revert afterwards.
-- [ ] 1.4 Add `src/theme/guard.test.ts` (Decision 11). It scans `src/**/*.tsx` (test files excluded) for numbered default-palette classes and hex color literals. For now it has an allowlist of the component and screen files that still use them; later groups remove their files from it. Verify:
+- [x] 1.4 Add `src/theme/guard.test.ts` (Decision 11). It scans `src/**/*.tsx` (test files excluded) for numbered default-palette classes and hex color literals. For now it has an allowlist of the component and screen files that still use them; later groups remove their files from it. Verify:
   - `npm test` passes;
   - taking one file off the allowlist makes the test fail and list that file's offending lines.
-- [ ] 1.5 Add a row to the README's project layout: `src/index.css`, the theme (colors, fonts, motion), and `src/theme/`, its tests. Verify the table renders correctly.
+- [x] 1.5 Add a row to the README's project layout: `src/index.css`, the theme (colors, fonts, motion), and `src/theme/`, its tests. Verify the table renders correctly.
 
 ## 2. Shared pieces and the app frame
 

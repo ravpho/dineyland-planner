@@ -17,5 +17,7 @@
     "noEmit": true,
     "types": ["vite/client", "vite-plugin-pwa/react", "@testing-library/jest-dom"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  // Theme tests read source files with Node, so they belong to the Node project (tsconfig.node.json).
+  "exclude": ["src/theme"]
 }

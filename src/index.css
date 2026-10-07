@@ -1,1 +1,127 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/fraunces/wght.css';
+
+/*
+ * Night-sky theme (midnight-theme design Decisions 1 and 2).
+ * Raw palette: plain custom properties with no utilities, so components can't use them directly.
+ * Roles: the @theme colors below, which components use (bg-surface, text-ink-muted, fill-map-zone-2...).
+ * Contrast between roles is checked by src/theme/contrast.test.ts.
+ */
+:root {
+  --night-950: #060b1f;
+  --night-900: #0a1433;
+  --night-800: #111e48;
+  --night-700: #1b2b5e;
+  --night-50: #eef1fa;
+  --night-ink: #0e1631;
+  --night-soft: #2c3654;
+
+  --silver-50: #f6f8fc;
+  --silver-100: #eceff6;
+  --silver-200: #dde2ec;
+  --silver-300: #c9d1e0;
+  --silver-400: #a9b3c7;
+  --silver-500: #7a859e;
+  --silver-600: #5c6784;
+
+  --gold-300: #f2d48b;
+  --gold-700: #a87b1f;
+
+  --teal-700: #0f766e;
+  --teal-50: #e6f6f4;
+  --teal-300: #5eead4;
+  --rose-700: #be123c;
+  --rose-50: #fdecef;
+  --rose-300: #fda4af;
+  --amber-800: #92400e;
+  --amber-100: #fef3c7;
+  --royal-600: #3b5bdb;
+
+  --mist: #edf1f7;
+  --zone-rose: #9d3a5e;
+  --zone-amber: #8a5a12;
+  --zone-teal: #1f6e64;
+  --zone-violet: #5a46a0;
+  --zone-sky: #2f639a;
+  --copper: #a8551a;
+  --plum: #a2306b;
+
+  color-scheme: light;
+}
+
+@theme {
+  /* Tailwind's default palette is off: a leftover bg-slate-50 produces no CSS (design Decision 1). */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-page: var(--silver-50);
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--silver-100);
+  --color-line: var(--silver-200);
+  --color-line-strong: var(--silver-300);
+  --color-field: var(--silver-500);
+
+  --color-ink: var(--night-ink);
+  --color-ink-soft: var(--night-soft);
+  --color-ink-muted: var(--silver-600);
+  --color-ink-faint: var(--silver-500);
+
+  --color-accent: var(--night-800);
+  --color-accent-hover: var(--night-700);
+  --color-accent-soft: var(--night-50);
+  --color-on-accent: var(--color-white);
+
+  --color-sky: var(--night-900);
+  --color-sky-deep: var(--night-950);
+  --color-on-sky: var(--silver-100);
+  --color-on-sky-muted: var(--silver-400);
+
+  --color-star: var(--gold-300);
+  --color-star-ink: var(--gold-700);
+
+  --color-fits: var(--teal-700);
+  --color-fits-soft: var(--teal-50);
+  --color-fits-on-sky: var(--teal-300);
+  --color-over: var(--rose-700);
+  --color-over-soft: var(--rose-50);
+  --color-over-on-sky: var(--rose-300);
+  --color-warn: var(--amber-800);
+  --color-warn-soft: var(--amber-100);
+
+  --color-focus: var(--royal-600);
+  --color-focus-on-sky: var(--gold-300);
+
+  --color-map-ground: var(--mist);
+  --color-map-zone-1: var(--zone-rose);
+  --color-map-zone-2: var(--zone-amber);
+  --color-map-zone-3: var(--zone-teal);
+  --color-map-zone-4: var(--zone-violet);
+  --color-map-zone-5: var(--zone-sky);
+  --color-map-attraction: var(--night-900);
+  --color-map-restaurant: var(--copper);
+  --color-map-show: var(--plum);
+  --color-map-unsuitable: var(--silver-300);
+
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+
+  --shadow-card: 0 1px 2px rgb(10 20 51 / 0.06), 0 4px 12px rgb(10 20 51 / 0.06);
+}
+
+@layer base {
+  /* Tailwind 4 defaults borders to currentColor; give unlabelled borders the theme's hairline instead. */
+  *,
+  ::before,
+  ::after,
+  ::backdrop {
+    border-color: var(--color-line);
+  }
+
+  body {
+    background-color: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+}
