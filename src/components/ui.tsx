@@ -4,17 +4,17 @@ import { CloseIcon } from './icons'
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-indigo-700 text-white hover:bg-indigo-800 disabled:bg-indigo-300',
-  secondary: 'bg-white text-slate-900 border border-slate-300 hover:bg-slate-50',
-  ghost: 'text-slate-700 hover:bg-slate-100',
-  danger: 'bg-white text-red-700 border border-red-300 hover:bg-red-50',
+  primary: 'bg-accent text-on-accent shadow-sm hover:bg-accent-hover disabled:bg-accent/40',
+  secondary: 'bg-surface text-ink border border-line-strong hover:bg-surface-muted',
+  ghost: 'text-ink-soft hover:bg-surface-muted',
+  danger: 'bg-surface text-over border border-over/40 hover:bg-over-soft',
 }
 
 export function Button({ variant = 'secondary', className = '', ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
   return (
     <button
       type="button"
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${VARIANTS[variant]} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${VARIANTS[variant]} ${className}`}
       {...props}
     />
   )
@@ -27,7 +27,7 @@ export function IconButton({ label, className = '', children, ...props }: Button
       type="button"
       aria-label={label}
       title={label}
-      className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600 disabled:opacity-30 ${className}`}
+      className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink-soft hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-30 ${className}`}
       {...props}
     >
       {children}
@@ -41,29 +41,33 @@ export function Chip({ selected, onClick, children }: { selected: boolean; onCli
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`min-h-11 rounded-full border px-3 text-sm ${selected ? 'border-indigo-700 bg-indigo-700 text-white' : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50'}`}
+      className={`min-h-11 rounded-full border px-3 text-sm ${selected ? 'border-accent bg-accent text-on-accent' : 'border-line-strong bg-surface text-ink hover:bg-surface-muted'} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus`}
     >
       {children}
     </button>
   )
 }
 
-export function Badge({ tone = 'slate', children }: { tone?: 'slate' | 'amber' | 'red' | 'green' | 'indigo'; children: ReactNode }) {
-  const tones = {
-    slate: 'bg-slate-100 text-slate-700',
-    amber: 'bg-amber-100 text-amber-900',
-    red: 'bg-red-100 text-red-800',
-    green: 'bg-emerald-100 text-emerald-800',
-    indigo: 'bg-indigo-100 text-indigo-800',
-  }
-  return <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${tones[tone]}`}>{children}</span>
+/** Tones name a meaning, not a color (midnight-theme design Decision 10). */
+export type BadgeTone = 'neutral' | 'warn' | 'over' | 'fits' | 'planned'
+
+const TONES: Record<BadgeTone, string> = {
+  neutral: 'bg-surface-muted text-ink-soft',
+  warn: 'bg-warn-soft text-warn',
+  over: 'bg-over-soft text-over',
+  fits: 'bg-fits-soft text-fits',
+  planned: 'bg-accent text-on-accent',
+}
+
+export function Badge({ tone = 'neutral', children }: { tone?: BadgeTone; children: ReactNode }) {
+  return <span className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium ${TONES[tone]}`}>{children}</span>
 }
 
 export function Stars({ rating }: { rating: number }) {
   return (
-    <span className="whitespace-nowrap text-amber-500" aria-label={`Rated ${rating} out of 5`} title={`${rating}/5`}>
+    <span className="whitespace-nowrap text-star-ink" aria-label={`Rated ${rating} out of 5`} title={`${rating}/5`}>
       {'★'.repeat(rating)}
-      <span className="text-slate-300">{'★'.repeat(5 - rating)}</span>
+      <span className="text-line-strong">{'★'.repeat(5 - rating)}</span>
     </span>
   )
 }
@@ -78,18 +82,18 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-slate-900/40 sm:items-center" onClick={onClose}>
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-sky-deep/50 sm:items-center" onClick={onClose}>
       <div
         ref={ref}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-4 shadow-xl outline-none sm:max-w-lg sm:rounded-2xl"
+        className="max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl bg-surface p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl outline-none sm:max-w-lg sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-3 flex items-start justify-between gap-2">
-          <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
+          <h2 className="font-display text-xl font-semibold text-ink">{title}</h2>
           <IconButton label="Close" onClick={onClose} className="-mr-2 -mt-2">
             <CloseIcon />
           </IconButton>
@@ -102,7 +106,7 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
 
 export function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
+    <label className="flex flex-col gap-1 text-sm font-medium text-ink-soft">
       {label}
       {children}
     </label>
@@ -110,4 +114,4 @@ export function Field({ label, children }: { label: string; children: ReactNode 
 }
 
 export const inputClass =
-  'min-h-11 rounded-lg border border-slate-300 bg-white px-3 text-base text-slate-900 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-200'
+  'min-h-11 rounded-lg border border-field bg-surface px-3 text-base text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/25'

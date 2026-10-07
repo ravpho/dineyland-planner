@@ -41,7 +41,7 @@ function RowBody({ listed, month, place, mark, dayNumber, onOpen }: { listed: Li
       </span>
       {(unsuitable || mark) && (
         <span className="mt-1 flex flex-wrap gap-1">
-          {unsuitable && <Badge tone="amber">{unsuitable}</Badge>}
+          {unsuitable && <Badge tone="warn">{unsuitable}</Badge>}
           <PlannedLabel mark={mark} dayNumber={dayNumber} />
         </span>
       )}

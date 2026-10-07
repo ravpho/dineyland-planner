@@ -22,7 +22,7 @@
 
 ## 2. Shared pieces and the app frame
 
-- [ ] 2.1 Restyle `src/components/ui.tsx` with theme roles (design Decision 10):
+- [x] 2.1 Restyle `src/components/ui.tsx` with theme roles (design Decision 10):
   - `Button` variants, `IconButton`, `Chip`;
   - `Badge` tones renamed to `neutral`, `warn`, `over`, `fits` and `planned`, with every caller updated;
   - `Stars`: `star-ink` filled, `line-strong` empty;
@@ -30,7 +30,7 @@
   - `Field`, and `inputClass` with a `border-field` border and a `focus` outline.
 
   Take `ui.tsx` off the guard allowlist. Verify `npm run typecheck`, the guard test and all component tests pass.
-- [ ] 2.2 Add `src/components/NightSky.tsx` (design Decision 4): a seeded, fixed star field and five sparkles, three of them with the `twinkle` class, `aria-hidden`. Rebuild the header in `App.tsx`:
+- [x] 2.2 Add `src/components/NightSky.tsx` (design Decision 4): a seeded, fixed star field and five sparkles, three of them with the `twinkle` class, `aria-hidden`. Rebuild the header in `App.tsx`:
   - `bg-sky` with `NightSky`;
   - the Fraunces wordmark with a `star` sparkle, and About in `on-sky-muted`;
   - the phone tabs on navy with an `on-sky` underline on the selected tab;
@@ -40,7 +40,7 @@
   - a `NightSky` unit test: two renders give the same star positions, and the SVG is `aria-hidden`;
   - `App.test.tsx` and the guard test pass;
   - the tabs keep `role="tab"` and `aria-selected`.
-- [ ] 2.3 Restyle the rest of the frame:
+- [x] 2.3 Restyle the rest of the frame:
   - `FitBar`: `bg-sky`, with the status words in `fits-on-sky` or `over-on-sky`, a `star` sparkle when the day fits, and the times in `on-sky-muted`;
   - `Breakdown`;
   - `Toast`: `bg-sky`, the action in `star`, `bottom-24` plus the safe-area inset at every width;

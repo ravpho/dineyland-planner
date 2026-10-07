@@ -106,3 +106,10 @@ export const UnlockIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M8 11V7a4 4 0 0 1 7.5-2" />
   </svg>
 )
+/** Four-point star used across the night-sky theme. Its shape is SPARKLE_PATH, centred on 0,0 with radius 1. */
+export const SPARKLE_PATH = 'M0,-1 C0.1,-0.1 0.1,-0.1 1,0 C0.1,0.1 0.1,0.1 0,1 C-0.1,0.1 -0.1,0.1 -1,0 C-0.1,-0.1 -0.1,-0.1 0,-1 Z'
+export const SparkleIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg width={16} height={16} viewBox="-1 -1 2 2" fill="currentColor" aria-hidden {...p}>
+    <path d={SPARKLE_PATH} />
+  </svg>
+)

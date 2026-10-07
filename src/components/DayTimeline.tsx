@@ -164,9 +164,9 @@ function SlotCard({
                 {slot.item.type === 'show' && <span>{TYPE_LABELS.show}</span>}
               </p>
               <div className="mt-1 flex flex-wrap gap-1">
-                {slot.unsuitable && <Badge tone="amber">{slot.unsuitable}</Badge>}
-                {slot.lateBy > 0 && <Badge tone="red">{slot.lateBy} min late</Badge>}
-                {slot.afterWindow && <Badge tone="red">Ends after {windowEnd}</Badge>}
+                {slot.unsuitable && <Badge tone="warn">{slot.unsuitable}</Badge>}
+                {slot.lateBy > 0 && <Badge tone="over">{slot.lateBy} min late</Badge>}
+                {slot.afterWindow && <Badge tone="over">Ends after {windowEnd}</Badge>}
               </div>
               {slot.item.type === 'show' && (
                 <div className="mt-1 flex items-center gap-1 text-xs text-slate-600">

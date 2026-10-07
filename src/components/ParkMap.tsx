@@ -413,7 +413,7 @@ function MapItemCard({
       </p>
       {(unsuitable || marks.has(item.id)) && (
         <p className="mt-1 flex flex-wrap gap-1">
-          {unsuitable && <Badge tone="amber">{unsuitable}</Badge>}
+          {unsuitable && <Badge tone="warn">{unsuitable}</Badge>}
           <PlannedLabel mark={marks.get(item.id)} dayNumber={dayNumber} />
         </p>
       )}

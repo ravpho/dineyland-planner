@@ -39,7 +39,7 @@ export function ItemDetail({ item, onClose, onAdd }: { item: CatalogItem; onClos
   return (
     <Sheet title={item.name} onClose={onClose}>
       <div className="mb-2 flex flex-wrap items-center gap-2">
-        <Badge tone="indigo">{TYPE_LABELS[item.type]}</Badge>
+        <Badge>{TYPE_LABELS[item.type]}</Badge>
         <span className="text-sm text-slate-600">
           {park.name} · {area}
         </span>

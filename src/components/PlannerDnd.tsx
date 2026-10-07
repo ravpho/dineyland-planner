@@ -7,6 +7,7 @@ import {
   closestCenter,
   useSensor,
   useSensors,
+  type CollisionDetection,
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
@@ -18,6 +19,16 @@ import { usePlannerStore } from '../app/PlannerContext'
 import { useAddToDay } from '../app/useAddToDay'
 import { CATALOG_DRAG_PREFIX } from './CatalogList'
 import { DAY_DROP_ID } from './DayTimeline'
+
+/**
+ * Closest drop target to the dragged item. The whole-day target only exists so catalog items can be
+ * dropped into an empty day: a reorder ignores it, or a drop near the list's centre would land on it
+ * and move nothing.
+ */
+export const plannerCollision: CollisionDetection = (args) =>
+  String(args.active.id).startsWith(CATALOG_DRAG_PREFIX)
+    ? closestCenter(args)
+    : closestCenter({ ...args, droppableContainers: args.droppableContainers.filter((c) => c.id !== DAY_DROP_ID) })
 
 /** One drag-and-drop context for reordering the day and dragging catalog items into it. */
 export function PlannerDnd({ children }: { children: ReactNode }) {
@@ -54,9 +65,9 @@ export function PlannerDnd({ children }: { children: ReactNode }) {
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={() => setDragging(null)}>
+    <DndContext sensors={sensors} collisionDetection={plannerCollision} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={() => setDragging(null)}>
       {children}
-      <DragOverlay>{dragging && <div className="rounded-xl border border-indigo-300 bg-white px-3 py-2 font-medium shadow-lg">{dragging.name}</div>}</DragOverlay>
+      <DragOverlay>{dragging && <div className="rounded-xl border border-accent/30 bg-surface px-3 py-2 font-medium text-ink shadow-lg">{dragging.name}</div>}</DragOverlay>
     </DndContext>
   )
 }

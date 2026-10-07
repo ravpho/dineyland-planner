@@ -115,9 +115,9 @@ Gold is never used for text on light surfaces. `ink-faint` is never used for tex
 ### 4. Header sky: a static SVG with a fixed star pattern
 A new `src/components/NightSky.tsx` draws an `aria-hidden`, `pointer-events-none` SVG behind the header content:
 - **Background:** a vertical gradient from `sky-deep` to `sky`.
-- **Stars:** about 60 small stars (radius 0.4–1.2, opacity 0.3–0.9, `on-sky`) and 5 four-point sparkles (`star`, 3–6 units). Each sparkle is one path, `M0,-1 C.15,-.15 .15,-.15 1,0 …`, scaled.
+- **Stars:** 34 small stars (radius 0.4–1.2 px, opacity 0.3–0.9, `on-sky`) in a 480 × 120 px tile, repeated across the width with an SVG `<pattern>`. There are also 5 four-point sparkles (`star`, 2.5–5 px), placed by percentage of the width and height. Each sparkle is one path, `SPARKLE_PATH` in `icons.tsx`, scaled.
 - **Positions:** generated once at module load by a small seeded generator (mulberry32 with a fixed seed). They are the same on every load and in every screenshot.
-- **Scaling:** viewBox `0 0 400 120` with `preserveAspectRatio="xMidYMid slice"`, so the field covers any header width without stretching stars.
+- **Scaling:** stars keep their pixel size at every width, because the tile repeats instead of stretching. A single `slice`-scaled viewBox would make the stars about three times larger on a 1280 px wide, 48 px tall header.
 - **Twinkle:** three sparkles carry a `twinkle` class with staggered delays (Decision 6).
 
 The same component, shorter, heads the "create a trip" card on an empty Plan. Stars never sit behind body text.

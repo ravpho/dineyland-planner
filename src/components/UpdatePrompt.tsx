@@ -9,7 +9,7 @@ export function UpdatePrompt() {
   } = useRegisterSW()
   if (!needRefresh) return null
   return (
-    <div role="alert" className="flex flex-wrap items-center justify-between gap-2 bg-indigo-50 px-4 py-2 text-sm text-indigo-900">
+    <div role="alert" className="flex flex-wrap items-center justify-between gap-2 bg-accent-soft px-4 py-2 text-sm text-ink">
       <span>A new version with updated data is available. Your trips are kept.</span>
       <span className="flex gap-2">
         <Button variant="primary" onClick={() => updateServiceWorker(true)}>

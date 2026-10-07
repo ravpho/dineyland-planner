@@ -41,8 +41,8 @@ function StopCard({ day, slots, stops, onClose }: { day: Day; slots: ScheduledSl
               <span className="font-mono font-semibold text-slate-900">
                 {formatClock(s.start)}–{formatClock(s.end)}
               </span>
-              {s.lateBy > 0 && <Badge tone="red">{s.lateBy} min late</Badge>}
-              {s.afterWindow && <Badge tone="red">Ends after {day.end}</Badge>}
+              {s.lateBy > 0 && <Badge tone="over">{s.lateBy} min late</Badge>}
+              {s.afterWindow && <Badge tone="over">Ends after {day.end}</Badge>}
               <Button
                 className="ml-auto px-3"
                 aria-label={slots.length > 1 ? `Show stop ${stop} in timeline` : undefined}
