@@ -67,7 +67,7 @@
 
 ## 4. Constellation timeline
 
-- [ ] 4.1 Turn each `SlotCard` `<li>` into the rail and card grid (design Decision 5):
+- [x] 4.1 Turn each `SlotCard` `<li>` into the rail and card grid (design Decision 5):
   - the rail line, extended over the gap to the next item;
   - the stop node: 26 px `accent`, `on-accent` number, `star` ring, still `data-testid="slot-stop"` with its "Stop " `sr-only` prefix;
   - a hollow, dashed node with no number for missing entries;
@@ -78,7 +78,7 @@
   - `timeline.test.tsx` "Numbers in plan order", "Entry no longer available" and "Reorder" pass unchanged;
   - a new test: a missing entry's rail node has no number;
   - `npm run e2e -- plan` passes, since drag still uses `slot-handle`.
-- [ ] 4.2 Finish the timeline (design Decisions 5 and 10):
+- [x] 4.2 Finish the timeline (design Decisions 5 and 10):
   - park change and free time drawn as rail nodes (same test ids);
   - the card in `surface` with a `line` hairline and `shadow-card`, with an `over` border when it ends after the window;
   - badges, the show and meal pickers, the lock button, and the restaurant suggestions (`fits-soft`);

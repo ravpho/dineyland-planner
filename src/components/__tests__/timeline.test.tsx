@@ -122,6 +122,13 @@ describe('stop numbers in the timeline (day-schedule spec)', () => {
     expect(stopsShown()).toEqual(['Stop 1', null, 'Stop 2'])
   })
 
+  test('an entry no longer available gets a hollow rail node without a number (midnight-theme design Decision 5)', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'dlp.retired', 'dlp.phantom-manor']))
+    const missing = within(slots()[1]!).getByTestId('slot-node-missing')
+    expect(missing).toHaveTextContent('')
+    expect(slots().map((s) => within(s).queryByTestId('slot-node-missing') !== null)).toEqual([false, true, false])
+  })
+
   test('reorder: the moved item and the one it passed swap numbers', () => {
     const { store } = renderWithPlanner(
       <ToastProvider>

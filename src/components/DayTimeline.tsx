@@ -1,6 +1,6 @@
 import { useDroppable } from '@dnd-kit/core'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { CSS } from '@dnd-kit/utilities'
 import type { Show } from '../domain/catalog'
 import { restaurantSuggestions, type RestaurantSuggestion } from '../domain/restaurants'
@@ -21,6 +21,36 @@ function mealTimeOptions(day: Day, current?: string): string[] {
   const steps: string[] = []
   for (let t = Math.ceil(parseClock(day.start) / 30) * 30; t <= parseClock(day.end); t += 30) steps.push(formatClock(t))
   return [...new Set([...steps, ...(current ? [current] : [])])].sort()
+}
+
+/** Centre of a stop's node, from the top of its card row: level with the reorder handle. */
+const NODE_CENTRE_PX = 26
+/** Centre of the small markers on the park-change and free-time rows. */
+const MARKER_CENTRE_PX = 12
+
+/**
+ * The constellation rail's line in one row (midnight-theme design Decision 5). It starts at the marker on
+ * the day's first row and ends at the node on its last; elsewhere it runs the full row, so the rows join
+ * into one line down the day.
+ */
+function RailLine({ dashed = false, startAt, endAt }: { dashed?: boolean; startAt?: number; endAt?: number }) {
+  return (
+    <span
+      aria-hidden
+      className={`absolute left-1/2 -translate-x-1/2 ${dashed ? 'w-0 border-l-[1.5px] border-dashed border-line-strong' : 'w-[1.5px] bg-line-strong'}`}
+      style={{ top: startAt ?? 0, ...(endAt === undefined ? { bottom: 0 } : { height: endAt - (startAt ?? 0) }) }}
+    />
+  )
+}
+
+/** A row of the timeline: the rail's 2 rem column, then the content. The rail spans the content's padding. */
+function RailRow({ rail, children, padded = false }: { rail: ReactNode; children: ReactNode; padded?: boolean }) {
+  return (
+    <div className="flex">
+      <div className="relative w-8 shrink-0">{rail}</div>
+      <div className={`min-w-0 flex-1 ${padded ? 'pb-2' : ''}`}>{children}</div>
+    </div>
+  )
 }
 
 function SlotCard({
@@ -85,6 +115,10 @@ function SlotCard({
     clearPlanFocus()
   }, [focused, clearPlanFocus])
   const name = slot.kind === 'scheduled' ? slot.item.name : 'No longer available'
+  const first = index === 0
+  const last = index === count - 1
+  /** The rows above the card, in order: they decide where the day's line starts. */
+  const preRows = slot.kind === 'scheduled' ? [...(slot.parkChange ? ['park'] : []), ...(slot.freeBefore > 0 ? ['free'] : [])] : []
 
   const remove = () => {
     removeItem(day.id, slot.entry.key)
@@ -103,150 +137,188 @@ function SlotCard({
       data-item-id={slot.entry.itemId}
     >
       {slot.kind === 'scheduled' && slot.parkChange && (
-        <p className="py-1 pl-14 text-xs font-medium text-indigo-800" data-testid="park-change">
-          Walk to {catalog.parks.find((p) => p.id === slot.item.parkId)?.name} · park change · {slot.walk} min
-        </p>
+        <RailRow
+          rail={
+            <>
+              <RailLine dashed startAt={first && preRows[0] === 'park' ? MARKER_CENTRE_PX : undefined} />
+              <span aria-hidden className="absolute left-1/2 top-[8px] h-2 w-2 -translate-x-1/2 rotate-45 bg-accent" />
+            </>
+          }
+        >
+          <p className="py-1 text-xs font-medium text-accent" data-testid="park-change">
+            Walk to {catalog.parks.find((p) => p.id === slot.item.parkId)?.name} · park change · {slot.walk} min
+          </p>
+        </RailRow>
       )}
       {slot.kind === 'scheduled' && slot.freeBefore > 0 && (
-        <p className="py-1 pl-14 text-xs text-emerald-700" data-testid="free-time">
-          Free time {formatDuration(slot.freeBefore)}
-        </p>
-      )}
-      <div
-        ref={cardRef}
-        className={`flex flex-wrap items-start gap-x-1 rounded-xl border bg-white p-1 shadow-sm transition-shadow data-[highlight=true]:ring-2 data-[highlight=true]:ring-amber-400 sm:flex-nowrap ${slot.kind === 'scheduled' && slot.afterWindow ? 'border-red-300' : 'border-slate-200'}`}
-      >
-        <button
-          type="button"
-          ref={setHandleNode}
-          {...attributes}
-          {...listeners}
-          aria-label={`Reorder ${name}`}
-          className="flex h-11 w-11 shrink-0 cursor-grab touch-none items-center justify-center text-slate-400"
-          data-testid="slot-handle"
-        >
-          <GripIcon />
-        </button>
-        <div className="min-w-0 flex-1 basis-[calc(100%-3.25rem)] py-1 sm:basis-auto">
-          {slot.kind === 'missing' ? (
+        <RailRow
+          rail={
             <>
-              <p className="font-medium text-slate-500">No longer available</p>
-              <p className="text-xs text-slate-500">This item is not in the current catalog and is left out of the schedule.</p>
+              <RailLine startAt={first && preRows[0] === 'free' ? MARKER_CENTRE_PX : undefined} />
+              <span aria-hidden className="absolute left-1/2 top-[8px] h-2 w-2 -translate-x-1/2 rounded-full border-[1.5px] border-fits bg-page" />
             </>
-          ) : (
-            <>
-              <p className="flex flex-wrap items-baseline gap-x-2">
-                {stop !== undefined && (
-                  // Drawn like the map's numbered stops (plan-ui-improvements design Decision 3).
-                  <span className="inline-flex h-5 min-w-5 shrink-0 items-center justify-center self-center rounded-full bg-indigo-600 px-1.5 text-xs font-bold text-white" data-testid="slot-stop">
-                    <span className="sr-only">Stop </span>
-                    {stop}
+          }
+        >
+          <p className="py-1 text-xs text-fits" data-testid="free-time">
+            Free time {formatDuration(slot.freeBefore)}
+          </p>
+        </RailRow>
+      )}
+      <RailRow
+        padded
+        rail={
+          <>
+            {!(first && last && preRows.length === 0) && (
+              <RailLine startAt={first && preRows.length === 0 ? NODE_CENTRE_PX : undefined} endAt={last ? NODE_CENTRE_PX : undefined} />
+            )}
+            {stop !== undefined ? (
+              // The same number the maps' route and the catalog's planned label use (plan-ui-improvements design Decision 3).
+              <span
+                className="absolute left-1/2 top-[13px] flex h-[26px] min-w-[26px] -translate-x-1/2 items-center justify-center rounded-full bg-accent px-1 text-xs font-bold text-on-accent tabular-nums ring-[1.5px] ring-star"
+                data-testid="slot-stop"
+              >
+                <span className="sr-only">Stop </span>
+                {stop}
+              </span>
+            ) : (
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-[17px] h-[18px] w-[18px] -translate-x-1/2 rounded-full border-[1.5px] border-dashed border-ink-faint bg-page"
+                data-testid="slot-node-missing"
+              />
+            )}
+          </>
+        }
+      >
+        <div
+          ref={cardRef}
+          className={`flex flex-wrap items-start gap-x-1 rounded-xl border bg-surface p-1 shadow-card transition-shadow data-[highlight=true]:ring-2 data-[highlight=true]:ring-star-ink sm:flex-nowrap ${slot.kind === 'scheduled' && slot.afterWindow ? 'border-over/50' : 'border-line'}`}
+        >
+          <button
+            type="button"
+            ref={setHandleNode}
+            {...attributes}
+            {...listeners}
+            aria-label={`Reorder ${name}`}
+            className="flex h-11 w-11 shrink-0 cursor-grab touch-none items-center justify-center rounded-lg text-ink-faint hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-focus"
+            data-testid="slot-handle"
+          >
+            <GripIcon />
+          </button>
+          <div className="min-w-0 flex-1 basis-[calc(100%-3.25rem)] py-1 sm:basis-auto">
+            {slot.kind === 'missing' ? (
+              <>
+                <p className="font-medium text-ink-muted">No longer available</p>
+                <p className="text-xs text-ink-muted">This item is not in the current catalog and is left out of the schedule.</p>
+              </>
+            ) : (
+              <>
+                <p className="flex flex-wrap items-baseline gap-x-2">
+                  <span className="text-sm font-semibold text-ink tabular-nums" data-testid="slot-time">
+                    {formatClock(slot.start)}–{formatClock(slot.end)}
                   </span>
-                )}
-                <span className="font-mono text-sm font-semibold text-slate-900" data-testid="slot-time">
-                  {formatClock(slot.start)}–{formatClock(slot.end)}
-                </span>
-                <span className="font-medium text-slate-900" data-testid="slot-name">{slot.item.name}</span>
-              </p>
-              <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-slate-600">
-                <span className="font-medium text-slate-700" data-testid="slot-area">
-                  {areaName(slot.item, catalog)}
-                </span>
-                <span className="inline-flex items-center gap-1" data-testid="slot-walk">
-                  <WalkIcon width={14} height={14} /> {slot.walk} min
-                </span>
-                <span>arrive {formatClock(slot.arrive)}</span>
-                {slot.item.type !== 'show' && (
-                  <span>
-                    wait {slot.wait} min <span className="text-slate-400">({slot.waitIsEstimate ? 'estimate' : 'typical'})</span>
+                  <span className="font-medium text-ink" data-testid="slot-name">{slot.item.name}</span>
+                </p>
+                <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-ink-muted">
+                  <span className="font-medium text-ink-soft" data-testid="slot-area">
+                    {areaName(slot.item, catalog)}
                   </span>
-                )}
-                {slot.item.type === 'show' && <span>{TYPE_LABELS.show}</span>}
-              </p>
-              <div className="mt-1 flex flex-wrap gap-1">
-                {slot.unsuitable && <Badge tone="warn">{slot.unsuitable}</Badge>}
-                {slot.lateBy > 0 && <Badge tone="over">{slot.lateBy} min late</Badge>}
-                {slot.afterWindow && <Badge tone="over">Ends after {windowEnd}</Badge>}
-              </div>
-              {slot.item.type === 'show' && (
-                <div className="mt-1 flex items-center gap-1 text-xs text-slate-600">
-                  <label className="flex items-center gap-2">
-                    Start
-                    <select
-                      aria-label={`Start time for ${slot.item.name}`}
-                      className={`${inputClass} text-sm`}
-                      value={slot.entry.showTime ?? (slot.item as Show).times[0]}
-                      onChange={(e) => setShowTime(day.id, slot.entry.key, e.target.value)}
+                  <span className="inline-flex items-center gap-1" data-testid="slot-walk">
+                    <WalkIcon width={14} height={14} /> {slot.walk} min
+                  </span>
+                  <span>arrive {formatClock(slot.arrive)}</span>
+                  {slot.item.type !== 'show' && (
+                    <span>
+                      wait {slot.wait} min <span>({slot.waitIsEstimate ? 'estimate' : 'typical'})</span>
+                    </span>
+                  )}
+                  {slot.item.type === 'show' && <span>{TYPE_LABELS.show}</span>}
+                </p>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {slot.unsuitable && <Badge tone="warn">{slot.unsuitable}</Badge>}
+                  {slot.lateBy > 0 && <Badge tone="over">{slot.lateBy} min late</Badge>}
+                  {slot.afterWindow && <Badge tone="over">Ends after {windowEnd}</Badge>}
+                </div>
+                {slot.item.type === 'show' && (
+                  <div className="mt-1 flex items-center gap-1 text-xs text-ink-muted">
+                    <label className="flex items-center gap-2">
+                      Start
+                      <select
+                        aria-label={`Start time for ${slot.item.name}`}
+                        className={`${inputClass} text-sm`}
+                        value={slot.entry.showTime ?? (slot.item as Show).times[0]}
+                        onChange={(e) => setShowTime(day.id, slot.entry.key, e.target.value)}
+                      >
+                        {[...new Set([...(slot.item as Show).times, slot.entry.showTime].filter(Boolean))].sort().map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <IconButton
+                      label={`Keep ${slot.item.name} at ${slot.entry.showTime ?? (slot.item as Show).times[0]} when optimizing`}
+                      aria-pressed={slot.entry.timeLocked === true}
+                      onClick={() => setShowLock(day.id, slot.entry.key, !slot.entry.timeLocked)}
+                      className={slot.entry.timeLocked ? 'text-accent' : 'text-ink-faint'}
                     >
-                      {[...new Set([...(slot.item as Show).times, slot.entry.showTime].filter(Boolean))].sort().map((t) => (
+                      {slot.entry.timeLocked ? <LockIcon /> : <UnlockIcon />}
+                    </IconButton>
+                    {slot.entry.timeLocked && <span>Time kept when optimizing</span>}
+                  </div>
+                )}
+                {slot.item.type === 'restaurant' && (
+                  <label className="mt-1 flex items-center gap-2 text-xs text-ink-muted">
+                    Meal time
+                    <select
+                      aria-label={`Meal time for ${slot.item.name}`}
+                      className={`${inputClass} text-sm`}
+                      value={slot.entry.mealTime ?? ''}
+                      onChange={(e) => setMealTime(day.id, slot.entry.key, e.target.value || undefined)}
+                    >
+                      <option value="">Any time</option>
+                      {mealTimeOptions(day, slot.entry.mealTime).map((t) => (
                         <option key={t} value={t}>
                           {t}
                         </option>
                       ))}
                     </select>
                   </label>
-                  <IconButton
-                    label={`Keep ${slot.item.name} at ${slot.entry.showTime ?? (slot.item as Show).times[0]} when optimizing`}
-                    aria-pressed={slot.entry.timeLocked === true}
-                    onClick={() => setShowLock(day.id, slot.entry.key, !slot.entry.timeLocked)}
-                    className={slot.entry.timeLocked ? 'text-indigo-700' : 'text-slate-400'}
-                  >
-                    {slot.entry.timeLocked ? <LockIcon /> : <UnlockIcon />}
-                  </IconButton>
-                  {slot.entry.timeLocked && <span>Time kept when optimizing</span>}
-                </div>
-              )}
-              {slot.item.type === 'restaurant' && (
-                <label className="mt-1 flex items-center gap-2 text-xs text-slate-600">
-                  Meal time
-                  <select
-                    aria-label={`Meal time for ${slot.item.name}`}
-                    className={`${inputClass} text-sm`}
-                    value={slot.entry.mealTime ?? ''}
-                    onChange={(e) => setMealTime(day.id, slot.entry.key, e.target.value || undefined)}
-                  >
-                    <option value="">Any time</option>
-                    {mealTimeOptions(day, slot.entry.mealTime).map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              {suggestions.length > 0 && (
-                <div className="mt-1" data-testid="restaurant-suggestions">
-                  <p className="text-xs font-medium text-slate-700">Fits better:</p>
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {suggestions.map((s) => (
-                      <button
-                        key={s.restaurant.id}
-                        type="button"
-                        onClick={() => swap(s)}
-                        className="min-h-11 rounded-lg border border-emerald-300 bg-emerald-50 px-2 text-left text-xs text-emerald-900 hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-indigo-600"
-                      >
-                        <span className="font-medium">{s.restaurant.name}</span> · {s.onTime ? 'on time' : `saves ${s.saves} min`}
-                        {s.restaurant.service === 'table' && <span className="text-emerald-800"> · booking usually needed</span>}
-                      </button>
-                    ))}
+                )}
+                {suggestions.length > 0 && (
+                  <div className="mt-1" data-testid="restaurant-suggestions">
+                    <p className="text-xs font-medium text-ink-soft">Fits better:</p>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {suggestions.map((s) => (
+                        <button
+                          key={s.restaurant.id}
+                          type="button"
+                          onClick={() => swap(s)}
+                          className="min-h-11 rounded-lg border border-fits/30 bg-fits-soft px-2 text-left text-xs text-fits hover:border-fits focus-visible:outline-2 focus-visible:outline-focus"
+                        >
+                          <span className="font-medium">{s.restaurant.name}</span> · {s.onTime ? 'on time' : `saves ${s.saves} min`}
+                          {s.restaurant.service === 'table' && <span> · booking usually needed</span>}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </>
-          )}
+                )}
+              </>
+            )}
+          </div>
+          <div className="ml-auto flex shrink-0 sm:ml-0">
+            <IconButton label={`Move ${name} up`} disabled={index === 0} onClick={() => moveItem(day.id, index, index - 1)}>
+              <UpIcon />
+            </IconButton>
+            <IconButton label={`Move ${name} down`} disabled={index === count - 1} onClick={() => moveItem(day.id, index, index + 1)}>
+              <DownIcon />
+            </IconButton>
+            <IconButton label={`Remove ${name}`} onClick={remove} className="text-over">
+              <TrashIcon />
+            </IconButton>
+          </div>
         </div>
-        <div className="ml-auto flex shrink-0 sm:ml-0">
-          <IconButton label={`Move ${name} up`} disabled={index === 0} onClick={() => moveItem(day.id, index, index - 1)}>
-            <UpIcon />
-          </IconButton>
-          <IconButton label={`Move ${name} down`} disabled={index === count - 1} onClick={() => moveItem(day.id, index, index + 1)}>
-            <DownIcon />
-          </IconButton>
-          <IconButton label={`Remove ${name}`} onClick={remove} className="text-red-700">
-            <TrashIcon />
-          </IconButton>
-        </div>
-      </div>
+      </RailRow>
     </li>
   )
 }
@@ -263,7 +335,7 @@ export function DayTimeline({ day, schedule }: { day: Day; schedule: DaySchedule
   )
   return (
     <SortableContext items={day.items.map((i) => i.key)} strategy={verticalListSortingStrategy}>
-      <ol ref={setNodeRef} aria-label="Day plan" className={`flex min-h-24 flex-col gap-2 rounded-xl p-1 ${isOver ? 'bg-indigo-50 ring-2 ring-indigo-300' : ''}`}>
+      <ol ref={setNodeRef} aria-label="Day plan" className={`flex min-h-24 flex-col rounded-xl p-1 ${isOver ? 'bg-accent-soft ring-2 ring-accent/30' : ''}`}>
         {schedule.slots.map((slot, i) => (
           <SlotCard
             key={slot.entry.key}
@@ -278,7 +350,7 @@ export function DayTimeline({ day, schedule }: { day: Day; schedule: DaySchedule
           />
         ))}
         {schedule.slots.length === 0 && (
-          <li className="list-none rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-600">
+          <li className="list-none rounded-xl border border-dashed border-line-strong bg-surface/60 p-6 text-center text-sm text-ink-muted">
             Nothing planned yet. Add attractions, meals and shows from the catalog.
           </li>
         )}

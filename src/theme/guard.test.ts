@@ -17,7 +17,6 @@ const FORBIDDEN = [
 
 /** Files not yet moved to the theme. Each task group of midnight-theme removes its own; the list ends empty. */
 const NOT_YET_MIGRATED = new Set([
-  'src/components/DayTimeline.tsx',
   'src/components/ParkMap.tsx',
   'src/components/ParkOrder.tsx',
   'src/components/PlanMap.tsx',
