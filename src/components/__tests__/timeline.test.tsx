@@ -87,6 +87,14 @@ describe('timeline marks (day-schedule spec)', () => {
     expect(screen.getByTestId('ticket-reminder')).toHaveTextContent(/ticket valid for Disneyland Park and Disney Adventure World/)
   })
 
+  test('two-park reminder kept: the compact note has the ticket text, the park order and Switch order (app-shell spec)', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'daw.avengers-flight-force']))
+    const note = screen.getByTestId('ticket-reminder')
+    expect(note).toHaveTextContent('You need a ticket valid for Disneyland Park and Disney Adventure World on the same day.')
+    expect(within(note).getByTestId('park-order-text')).toHaveTextContent('Disneyland Park → Disney Adventure World')
+    expect(within(note).getByRole('button', { name: 'Switch order' })).toBeInTheDocument()
+  })
+
   test('each item shows its area', () => {
     renderDay(day(['dlp.peter-pans-flight']))
     expect(within(slots()[0]!).getByTestId('slot-area')).toHaveTextContent('Fantasyland')
@@ -120,6 +128,13 @@ describe('stop numbers in the timeline (day-schedule spec)', () => {
   test('an entry no longer available has no number and is not counted', () => {
     renderDay(day(['dlp.big-thunder-mountain', 'dlp.retired', 'dlp.phantom-manor']))
     expect(stopsShown()).toEqual(['Stop 1', null, 'Stop 2'])
+  })
+
+  test('an entry no longer available gets a hollow rail node without a number (midnight-theme design Decision 5)', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'dlp.retired', 'dlp.phantom-manor']))
+    const missing = within(slots()[1]!).getByTestId('slot-node-missing')
+    expect(missing).toHaveTextContent('')
+    expect(slots().map((s) => within(s).queryByTestId('slot-node-missing') !== null)).toEqual([false, true, false])
   })
 
   test('reorder: the moved item and the one it passed swap numbers', () => {

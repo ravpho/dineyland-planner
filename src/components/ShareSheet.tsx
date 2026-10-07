@@ -16,7 +16,7 @@ export function ShareSheet({ trip, onClose }: { trip: Trip; onClose: () => void 
   }
   return (
     <Sheet title="Share this trip" onClose={onClose}>
-      <p className="mb-2 text-sm text-slate-600">
+      <p className="mb-2 text-sm text-ink-muted">
         Open this link on another device to import a copy of <strong>{trip.name}</strong>. It is also a handy backup.
       </p>
       <input aria-label="Share link" readOnly className={`${inputClass} w-full text-sm`} value={url} onFocus={(e) => e.currentTarget.select()} />

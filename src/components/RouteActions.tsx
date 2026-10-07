@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { formatClock } from '../domain/time'
 import type { Day } from '../domain/trip'
 import { usePlanner } from '../app/PlannerContext'
 import type { OptimizeResult } from '../state/store'
+import { useMediaQuery } from '../app/hooks'
+import { Sparkle } from './Sparkle'
 import { useToast } from './Toast'
 import { Button } from './ui'
 
@@ -19,6 +21,10 @@ export function RouteActions({ day }: { day: Day }) {
   const undoRouteChange = usePlanner((s) => s.undoRouteChange)
   const toast = useToast()
   const [optimizing, setOptimizing] = useState(false)
+  // A new key for each sparkle, so a second optimize plays it again; 0 when none is showing.
+  const [sparkle, setSparkle] = useState(0)
+  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const sparkleDone = useCallback(() => setSparkle(0), [])
   const tooFew = day.items.length < 2
 
   const group = () => {
@@ -33,19 +39,25 @@ export function RouteActions({ day }: { day: Day }) {
     setTimeout(() => {
       const result = optimizeDayRoute(day.id)
       setOptimizing(false)
-      if (result.changed) toast(optimizeMessage(result), { label: 'Undo', run: undoRouteChange })
-      else toast('No quicker order found')
+      if (result.changed) {
+        // The message and the sparkle come together: nothing waits for the animation (app-shell spec: Reduced motion).
+        toast(optimizeMessage(result), { label: 'Undo', run: undoRouteChange })
+        if (!reducedMotion) setSparkle((n) => n + 1)
+      } else toast('No quicker order found')
     }, 0)
   }
 
   return (
-    <div className="flex justify-end gap-2">
+    <div className="ml-auto flex justify-end gap-2">
       <Button onClick={group} disabled={tooFew || optimizing} className="disabled:cursor-not-allowed disabled:opacity-50">
         Group by area
       </Button>
-      <Button onClick={optimize} disabled={tooFew || optimizing} className="disabled:cursor-not-allowed disabled:opacity-50">
-        {optimizing ? 'Optimizing…' : 'Optimize route'}
-      </Button>
+      <span className="relative inline-flex">
+        <Button onClick={optimize} disabled={tooFew || optimizing} className="disabled:cursor-not-allowed disabled:opacity-50">
+          {optimizing ? 'Optimizing…' : 'Optimize route'}
+        </Button>
+        {sparkle > 0 && <Sparkle key={sparkle} onDone={sparkleDone} />}
+      </span>
     </div>
   )
 }

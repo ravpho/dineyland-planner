@@ -1,5 +1,7 @@
 import { useIsWide } from './app/hooks'
 import { usePlanner } from './app/PlannerContext'
+import { SparkleIcon } from './components/icons'
+import { NightSky } from './components/NightSky'
 import { PlannerDnd } from './components/PlannerDnd'
 import { ToastProvider } from './components/Toast'
 import { UpdatePrompt } from './components/UpdatePrompt'
@@ -19,7 +21,7 @@ function StorageBanner() {
         ? 'Saved trips could not be read. Changes made now will not be saved, to avoid overwriting them.'
         : 'This browser is not letting the app save data, so your changes will not be kept after you close it.'
   return (
-    <p role="alert" className="bg-amber-100 px-4 py-2 text-sm text-amber-900">
+    <p role="alert" className="bg-warn-soft px-4 py-2 text-sm text-warn">
       {text}
     </p>
   )
@@ -32,7 +34,7 @@ function Tab({ route, current, label }: { route: Route; current: Route; label: s
       href={hrefFor(route)}
       role="tab"
       aria-selected={active}
-      className={`flex min-h-11 flex-1 items-center justify-center border-b-2 text-sm font-semibold ${active ? 'border-indigo-700 text-indigo-800' : 'border-transparent text-slate-600'}`}
+      className={`flex min-h-11 flex-1 items-center justify-center border-b-2 text-sm font-semibold focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-on-sky ${active ? 'border-on-sky text-on-sky' : 'border-transparent text-on-sky-muted hover:text-on-sky'}`}
     >
       {label}
     </a>
@@ -46,18 +48,27 @@ export default function App() {
 
   return (
     <ToastProvider>
-      <div className="min-h-dvh bg-slate-50 text-slate-900">
-        <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4">
-            <a href="#/plan" className="flex min-h-11 items-center text-lg font-bold text-indigo-800">
+      <div className="min-h-dvh bg-page text-ink">
+        {/* Night sky header; on an installed iPhone app it runs under the status bar (midnight-theme Decisions 4 and 9). */}
+        <header className="sticky top-0 z-20 overflow-hidden bg-sky pt-[env(safe-area-inset-top)] shadow-md">
+          <NightSky variant={planning && !wide ? 'header' : 'row'} />
+          <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4">
+            <a
+              href="#/plan"
+              className="flex min-h-12 items-center gap-2 font-display text-xl font-semibold tracking-tight text-on-sky focus-visible:outline-2 focus-visible:outline-focus-on-sky"
+            >
+              <SparkleIcon width={14} height={14} className="text-star" />
               Disneyland Planner
             </a>
-            <a href="#/about" className="flex min-h-11 min-w-11 items-center justify-center px-2 text-sm font-medium text-slate-700">
+            <a
+              href="#/about"
+              className="flex min-h-11 min-w-11 items-center justify-center px-2 text-sm font-medium text-on-sky-muted hover:text-on-sky focus-visible:outline-2 focus-visible:outline-focus-on-sky"
+            >
               About
             </a>
           </div>
           {planning && !wide && (
-            <nav role="tablist" aria-label="Sections" className="mx-auto flex max-w-6xl">
+            <nav role="tablist" aria-label="Sections" className="relative mx-auto flex max-w-6xl">
               <Tab route={{ name: 'catalog' }} current={route} label="Catalog" />
               <Tab route={{ name: 'plan' }} current={route} label="Plan" />
             </nav>

@@ -119,7 +119,7 @@
 ## 7. Integration checks
 
 - [x] 7.1 Run `openspec validate plan-ui-improvements --strict`, `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e`. Verify all pass and CI on the branch is green.
-- [ ] 7.2 Owner opens the deployed update on a phone and plans a two-park day. Verify:
+- [x] 7.2 Owner opens the deployed update on a phone and plans a two-park day. Verify:
   - added items are tinted and labelled in the catalog, and items on another day show a muted label;
   - the plan map shows the day's numbered stops without catalog clutter, and "Show in timeline" lands on the right item;
   - "Switch order" is unavailable until the day is grouped, warns about the lunch and show it removes, and Undo brings them back.

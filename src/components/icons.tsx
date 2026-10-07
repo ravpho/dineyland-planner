@@ -106,3 +106,29 @@ export const UnlockIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M8 11V7a4 4 0 0 1 7.5-2" />
   </svg>
 )
+/** Four-point star used across the night-sky theme. Its shape is SPARKLE_PATH, centred on 0,0 with radius 1. */
+export const SPARKLE_PATH = 'M0,-1 C0.1,-0.1 0.1,-0.1 1,0 C0.1,0.1 0.1,0.1 0,1 C-0.1,0.1 -0.1,0.1 -1,0 C-0.1,-0.1 -0.1,-0.1 0,-1 Z'
+export const SparkleIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg width={16} height={16} viewBox="-1 -1 2 2" fill="currentColor" aria-hidden {...p}>
+    <path d={SPARKLE_PATH} />
+  </svg>
+)
+export const MoreIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="5" cy="12" r="1" />
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="19" cy="12" r="1" />
+  </svg>
+)
+export const TicketIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" />
+    <path d="M14 5v2M14 11v2M14 17v2" />
+  </svg>
+)
+export const PencilIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z" />
+    <path d="m13.5 6.5 4 4" />
+  </svg>
+)

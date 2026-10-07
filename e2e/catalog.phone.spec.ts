@@ -11,7 +11,7 @@ test('6.1 typing "thunder" filters the list', async ({ page }) => {
   const before = await rows.count()
   await page.getByLabel('Search by name').fill('thunder')
   await expect(rows.filter({ hasText: 'Big Thunder Mountain' })).toHaveCount(1)
-  const names = await rows.locator('span.block.font-medium').allTextContents()
+  const names = await rows.getByTestId('row-name').allTextContents()
   expect(names.every((n) => n.toLowerCase().includes('thunder'))).toBe(true)
   await expect(page.getByTestId('match-count')).toHaveText(`${names.length} items`)
   expect(before).toBeGreaterThan(50)
@@ -48,7 +48,7 @@ test('3.2 both parks are listed with labels, and sorting works without opening t
 
   await page.getByLabel('Sort by').selectOption('duration')
   await expect(page.getByRole('dialog')).toHaveCount(0)
-  const names = await page.getByTestId('catalog-row').locator('span.block.font-medium').allTextContents()
+  const names = await page.getByTestId('catalog-row').getByTestId('row-name').allTextContents()
   expect(names.indexOf('RC Racer')).toBeLessThan(names.indexOf('Pirates of the Caribbean')) // 1 min < 10 min
   expect(names.indexOf('Pirates of the Caribbean')).toBeLessThan(names.indexOf('Auberge de Cendrillon')) // < 90 min meal
 

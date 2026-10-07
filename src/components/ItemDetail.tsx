@@ -10,9 +10,9 @@ import { Badge, Button, Sheet, Stars } from './ui'
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex justify-between gap-4 border-b border-slate-100 py-2 text-sm">
-      <dt className="text-slate-500">{label}</dt>
-      <dd className="text-right font-medium text-slate-900">{children}</dd>
+    <div className="flex justify-between gap-4 border-b border-line py-2 text-sm">
+      <dt className="text-ink-muted">{label}</dt>
+      <dd className="text-right font-medium text-ink">{children}</dd>
     </div>
   )
 }
@@ -20,7 +20,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 export function WaitExplanation() {
   const catalog = useCatalog()
   return (
-    <p className="mt-3 rounded-lg bg-slate-50 p-3 text-xs text-slate-600">
+    <p className="mt-3 rounded-lg bg-surface-muted p-3 text-xs text-ink-muted">
       Waits are <strong>typical</strong> values, not live ones: the ride&apos;s average queue time in {catalog.statsYears.join(', ')} from
       Queue-Times, scaled by how busy the month usually is and by the time of day. Statistics collected on {catalog.collectedAt}.
     </p>
@@ -39,30 +39,30 @@ export function ItemDetail({ item, onClose, onAdd }: { item: CatalogItem; onClos
   return (
     <Sheet title={item.name} onClose={onClose}>
       <div className="mb-2 flex flex-wrap items-center gap-2">
-        <Badge tone="indigo">{TYPE_LABELS[item.type]}</Badge>
-        <span className="text-sm text-slate-600">
+        <Badge>{TYPE_LABELS[item.type]}</Badge>
+        <span className="text-sm text-ink-muted">
           {park.name} · {area}
         </span>
         <PlannedLabel mark={marks.get(item.id)} dayNumber={dayNumber} />
       </div>
       {reason && (
-        <p className="mb-2 rounded bg-amber-50 px-2 py-1 text-sm text-amber-900" role="note">
+        <p className="mb-2 rounded bg-warn-soft px-2 py-1 text-sm text-warn" role="note">
           Not suitable for your group: {reason}
         </p>
       )}
-      <p className="text-slate-800">{item.description}</p>
-      <p className="mt-2 text-sm text-slate-600">
+      <p className="text-ink">{item.description}</p>
+      <p className="mt-2 text-sm text-ink-muted">
         <Stars rating={item.rating} /> <span className="ml-1">{item.ratingReason}</span>
       </p>
       {(item.officialUrl || item.location) && (
         <p className="mt-2 flex flex-wrap gap-x-4 text-sm">
           {item.officialUrl && (
-            <a href={item.officialUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 font-medium text-indigo-700 underline">
+            <a href={item.officialUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 font-medium text-accent underline underline-offset-2 hover:decoration-2">
               Official page <ExternalIcon />
             </a>
           )}
           {item.location && (
-            <a href={mapsUrl(item.location)} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 font-medium text-indigo-700 underline">
+            <a href={mapsUrl(item.location)} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 font-medium text-accent underline underline-offset-2 hover:decoration-2">
               {item.locationApproximate ? 'Open in Maps (approximate)' : 'Open in Maps'} <ExternalIcon />
             </a>
           )}
@@ -107,18 +107,18 @@ export function ItemDetail({ item, onClose, onAdd }: { item: CatalogItem; onClos
         )}
       </dl>
       {item.type === 'attraction' && (
-        <p className="mt-2 text-xs text-slate-600" role="note">
+        <p className="mt-2 text-xs text-ink-muted" role="note">
           Height and age rules can change: always follow the signs posted at the attraction.
         </p>
       )}
       {item.type !== 'show' && <WaitExplanation />}
       <section className="mt-3">
-        <h3 className="text-sm font-semibold text-slate-900">Sources</h3>
-        <ul className="mt-1 list-disc pl-5 text-sm text-slate-700">
+        <h3 className="text-sm font-semibold text-ink">Sources</h3>
+        <ul className="mt-1 list-disc pl-5 text-sm text-ink-soft">
           {item.sources.map((s) => (
             <li key={s.label}>
               {s.url ? (
-                <a href={s.url} target="_blank" rel="noreferrer" className="text-indigo-700 underline">
+                <a href={s.url} target="_blank" rel="noreferrer" className="text-accent underline underline-offset-2 hover:decoration-2">
                   {s.label}
                 </a>
               ) : (

@@ -30,11 +30,20 @@ import { areaName, itemFacts, TYPE_LABELS } from './labels'
 import { PlannedLabel } from './PlannedLabel'
 import { Badge, Button, IconButton, Sheet, Stars } from './ui'
 
-/** Zone colours by area order: Main Street / Plaza, then the themed lands. */
-const AREA_COLOURS = ['#e11d48', '#d97706', '#059669', '#7c3aed', '#0284c7']
-const TYPE_COLOURS: Record<CatalogItem['type'], string> = { attraction: '#1e293b', restaurant: '#b45309', show: '#be185d' }
-const UNSUITABLE_COLOUR = '#cbd5e1'
-const ROUTE_COLOUR = '#4f46e5'
+/**
+ * Map colours as theme classes, written out in full so Tailwind finds them (midnight-theme design Decision 8).
+ * Zones go by area order: Main Street / Plaza, then the themed lands. Labels use the zone's colour at full strength.
+ */
+const ZONE_FILL = [
+  'fill-map-zone-1 stroke-map-zone-1',
+  'fill-map-zone-2 stroke-map-zone-2',
+  'fill-map-zone-3 stroke-map-zone-3',
+  'fill-map-zone-4 stroke-map-zone-4',
+  'fill-map-zone-5 stroke-map-zone-5',
+]
+const ZONE_LABEL = ['fill-map-zone-1', 'fill-map-zone-2', 'fill-map-zone-3', 'fill-map-zone-4', 'fill-map-zone-5']
+const TYPE_FILL: Record<CatalogItem['type'], string> = { attraction: 'fill-map-attraction', restaurant: 'fill-map-restaurant', show: 'fill-map-show' }
+const TYPE_STROKE: Record<CatalogItem['type'], string> = { attraction: 'stroke-map-attraction', restaurant: 'stroke-map-restaurant', show: 'stroke-map-show' }
 /** Zone padding, in metres (design Decision 2). */
 const ZONE_STROKE_M = 50
 /** Restaurant and show labels appear from this zoom (design Decision 3). */
@@ -205,12 +214,12 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
   const height = bounds.maxY - bounds.minY
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-slate-200 bg-[#eef3ea]">
+    <div className="relative overflow-hidden rounded-xl border border-line bg-map-ground">
       <svg
         ref={svgRef}
         viewBox={`${box.x} ${box.y} ${box.width} ${box.height}`}
         preserveAspectRatio="xMidYMid meet"
-        className="block max-h-[62dvh] w-full cursor-grab touch-none select-none outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+        className="block max-h-[62dvh] w-full cursor-grab touch-none select-none outline-none focus-visible:ring-2 focus-visible:ring-focus"
         style={{ aspectRatio: `${width} / ${height}` }}
         role="group"
         aria-label={`Map of ${park.name}. Drag to move, pinch or use the buttons to zoom.`}
@@ -223,10 +232,10 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
         onPointerCancel={onPointerEnd}
         onKeyDown={onKeyDown}
       >
-        <rect x={bounds.minX} y={bounds.minY} width={width} height={height} fill="#eef3ea" onClick={(e) => tapBackground(e.clientX, e.clientY)} data-testid="map-background" />
+        <rect x={bounds.minX} y={bounds.minY} width={width} height={height} className="fill-map-ground" onClick={(e) => tapBackground(e.clientX, e.clientY)} data-testid="map-background" />
         {zones.map((z, i) => (
-          <g key={z.areaId} opacity={0.2} data-testid="map-zone" data-area={z.areaId} pointerEvents="none">
-            <path d={zonePath(z.hull)} fill={AREA_COLOURS[i % AREA_COLOURS.length]} stroke={AREA_COLOURS[i % AREA_COLOURS.length]} strokeWidth={ZONE_STROKE_M} strokeLinejoin="round" strokeLinecap="round" />
+          <g key={z.areaId} opacity={0.16} data-testid="map-zone" data-area={z.areaId} pointerEvents="none">
+            <path d={zonePath(z.hull)} className={ZONE_FILL[i % ZONE_FILL.length]} strokeWidth={ZONE_STROKE_M} strokeLinejoin="round" strokeLinecap="round" />
           </g>
         ))}
         {zones.map((z, i) => (
@@ -236,14 +245,12 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
             y={box.y + px(labels.areas.get(z.areaId)!.y + 10)}
             fontSize={px(10)}
             paintOrder="stroke"
-            stroke="#ffffff"
             strokeWidth={px(2.5)}
             strokeOpacity={0.7}
             fontWeight={700}
             letterSpacing={px(0.6)}
             textAnchor="middle"
-            fill={AREA_COLOURS[i % AREA_COLOURS.length]}
-            opacity={0.85}
+            className={`stroke-surface ${ZONE_LABEL[i % ZONE_LABEL.length]}`}
             pointerEvents="none"
             data-testid="map-zone-label"
           >
@@ -258,7 +265,7 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
             y1={s.from.y}
             x2={s.to.x}
             y2={s.to.y}
-            stroke={ROUTE_COLOUR}
+            className="stroke-accent"
             strokeWidth={px(3)}
             strokeLinecap="round"
             strokeDasharray={s.dashed ? `${px(7)} ${px(5)}` : undefined}
@@ -269,18 +276,18 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
         ))}
 
         <g transform={`translate(${entrance.x} ${entrance.y})`} pointerEvents="none">
-          <rect x={-px(5)} y={-px(5)} width={px(10)} height={px(10)} fill="#475569" rx={px(2)} />
-          <text x={px(8)} y={px(4)} fontSize={px(10)} fill="#475569" paintOrder="stroke" stroke="#eef3ea" strokeWidth={px(3)}>
+          <rect x={-px(5)} y={-px(5)} width={px(10)} height={px(10)} className="fill-ink-muted" rx={px(2)} />
+          <text x={px(8)} y={px(4)} fontSize={px(10)} className="fill-ink-muted stroke-map-ground" paintOrder="stroke" strokeWidth={px(3)}>
             Entrance
           </text>
         </g>
 
         {markers.map(({ item, point, unsuitable }) => {
           const selected = item.id === selectedId
-          const colour = unsuitable ? UNSUITABLE_COLOUR : TYPE_COLOURS[item.type]
+          const fillColour = unsuitable ? 'fill-map-unsuitable' : TYPE_FILL[item.type]
+          const strokeColour = unsuitable ? 'stroke-map-unsuitable' : TYPE_STROKE[item.type]
           // Approximate positions are hollow with a dashed outline.
-          const fill = item.locationApproximate ? '#ffffff' : colour
-          const stroke = item.locationApproximate ? colour : '#ffffff'
+          const colours = item.locationApproximate ? `fill-surface ${strokeColour}` : `${fillColour} stroke-surface`
           const dash = item.locationApproximate ? `${px(2.5)} ${px(1.5)}` : undefined
           const r = item.type === 'attraction' ? px(6.5) : px(4.5)
           return (
@@ -305,10 +312,10 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
                 }
               }}
             >
-              {(selected || emphasise) && <circle r={px(selected ? 11 : 9.5)} fill="none" stroke={selected ? ROUTE_COLOUR : '#f59e0b'} strokeWidth={px(2.5)} />}
-              {item.type === 'attraction' && <circle r={r} fill={fill} stroke={stroke} strokeWidth={px(item.locationApproximate ? 2 : 1.5)} strokeDasharray={dash} />}
-              {item.type === 'restaurant' && <rect x={-r} y={-r} width={2 * r} height={2 * r} fill={fill} stroke={stroke} strokeWidth={px(1.5)} strokeDasharray={dash} />}
-              {item.type === 'show' && <rect x={-r} y={-r} width={2 * r} height={2 * r} transform="rotate(45)" fill={fill} stroke={stroke} strokeWidth={px(1.5)} strokeDasharray={dash} />}
+              {(selected || emphasise) && <circle r={px(selected ? 11 : 9.5)} fill="none" className={selected ? 'stroke-accent' : 'stroke-star-ink'} strokeWidth={px(2.5)} />}
+              {item.type === 'attraction' && <circle r={r} className={colours} strokeWidth={px(item.locationApproximate ? 2 : 1.5)} strokeDasharray={dash} />}
+              {item.type === 'restaurant' && <rect x={-r} y={-r} width={2 * r} height={2 * r} className={colours} strokeWidth={px(1.5)} strokeDasharray={dash} />}
+              {item.type === 'show' && <rect x={-r} y={-r} width={2 * r} height={2 * r} transform="rotate(45)" className={colours} strokeWidth={px(1.5)} strokeDasharray={dash} />}
             </g>
           )
         })}
@@ -323,9 +330,8 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
               textAnchor={labels.left.has(item.id) ? 'end' : 'start'}
               fontSize={px(LABEL_PX)}
               fontWeight={item.id === selectedId ? 700 : 500}
-              fill={unsuitable ? '#64748b' : '#0f172a'}
+              className={`stroke-surface ${unsuitable ? 'fill-ink-muted' : 'fill-ink'}`}
               paintOrder="stroke"
-              stroke="#ffffff"
               strokeWidth={px(3)}
               strokeLinejoin="round"
               pointerEvents="none"
@@ -340,8 +346,9 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
           const w = Math.max(px(18), px(labelWidth(text, 10) + 8))
           return (
             <g key={s.itemId} transform={`translate(${s.point.x - px(10)} ${s.point.y - px(12)})`} pointerEvents="none" data-testid="route-stop" data-item={s.itemId}>
-              <rect x={-w / 2} y={-px(9)} width={w} height={px(18)} rx={px(9)} fill={ROUTE_COLOUR} stroke="#ffffff" strokeWidth={px(1.5)} />
-              <text textAnchor="middle" y={px(3.5)} fontSize={px(10)} fontWeight={700} fill="#ffffff">
+              {/* Drawn like the timeline's stop nodes: navy with a gold ring (midnight-theme design Decision 8). */}
+              <rect x={-w / 2} y={-px(9)} width={w} height={px(18)} rx={px(9)} className="fill-accent stroke-star" strokeWidth={px(1.5)} />
+              <text textAnchor="middle" y={px(3.5)} fontSize={px(10)} fontWeight={700} className="fill-on-accent">
                 {text}
               </text>
             </g>
@@ -349,18 +356,18 @@ export function MapCanvas({ parkId, listed, schedule, selectedId, emphasise, lab
         })}
         {route.markers.map((m, i) => (
           <g key={m.label} transform={`translate(${m.point.x} ${m.point.y + px(16 + i * 20)})`} pointerEvents="none" data-testid="route-marker">
-            <rect x={-px(labelWidth(m.label, 10) / 2 + 6)} y={-px(9)} width={px(labelWidth(m.label, 10) + 12)} height={px(18)} rx={px(9)} fill="#ffffff" stroke={ROUTE_COLOUR} strokeWidth={px(1.5)} strokeDasharray={`${px(4)} ${px(3)}`} />
-            <text textAnchor="middle" y={px(3.5)} fontSize={px(10)} fontWeight={600} fill={ROUTE_COLOUR}>
+            <rect x={-px(labelWidth(m.label, 10) / 2 + 6)} y={-px(9)} width={px(labelWidth(m.label, 10) + 12)} height={px(18)} rx={px(9)} className="fill-surface stroke-accent" strokeWidth={px(1.5)} strokeDasharray={`${px(4)} ${px(3)}`} />
+            <text textAnchor="middle" y={px(3.5)} fontSize={px(10)} fontWeight={600} className="fill-accent">
               {m.label}
             </text>
           </g>
         ))}
       </svg>
       <div className="absolute right-2 top-2 flex flex-col gap-1">
-        <IconButton label="Zoom in" onClick={() => setView((v) => zoomView(v, 1.5, bounds))} disabled={view.zoom >= 4} className="border border-slate-300 bg-white shadow-sm">
+        <IconButton label="Zoom in" onClick={() => setView((v) => zoomView(v, 1.5, bounds))} disabled={view.zoom >= 4} className="border border-line-strong bg-surface shadow-sm">
           <PlusIcon />
         </IconButton>
-        <IconButton label="Zoom out" onClick={() => setView((v) => zoomView(v, 1 / 1.5, bounds))} disabled={view.zoom <= 1} className="border border-slate-300 bg-white shadow-sm">
+        <IconButton label="Zoom out" onClick={() => setView((v) => zoomView(v, 1 / 1.5, bounds))} disabled={view.zoom <= 1} className="border border-line-strong bg-surface shadow-sm">
           <MinusIcon />
         </IconButton>
       </div>
@@ -392,11 +399,11 @@ function MapItemCard({
   const { marks, dayNumber } = usePlannedMarks()
 
   return (
-    <section aria-label={`${item.name} on the map`} data-testid="map-card" className="mt-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+    <section aria-label={`${item.name} on the map`} data-testid="map-card" className="mt-2 rounded-xl border border-line bg-surface p-3 shadow-card">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="font-semibold text-slate-900">{item.name}</h3>
-          <p className="text-xs text-slate-500">
+          <h3 className="font-semibold text-ink">{item.name}</h3>
+          <p className="text-xs text-ink-muted">
             {park.name} · {area}
           </p>
         </div>
@@ -404,7 +411,7 @@ function MapItemCard({
           <CloseIcon />
         </IconButton>
       </div>
-      <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-600">
+      <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-muted">
         <Badge>{TYPE_LABELS[item.type]}</Badge>
         <Stars rating={item.rating} />
         {itemFacts(item).map((f) => (
@@ -413,16 +420,16 @@ function MapItemCard({
       </p>
       {(unsuitable || marks.has(item.id)) && (
         <p className="mt-1 flex flex-wrap gap-1">
-          {unsuitable && <Badge tone="amber">{unsuitable}</Badge>}
+          {unsuitable && <Badge tone="warn">{unsuitable}</Badge>}
           <PlannedLabel mark={marks.get(item.id)} dayNumber={dayNumber} />
         </p>
       )}
       {item.locationApproximate && (
-        <p className="mt-2 text-xs text-slate-600" role="note">
+        <p className="mt-2 text-xs text-ink-muted" role="note">
           The position on the map is approximate.
         </p>
       )}
-      <div className="mt-2 text-sm text-slate-800">
+      <div className="mt-2 text-sm text-ink">
         {last?.id === item.id ? (
           <p data-testid="is-last-stop">This is your last planned stop.</p>
         ) : walk && last ? (
@@ -431,18 +438,18 @@ function MapItemCard({
             {walk.parkChange && ' (includes changing park)'}
           </p>
         ) : (
-          <p className="text-slate-600" data-testid="no-last-stop">
+          <p className="text-ink-muted" data-testid="no-last-stop">
             Plan a day to see the walk from your last stop.
           </p>
         )}
       </div>
       <div className="mt-2">
-        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Walk to each area</h4>
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Walk to each area</h4>
         <ul className="mt-1 grid grid-cols-2 gap-x-3 gap-y-0.5 text-sm" data-testid="area-walks">
           {areaWalks.map((w) => (
             <li key={w.areaId} className="flex justify-between gap-2">
-              <span className="text-slate-700">{w.name}</span>
-              <span className="shrink-0 font-medium text-slate-900">{w.minutes} min</span>
+              <span className="text-ink-soft">{w.name}</span>
+              <span className="shrink-0 font-medium text-ink">{w.minutes} min</span>
             </li>
           ))}
         </ul>
@@ -465,15 +472,15 @@ function AreaWalkTimes({ parkId, onClose }: { parkId: ParkId; onClose: () => voi
   const table = useMemo(() => areaWalkTable(catalog, parkId), [catalog, parkId])
   return (
     <Sheet title={`Walking times in ${park.name}`} onClose={onClose}>
-      <p className="mb-2 text-sm text-slate-600">Minutes on foot between the centres of the areas, with the same estimate as the day plan.</p>
+      <p className="mb-2 text-sm text-ink-muted">Minutes on foot between the centres of the areas, with the same estimate as the day plan.</p>
       <table className="w-full text-sm" data-testid="area-table">
         <thead>
           <tr>
-            <th scope="col" className="py-1 text-left font-medium text-slate-500">
+            <th scope="col" className="py-1 text-left font-medium text-ink-muted">
               Area
             </th>
             {table.areas.map((a, j) => (
-              <th key={a.id} scope="col" title={a.name} className="w-9 py-1 text-center font-medium text-slate-500">
+              <th key={a.id} scope="col" title={a.name} className="w-9 py-1 text-center font-medium text-ink-muted">
                 <abbr title={a.name} className="no-underline">
                   {j + 1}
                 </abbr>
@@ -483,13 +490,13 @@ function AreaWalkTimes({ parkId, onClose }: { parkId: ParkId; onClose: () => voi
         </thead>
         <tbody>
           {table.areas.map((a, i) => (
-            <tr key={a.id} className="border-t border-slate-100">
-              <th scope="row" className="py-1.5 pr-2 text-left font-medium text-slate-800">
-                <span className="mr-1 text-slate-400">{i + 1}</span>
+            <tr key={a.id} className="border-t border-line">
+              <th scope="row" className="py-1.5 pr-2 text-left font-medium text-ink">
+                <span className="mr-1 text-ink-muted">{i + 1}</span>
                 {a.name}
               </th>
               {table.minutes[i]!.map((m, j) => (
-                <td key={table.areas[j]!.id} className="text-center tabular-nums text-slate-900">
+                <td key={table.areas[j]!.id} className="text-center tabular-nums text-ink">
                   {m === null ? '–' : m}
                 </td>
               ))}
@@ -517,7 +524,7 @@ export function ParkMap({ listed, onAdd, onOpen }: { listed: ListedItem[]; onAdd
 
   return (
     <div data-testid="map-view">
-      <div role="group" aria-label="Park on the map" className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-slate-200 p-1">
+      <div role="group" aria-label="Park on the map" className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-surface-muted p-1">
         {catalog.parks.map((p) => (
           <button
             key={p.id}
@@ -527,7 +534,7 @@ export function ParkMap({ listed, onAdd, onOpen }: { listed: ListedItem[]; onAdd
               setSelectedId(undefined)
               setMapPark(p.id)
             }}
-            className={`min-h-11 rounded-md px-2 text-sm font-medium ${p.id === parkId ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-700'}`}
+            className={`min-h-11 rounded-md px-2 text-sm font-medium ${p.id === parkId ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft'}`}
           >
             {p.name}
           </button>
@@ -542,33 +549,33 @@ export function ParkMap({ listed, onAdd, onOpen }: { listed: ListedItem[]; onAdd
         emphasise={query.trim() !== ''}
         onSelect={(item) => setSelectedId(item?.id)}
       />
-      {listed.length === 0 && <p className="mt-2 text-sm text-slate-600">Nothing in {park.name} matches these filters.</p>}
+      {listed.length === 0 && <p className="mt-2 text-sm text-ink-muted">Nothing in {park.name} matches these filters.</p>}
       {selected && (
         <MapItemCard listed={selected} schedule={schedule} onClose={() => setSelectedId(undefined)} onAdd={() => onAdd(selected.item)} onOpen={() => onOpen(selected.item)} />
       )}
-      <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
         <span className="flex flex-wrap items-center gap-x-3 gap-y-1" aria-label="Legend">
           <span className="inline-flex items-center gap-1">
             <svg width="10" height="10" aria-hidden="true">
-              <circle cx="5" cy="5" r="4.5" fill={TYPE_COLOURS.attraction} />
+              <circle cx="5" cy="5" r="4.5" className={TYPE_FILL.attraction} />
             </svg>
             Attraction
           </span>
           <span className="inline-flex items-center gap-1">
             <svg width="10" height="10" aria-hidden="true">
-              <rect x="1" y="1" width="8" height="8" fill={TYPE_COLOURS.restaurant} />
+              <rect x="1" y="1" width="8" height="8" className={TYPE_FILL.restaurant} />
             </svg>
             Restaurant
           </span>
           <span className="inline-flex items-center gap-1">
             <svg width="10" height="10" aria-hidden="true">
-              <rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)" fill={TYPE_COLOURS.show} />
+              <rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)" className={TYPE_FILL.show} />
             </svg>
             Show
           </span>
           <span className="inline-flex items-center gap-1">
             <svg width="10" height="10" aria-hidden="true">
-              <circle cx="5" cy="5" r="4" fill="#ffffff" stroke={TYPE_COLOURS.attraction} strokeWidth="1.5" strokeDasharray="2 1.5" />
+              <circle cx="5" cy="5" r="4" className={`fill-surface ${TYPE_STROKE.attraction}`} strokeWidth="1.5" strokeDasharray="2 1.5" />
             </svg>
             Approximate
           </span>
@@ -578,7 +585,7 @@ export function ParkMap({ listed, onAdd, onOpen }: { listed: ListedItem[]; onAdd
         </Button>
       </div>
       <p className="mt-1 text-xs">
-        <a href={park.officialMapUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 text-indigo-700 underline">
+        <a href={park.officialMapUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 text-accent underline underline-offset-2 hover:decoration-2">
           {park.officialMapLabel} <ExternalIcon />
         </a>
       </p>

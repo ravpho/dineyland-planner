@@ -28,7 +28,7 @@ export function FilterPanel({ onClose }: { onClose: () => void }) {
         </Field>
         {parks.map((park) => (
           <div key={park.id}>
-            <p className="mb-1 text-sm font-medium text-slate-700">Areas · {park.name}</p>
+            <p className="mb-1 text-sm font-medium text-ink-soft">Areas · {park.name}</p>
             <div className="flex flex-wrap gap-2">
               {park.areas.map((a) => (
                 <Chip key={a.id} selected={filters.areaIds.includes(a.id)} onClick={() => setFilters({ areaIds: toggle(filters.areaIds, a.id) })}>
@@ -39,7 +39,7 @@ export function FilterPanel({ onClose }: { onClose: () => void }) {
           </div>
         ))}
         <div>
-          <p className="mb-1 text-sm font-medium text-slate-700">Type</p>
+          <p className="mb-1 text-sm font-medium text-ink-soft">Type</p>
           <div className="flex flex-wrap gap-2">
             {(Object.keys(TYPE_LABELS) as ItemType[]).map((t) => (
               <Chip key={t} selected={filters.types.includes(t)} onClick={() => setFilters({ types: toggle(filters.types, t) })}>
@@ -48,8 +48,8 @@ export function FilterPanel({ onClose }: { onClose: () => void }) {
             ))}
           </div>
         </div>
-        <label className="flex min-h-11 items-center gap-3 text-sm text-slate-800">
-          <input type="checkbox" className="h-5 w-5" checked={filters.hideUnsuitable} onChange={(e) => setFilters({ hideUnsuitable: e.target.checked })} />
+        <label className="flex min-h-11 items-center gap-3 text-sm text-ink">
+          <input type="checkbox" className="h-5 w-5 accent-accent" checked={filters.hideUnsuitable} onChange={(e) => setFilters({ hideUnsuitable: e.target.checked })} />
           Hide unsuitable
         </label>
         <ProfileEditor />

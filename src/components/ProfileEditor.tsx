@@ -25,9 +25,9 @@ export function ProfileEditor() {
   }
 
   return (
-    <fieldset className="rounded-xl border border-slate-200 p-3">
-      <legend className="px-1 text-sm font-semibold text-slate-900">Group profile</legend>
-      <p className="mb-2 text-xs text-slate-600">Saved on this device and applied to the list automatically.</p>
+    <fieldset className="rounded-xl border border-line p-3">
+      <legend className="px-1 text-sm font-semibold text-ink">Group profile</legend>
+      <p className="mb-2 text-xs text-ink-muted">Saved on this device and applied to the list automatically.</p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Field label="Shortest height (cm)">
           <input className={inputClass} type="number" inputMode="numeric" min={70} max={220} value={height} onChange={(e) => setHeight(e.target.value)} placeholder="e.g. 110" />

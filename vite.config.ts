@@ -17,8 +17,9 @@ export default defineConfig({
         name: 'Disneyland Planner',
         short_name: 'DL Planner',
         description: 'Plan your Disneyland Paris days: attractions, typical waits and a timeline that shows what fits.',
-        theme_color: '#3730a3',
-        background_color: '#f8fafc',
+        // Navy status bar and launch screen, running straight into the header (midnight-theme design Decision 9).
+        theme_color: '#0a1433',
+        background_color: '#0a1433',
         display: 'standalone',
         start_url: './',
         scope: './',
@@ -29,7 +30,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
+        // Fonts: only the Latin subsets, which cover English and French names (midnight-theme design Decision 3).
+        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}', '**/*-latin-*.woff2'],
         navigateFallback: 'index.html',
       },
     }),

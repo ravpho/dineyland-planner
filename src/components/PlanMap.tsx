@@ -18,11 +18,11 @@ function StopCard({ day, slots, stops, onClose }: { day: Day; slots: ScheduledSl
   const { item } = slots[0]!
   const park = catalog.parks.find((p) => p.id === item.parkId)!
   return (
-    <section aria-label={`${item.name} in your day`} data-testid="stop-card" className="mt-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+    <section aria-label={`${item.name} in your day`} data-testid="stop-card" className="mt-2 rounded-xl border border-line bg-surface p-3 shadow-card">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="font-semibold text-slate-900">{item.name}</h3>
-          <p className="text-xs text-slate-500">
+          <h3 className="font-semibold text-ink">{item.name}</h3>
+          <p className="text-xs text-ink-muted">
             {park.name} · {areaName(item, catalog)}
           </p>
         </div>
@@ -30,19 +30,19 @@ function StopCard({ day, slots, stops, onClose }: { day: Day; slots: ScheduledSl
           <CloseIcon />
         </IconButton>
       </div>
-      <ul className="mt-1 divide-y divide-slate-100">
+      <ul className="mt-1 divide-y divide-line">
         {slots.map((s) => {
           const stop = stops.get(s.entry.key)
           return (
-            <li key={s.entry.key} className="flex flex-wrap items-center gap-x-2 gap-y-1 py-1 text-sm text-slate-700" data-testid="stop-times">
-              <span className="font-semibold text-slate-900">Stop {stop}</span>
+            <li key={s.entry.key} className="flex flex-wrap items-center gap-x-2 gap-y-1 py-1 text-sm text-ink-soft" data-testid="stop-times">
+              <span className="font-semibold text-ink">Stop {stop}</span>
               <span>arrive {formatClock(s.arrive)}</span>
               {item.type !== 'show' && <span>wait {s.wait} min</span>}
-              <span className="font-mono font-semibold text-slate-900">
+              <span className="font-semibold text-ink tabular-nums">
                 {formatClock(s.start)}–{formatClock(s.end)}
               </span>
-              {s.lateBy > 0 && <Badge tone="red">{s.lateBy} min late</Badge>}
-              {s.afterWindow && <Badge tone="red">Ends after {day.end}</Badge>}
+              {s.lateBy > 0 && <Badge tone="over">{s.lateBy} min late</Badge>}
+              {s.afterWindow && <Badge tone="over">Ends after {day.end}</Badge>}
               <Button
                 className="ml-auto px-3"
                 aria-label={slots.length > 1 ? `Show stop ${stop} in timeline` : undefined}
@@ -75,7 +75,7 @@ export function PlanMap({ day, schedule }: { day: Day; schedule: DaySchedule }) 
 
   return (
     <div data-testid="plan-map">
-      <div role="group" aria-label="Park on the map" className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-slate-200 p-1">
+      <div role="group" aria-label="Park on the map" className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-surface-muted p-1">
         {catalog.parks.map((p) => (
           <button
             key={p.id}
@@ -85,17 +85,17 @@ export function PlanMap({ day, schedule }: { day: Day; schedule: DaySchedule }) 
               setSelectedId(undefined)
               setParkId(p.id)
             }}
-            className={`min-h-11 rounded-md px-2 py-1 text-sm font-medium ${p.id === parkId ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-700'}`}
+            className={`min-h-11 rounded-md px-2 py-1 text-sm font-medium ${p.id === parkId ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft'}`}
           >
             {p.name}
-            <span className="block text-xs font-normal text-slate-600" data-testid="park-stops">
+            <span className="block text-xs font-normal text-ink-muted" data-testid="park-stops">
               {formatStops(scheduled.filter((s) => s.item.parkId === p.id).map((s) => stops.get(s.entry.key)!))}
             </span>
           </button>
         ))}
       </div>
       <MapCanvas key={parkId} parkId={parkId} listed={listed} schedule={schedule} selectedId={selectedId} emphasise={false} labelAll onSelect={(item) => setSelectedId(item?.id)} />
-      {scheduled.length === 0 && <p className="mt-2 text-sm text-slate-600">Nothing planned yet</p>}
+      {scheduled.length === 0 && <p className="mt-2 text-sm text-ink-muted">Nothing planned yet</p>}
       {selected.length > 0 && <StopCard day={day} slots={selected} stops={stops} onClose={() => setSelectedId(undefined)} />}
     </div>
   )

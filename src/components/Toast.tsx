@@ -22,14 +22,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={show}>
       {children}
-      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4 lg:bottom-6">
+      {/* Above the fit bar at every width (midnight-theme design Decision 10). */}
+      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
         {message && (
-          <div key={message.id} role="status" className="pointer-events-auto flex max-w-md items-center gap-3 rounded-lg bg-slate-900 px-4 py-2 text-sm text-white shadow-lg">
+          <div key={message.id} role="status" className="toast-enter pointer-events-auto flex max-w-md items-center gap-3 rounded-xl bg-sky px-4 py-2 text-sm text-on-sky shadow-lg ring-1 ring-on-sky/10" data-testid="toast">
             <span>{message.text}</span>
             {message.action && (
               <button
                 type="button"
-                className="min-h-11 rounded px-2 font-semibold text-amber-300 underline-offset-2 hover:underline"
+                className="min-h-11 rounded px-2 font-semibold text-star underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-focus-on-sky"
                 onClick={() => {
                   message.action!.run()
                   setMessage(null)

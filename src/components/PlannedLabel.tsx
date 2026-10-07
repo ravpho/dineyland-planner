@@ -10,7 +10,7 @@ export function PlannedLabel({ mark, dayNumber }: { mark: PlannedMark | undefine
   return (
     <>
       {strong && (
-        <Badge tone="green">
+        <Badge tone="planned">
           <span className="inline-flex items-center gap-1" data-testid="planned-label">
             <CheckIcon width={12} height={12} strokeWidth={3} /> {strong}
           </span>

@@ -10,13 +10,13 @@ export const DINNER_TIMES = ['18:00', '18:30', '19:00', '19:30', '20:00']
 export function MealTimePicker({ restaurant, onPick, onClose }: { restaurant: Restaurant; onPick: (time: string | undefined) => void; onClose: () => void }) {
   return (
     <Sheet title={`When will you eat at ${restaurant.name}?`} onClose={onClose}>
-      <p className="mb-3 text-sm text-slate-600">The plan keeps the meal within {MEAL_WINDOW_MIN} minutes of this time. You can change it later in your plan.</p>
+      <p className="mb-3 text-sm text-ink-muted">The plan keeps the meal within {MEAL_WINDOW_MIN} minutes of this time. You can change it later in your plan.</p>
       {[
         ['Lunch', LUNCH_TIMES],
         ['Dinner', DINNER_TIMES],
       ].map(([label, times]) => (
         <section key={label as string} className="mb-3">
-          <h3 className="mb-1 text-sm font-semibold text-slate-800">{label}</h3>
+          <h3 className="mb-1 text-sm font-semibold text-ink">{label}</h3>
           <div className="grid grid-cols-3 gap-2">
             {(times as string[]).map((t) => (
               <Button key={t} onClick={() => onPick(t)}>
