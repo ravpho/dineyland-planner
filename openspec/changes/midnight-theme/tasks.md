@@ -53,7 +53,7 @@
 
 ## 3. Catalog, details and other screens
 
-- [ ] 3.1 Restyle `CatalogList.tsx` and `PlannedLabel.tsx` (design Decision 10):
+- [x] 3.1 Restyle `CatalogList.tsx` and `PlannedLabel.tsx` (design Decision 10):
   - the sticky bar on `bg-page`;
   - rows on `surface`;
   - planned rows: `accent-soft` with an `accent` inset bar and the `planned` badge;
@@ -62,8 +62,8 @@
   - `data-testid="row-name"` on the name.
 
   Update `catalog.test.tsx` lines 176 and 214 to check `data-planned`, and `e2e/catalog.phone.spec.ts` to use `getByTestId('row-name')`. Take both files off the allowlist. Verify `catalog.test.tsx`, `npm run e2e -- catalog` and the guard test pass.
-- [ ] 3.2 Move `ItemDetail`, `FilterPanel`, `ProfileEditor`, `MealTimePicker`, `ShowTimePicker`, `ShareSheet` and `CreateTripForm` to theme roles, with links in `accent` and underlined. Take them off the allowlist. Verify the guard test and all component tests (`catalog`, `meals`, `plan`) pass.
-- [ ] 3.3 Restyle `AboutScreen` and `ImportScreen`: `font-display` headings, `accent` links, and the unofficial note in `warn-soft`. Take them off the allowlist. Verify `about.test.tsx` and the guard test pass, and the About page still shows the Queue-Times link and the unofficial statement.
+- [x] 3.2 Move `ItemDetail`, `FilterPanel`, `ProfileEditor`, `MealTimePicker`, `ShowTimePicker`, `ShareSheet` and `CreateTripForm` to theme roles, with links in `accent` and underlined. Take them off the allowlist. Verify the guard test and all component tests (`catalog`, `meals`, `plan`) pass.
+- [x] 3.3 Restyle `AboutScreen` and `ImportScreen`: `font-display` headings, `accent` links, and the unofficial note in `warn-soft`. Take them off the allowlist. Verify `about.test.tsx` and the guard test pass, and the About page still shows the Queue-Times link and the unofficial statement.
 
 ## 4. Constellation timeline
 

@@ -10,11 +10,11 @@ export default function ImportScreen({ data }: { data: string }) {
   const trip = useMemo(() => decodeTrip(data, catalog.items), [data, catalog])
 
   return (
-    <section className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-4">
-      <h2 className="mb-2 text-xl font-semibold text-slate-900">Import</h2>
+    <section className="mx-auto max-w-md rounded-2xl border border-line bg-surface p-4 shadow-card">
+      <h2 className="mb-2 font-display text-2xl font-semibold text-ink">Import</h2>
       {trip ? (
         <>
-          <p className="text-slate-800">
+          <p className="text-ink">
             Import <strong>{trip.name}</strong> with {trip.days.length} {trip.days.length === 1 ? 'day' : 'days'} and{' '}
             {trip.days.reduce((n, d) => n + d.items.length, 0)} planned items? It is added as a new trip; your existing trips are not changed.
           </p>
@@ -33,7 +33,7 @@ export default function ImportScreen({ data }: { data: string }) {
         </>
       ) : (
         <>
-          <p className="text-slate-800" role="alert">
+          <p className="text-ink" role="alert">
             This share link cannot be read. It may be incomplete or damaged. Nothing was imported.
           </p>
           <Button className="mt-4" onClick={() => navigate({ name: 'plan' })}>

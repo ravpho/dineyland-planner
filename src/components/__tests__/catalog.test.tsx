@@ -172,8 +172,8 @@ describe('planned items in the catalog (park-catalog spec)', () => {
     renderPlanned([['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.star-wars-hyperspace-mountain']])
     expect(row("Peter Pan's Flight")).not.toHaveAttribute('data-planned')
     fireEvent.click(screen.getByRole('button', { name: "Add Peter Pan's Flight to day" }))
+    // data-planned="selected" is what tints the row (midnight-theme design Decision 11: tests don't read colors).
     expect(row("Peter Pan's Flight")).toHaveAttribute('data-planned', 'selected')
-    expect(row("Peter Pan's Flight").className).toContain('bg-emerald-50')
     expect(within(row("Peter Pan's Flight")).getByTestId('planned-label')).toHaveTextContent('In Day 1 · stop 4')
     expect(screen.getByText("Added Peter Pan's Flight")).toBeInTheDocument()
   })
@@ -211,7 +211,7 @@ describe('planned items in the catalog (park-catalog spec)', () => {
     renderPlanned([['dlp.big-thunder-mountain'], [], ['dlp.phantom-manor']])
     const manor = row('Phantom Manor')
     expect(manor).toHaveAttribute('data-planned', 'other')
-    expect(manor.className).not.toContain('bg-emerald-50')
+    expect(manor).not.toHaveAttribute('data-planned', 'selected')
     expect(within(manor).queryByTestId('planned-label')).toBeNull()
     expect(within(manor).getByTestId('planned-other-days')).toHaveTextContent('In Day 3')
   })
