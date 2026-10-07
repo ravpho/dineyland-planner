@@ -9,7 +9,7 @@ const render = async (size: number, file: string, padding = 0) => {
   await page.setViewportSize({ width: size, height: size })
   const inner = size - padding * 2
   await page.setContent(
-    `<body style="margin:0;background:#3730a3;display:grid;place-items:center;width:${size}px;height:${size}px">` +
+    `<body style="margin:0;background:#0a1433;display:grid;place-items:center;width:${size}px;height:${size}px">` +
       `<div style="width:${inner}px;height:${inner}px">${svg.replace('<svg ', `<svg width="${inner}" height="${inner}" `)}</div></body>`,
   )
   await page.screenshot({ path: `public/${file}`, omitBackground: padding === 0 && file !== 'apple-touch-icon.png' })

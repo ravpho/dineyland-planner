@@ -54,13 +54,25 @@ test('8.2 works offline after the first visit and passes the installability chec
   const { installabilityErrors } = (await cdp.send('Page.getInstallabilityErrors')) as { installabilityErrors: unknown[] }
   expect(installabilityErrors).toEqual([])
   const manifest = await page.evaluate(async () => (await fetch(document.querySelector<HTMLLinkElement>('link[rel="manifest"]')!.href)).json())
-  expect(manifest).toMatchObject({ name: 'Disneyland Planner', display: 'standalone' })
+  expect(manifest).toMatchObject({ name: 'Disneyland Planner', display: 'standalone', theme_color: '#0a1433', background_color: '#0a1433' })
+  await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#0a1433')
 
   await context.setOffline(true)
   await page.reload()
   await showTab(page, 'Plan')
   await expect(page.getByLabel('Trip', { exact: true }).locator('option:checked')).toHaveText('Offline trip')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(1)
+  // The theme's fonts come from the precache: load() rejects if a face can't be fetched, and check() then
+  // confirms they are ready (app-shell spec: Night-sky theme, offline).
+  const fonts = await page.evaluate(async () => {
+    const statuses = async (font: string) => (await document.fonts.load(font, 'Abc')).map((f) => f.status)
+    return {
+      inter: await statuses('16px "Inter Variable"'),
+      fraunces: await statuses('16px "Fraunces Variable"'),
+      checked: document.fonts.check('16px "Inter Variable"') && document.fonts.check('16px "Fraunces Variable"'),
+    }
+  })
+  expect(fonts).toEqual({ inter: ['loaded'], fraunces: ['loaded'], checked: true })
   await showTab(page, 'Catalog')
   await expect(page.getByTestId('catalog-row').first()).toBeVisible()
   await context.setOffline(false)

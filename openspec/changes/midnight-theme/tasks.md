@@ -165,11 +165,11 @@
 
 ## 8. App icon and installed look
 
-- [ ] 8.1 Draw the new `public/icon.svg` and `public/favicon.svg` (design Decision 9): a navy rounded square, a silver calendar, a gold four-point star and two tiny silver stars. Change `scripts/make-icons.ts`'s background to `#0a1433` and regenerate the PNGs with `npx tsx scripts/make-icons.ts`. Verify:
+- [x] 8.1 Draw the new `public/icon.svg` and `public/favicon.svg` (design Decision 9): a navy rounded square, a silver calendar, a gold four-point star and two tiny silver stars. Change `scripts/make-icons.ts`'s background to `#0a1433` and regenerate the PNGs with `npx tsx scripts/make-icons.ts`. Verify:
   - the four PNGs are rewritten and show the new mark;
   - the maskable icon keeps its safe-zone padding;
   - the favicon shows in the browser tab of `npm run preview`.
-- [ ] 8.2 Set the manifest's `theme_color` and `background_color` to `#0a1433`. In `index.html`, set `theme-color` to `#0a1433` and add `<meta name="color-scheme" content="light">` and `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`. Extend shell test 8.2 to check:
+- [x] 8.2 Set the manifest's `theme_color` and `background_color` to `#0a1433`. In `index.html`, set `theme-color` to `#0a1433` and add `<meta name="color-scheme" content="light">` and `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`. Extend shell test 8.2 to check:
   - the manifest has `theme_color: '#0a1433'` and `background_color: '#0a1433'`, and the `theme-color` meta tag matches;
   - after the offline reload, `document.fonts.check('16px "Inter Variable"')` and `document.fonts.check('16px "Fraunces Variable"')` are true;
   - `installabilityErrors` is still empty.

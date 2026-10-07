@@ -1,8 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#3730a3"/>
-  <g fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="120" y="142" width="272" height="250" rx="36"/>
-    <path d="M120 214h272M190 110v64M322 110v64"/>
+  <!-- The app's own mark: a gold star over a silver calendar on a night sky (no Disney marks). -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#060b1f"/>
+      <stop offset="1" stop-color="#111e48"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#sky)"/>
+  <g fill="#dde2ec">
+    <circle cx="92" cy="92" r="7" opacity=".85"/>
+    <circle cx="420" cy="80" r="5" opacity=".7"/>
+    <circle cx="444" cy="132" r="3.5" opacity=".5"/>
   </g>
-  <path fill="#fbbf24" d="M256 246l20 41 45 6-33 31 8 45-40-22-40 22 8-45-33-31 45-6z"/>
+  <g fill="none" stroke="#dde2ec" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="124" y="150" width="264" height="240" rx="36"/>
+    <path d="M124 222h264M194 118v62M318 118v62"/>
+  </g>
+  <path fill="#f2d48b" transform="translate(256 306)" d="M0-64C7-7 7-7 64 0C7 7 7 7 0 64C-7 7-7 7-64 0C-7-7-7-7 0-64Z"/>
 </svg>

@@ -17,8 +17,9 @@ export default defineConfig({
         name: 'Disneyland Planner',
         short_name: 'DL Planner',
         description: 'Plan your Disneyland Paris days: attractions, typical waits and a timeline that shows what fits.',
-        theme_color: '#3730a3',
-        background_color: '#f8fafc',
+        // Navy status bar and launch screen, running straight into the header (midnight-theme design Decision 9).
+        theme_color: '#0a1433',
+        background_color: '#0a1433',
         display: 'standalone',
         start_url: './',
         scope: './',
