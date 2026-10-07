@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { CloseIcon } from './icons'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
@@ -72,7 +73,10 @@ export function Stars({ rating }: { rating: number }) {
   )
 }
 
-/** Modal sheet: bottom sheet on phones, centred dialog on wide screens. */
+/**
+ * Modal sheet: bottom sheet on phones, centred dialog on wide screens. Rendered into document.body, so a
+ * sticky ancestor (such as the wide-screen plan column) can't trap it under other sticky content.
+ */
 export function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -81,7 +85,7 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
     ref.current?.focus()
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
-  return (
+  return createPortal(
     <div className="sheet-scrim fixed inset-0 z-40 flex items-end justify-center bg-sky-deep/50 sm:items-center" onClick={onClose}>
       <div
         ref={ref}
@@ -100,7 +104,8 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

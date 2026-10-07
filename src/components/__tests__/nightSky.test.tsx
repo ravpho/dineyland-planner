@@ -18,8 +18,8 @@ describe('NightSky (midnight-theme design Decision 4)', () => {
     expect(getByTestId('night-sky')).toHaveAttribute('aria-hidden', 'true')
   })
 
-  test('has five gold sparkles, three of which twinkle', () => {
-    const { getAllByTestId } = render(<NightSky />)
+  test.each(['header', 'row', 'band'] as const)('the %s sky has five gold sparkles, three of which twinkle', (variant) => {
+    const { getAllByTestId } = render(<NightSky variant={variant} />)
     const sparkles = getAllByTestId('sky-sparkle')
     expect(sparkles).toHaveLength(5)
     expect(sparkles.filter((s) => s.classList.contains('twinkle'))).toHaveLength(3)

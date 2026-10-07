@@ -126,3 +126,9 @@ export const TicketIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M14 5v2M14 11v2M14 17v2" />
   </svg>
 )
+export const PencilIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z" />
+    <path d="m13.5 6.5 4 4" />
+  </svg>
+)

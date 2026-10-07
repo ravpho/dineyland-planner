@@ -4,7 +4,7 @@ import { MAX_TRIP_DAYS } from '../domain/trip'
 import { usePlanner } from '../app/PlannerContext'
 import { selectedTrip } from '../state/store'
 import { CreateTripForm } from './CreateTripForm'
-import { DownIcon, MoreIcon, PlusIcon, ShareIcon, TrashIcon } from './icons'
+import { DownIcon, MoreIcon, PencilIcon, PlusIcon, ShareIcon, TrashIcon } from './icons'
 import { ShareSheet } from './ShareSheet'
 import { Button, IconButton, inputClass, Sheet } from './ui'
 
@@ -81,7 +81,7 @@ export function TripBar() {
                 if (name) renameTrip(trip.id, name)
               })}
             >
-              Rename
+              <PencilIcon /> Rename
             </Button>
             <Button variant="danger" className="justify-start" onClick={choose(() => window.confirm(`Delete "${trip.name}"? This cannot be undone.`) && deleteTrip(trip.id))}>
               <TrashIcon /> Delete

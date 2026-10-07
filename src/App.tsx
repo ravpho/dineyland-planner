@@ -51,7 +51,7 @@ export default function App() {
       <div className="min-h-dvh bg-page text-ink">
         {/* Night sky header; on an installed iPhone app it runs under the status bar (midnight-theme Decisions 4 and 9). */}
         <header className="sticky top-0 z-20 overflow-hidden bg-sky pt-[env(safe-area-inset-top)] shadow-md">
-          <NightSky />
+          <NightSky variant={planning && !wide ? 'header' : 'row'} />
           <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4">
             <a
               href="#/plan"

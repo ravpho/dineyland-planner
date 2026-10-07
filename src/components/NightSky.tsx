@@ -21,20 +21,44 @@ export const STARS = Array.from({ length: 34 }, () => ({
   opacity: +(0.3 + random() * 0.6).toFixed(2),
 }))
 
-/** Gold sparkles placed by share of the width and height, sized in px. Three of them twinkle, each with its own delay. */
-const SPARKLES: { x: string; y: string; size: number; twinkle?: string }[] = [
-  { x: '62%', y: '28%', size: 5, twinkle: '0s' },
-  { x: '84%', y: '64%', size: 3.5, twinkle: '2.3s' },
-  { x: '93%', y: '22%', size: 4 },
-  { x: '44%', y: '70%', size: 3, twinkle: '4.1s' },
-  { x: '73%', y: '86%', size: 2.5 },
-]
+type SparkleSpot = { x: string; y: string; size: number; twinkle?: string }
+
+/**
+ * Gold sparkles placed by share of the width and height, sized in px; three twinkle, each with its own delay.
+ * They sit in gaps that stay free of text: in the two-row phone header, between and beside the tabs; in a
+ * one-row header (wide screens, About, Import), in the strips above and below the letters; in the empty
+ * Plan band, top right of its title.
+ */
+export type SkyVariant = 'header' | 'row' | 'band'
+const SPARKLES: Record<SkyVariant, SparkleSpot[]> = {
+  header: [
+    { x: '40%', y: '70%', size: 5, twinkle: '0s' },
+    { x: '57%', y: '84%', size: 3.5, twinkle: '2.3s' },
+    { x: '85%', y: '62%', size: 4 },
+    { x: '65%', y: '58%', size: 3, twinkle: '4.1s' },
+    { x: '97%', y: '80%', size: 2.5 },
+  ],
+  row: [
+    { x: '31%', y: '16%', size: 4, twinkle: '0s' },
+    { x: '66%', y: '90%', size: 3, twinkle: '2.3s' },
+    { x: '75%', y: '18%', size: 3.5 },
+    { x: '47%', y: '90%', size: 2.5, twinkle: '4.1s' },
+    { x: '98%', y: '50%', size: 2.5 },
+  ],
+  band: [
+    { x: '72%', y: '22%', size: 5, twinkle: '0s' },
+    { x: '88%', y: '40%', size: 3.5, twinkle: '2.3s' },
+    { x: '81%', y: '12%', size: 3 },
+    { x: '94%', y: '18%', size: 4, twinkle: '4.1s' },
+    { x: '63%', y: '40%', size: 2.5 },
+  ],
+}
 
 /**
  * Night sky drawn behind the header and the empty Plan band (midnight-theme design Decision 4).
  * Decorative: hidden from assistive technology and from pointer events.
  */
-export function NightSky({ className = '' }: { className?: string }) {
+export function NightSky({ variant = 'header', className = '' }: { variant?: SkyVariant; className?: string }) {
   const id = useId()
   return (
     <div aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden bg-linear-to-b from-sky-deep to-sky ${className}`} data-testid="night-sky">
@@ -47,7 +71,7 @@ export function NightSky({ className = '' }: { className?: string }) {
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill={`url(#${id}-stars)`} />
-        {SPARKLES.map((s, i) => (
+        {SPARKLES[variant].map((s, i) => (
           <svg key={i} x={s.x} y={s.y} overflow="visible">
             <path
               d={SPARKLE_PATH}

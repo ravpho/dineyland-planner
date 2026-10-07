@@ -42,7 +42,7 @@ export default function PlanScreen() {
         <h2 className="sr-only">Plan</h2>
         {/* A short band of night sky over the form (midnight-theme design Decision 10). */}
         <div className="relative px-4 pb-4 pt-6">
-          <NightSky />
+          <NightSky variant="band" />
           <p className="relative font-display text-2xl font-semibold text-on-sky">Plan your days</p>
           <p className="relative mt-1 text-sm text-on-sky-muted">Disneyland Park and Disney Adventure World</p>
         </div>

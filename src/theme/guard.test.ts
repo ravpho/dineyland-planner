@@ -15,9 +15,6 @@ const FORBIDDEN = [
   /(?<![\w&])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\b/g,
 ]
 
-/** Files not yet moved to the theme. Each task group of midnight-theme removes its own; the list ends empty. */
-const NOT_YET_MIGRATED = new Set<string>([])
-
 const root = process.cwd()
 const sources = readdirSync(join(root, 'src'), { recursive: true, encoding: 'utf8' })
   .map((f) => relative(root, join(root, 'src', f)).split('\\').join('/'))
@@ -37,11 +34,7 @@ describe('theme guard', () => {
     expect(sources).toContain('src/components/ui.tsx')
   })
 
-  test.each(sources.filter((f) => !NOT_YET_MIGRATED.has(f)))('%s uses only theme colors', (file) => {
+  test.each(sources)('%s uses only theme colors', (file) => {
     expect(rawColors(file), `${file} uses raw Tailwind palette classes or hex colors`).toEqual([])
-  })
-
-  test.each([...NOT_YET_MIGRATED])('%s is still listed only while it has raw colors', (file) => {
-    expect(rawColors(file).length, `${file} has no raw colors left: remove it from NOT_YET_MIGRATED`).toBeGreaterThan(0)
   })
 })

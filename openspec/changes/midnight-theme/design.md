@@ -115,7 +115,7 @@ Gold is never used for text on light surfaces. `ink-faint` is never used for tex
 ### 4. Header sky: a static SVG with a fixed star pattern
 A new `src/components/NightSky.tsx` draws an `aria-hidden`, `pointer-events-none` SVG behind the header content:
 - **Background:** a vertical gradient from `sky-deep` to `sky`.
-- **Stars:** 34 small stars (radius 0.4–1.2 px, opacity 0.3–0.9, `on-sky`) in a 480 × 120 px tile, repeated across the width with an SVG `<pattern>`. There are also 5 four-point sparkles (`star`, 2.5–5 px), placed by percentage of the width and height. Each sparkle is one path, `SPARKLE_PATH` in `icons.tsx`, scaled.
+- **Stars:** 34 small stars (radius 0.4–1.2 px, opacity 0.3–0.9, `on-sky`) in a 480 × 120 px tile, repeated across the width with an SVG `<pattern>`. There are also 5 four-point sparkles (`star`, 2.5–5 px), placed by percentage of the width and height, in gaps that stay free of text. There are three placements: the two-row phone header (between and beside the tabs), a one-row header (wide screens, About and Import: above and below the letters), and the empty Plan band (top right of its title). The screenshot review found sparkles on top of "About" and "Planner" with a single placement. Each sparkle is one path, `SPARKLE_PATH` in `icons.tsx`, scaled.
 - **Positions:** generated once at module load by a small seeded generator (mulberry32 with a fixed seed). They are the same on every load and in every screenshot.
 - **Scaling:** stars keep their pixel size at every width, because the tile repeats instead of stretching. A single `slice`-scaled viewBox would make the stars about three times larger on a 1280 px wide, 48 px tall header.
 - **Twinkle:** three sparkles carry a `twinkle` class with staggered delays (Decision 6).
@@ -280,7 +280,7 @@ Component notes:
 - **`ui.tsx`:**
   - `Badge` tones become `neutral`, `warn`, `over`, `fits` and `planned`, replacing the old color names.
   - `Button` primary uses `accent` and `accent-hover`; secondary uses `surface` and `line-strong`; danger uses `over`.
-  - `Sheet` gets the motion classes, a `font-display` title and a `sky-deep/50` scrim.
+  - `Sheet` gets the motion classes, a `font-display` title and a `sky-deep/50` scrim. It renders into `document.body` through a portal. On wide screens the plan column is `position: sticky`, which creates a stacking context, so a sheet opened from it (Trip options, Share, New trip, Switch order) was drawn under the catalog's sticky search bar. This bug predates the theme, and the screenshot review found it.
 - **`FitBar`:**
   - `bg-sky`. The status word ("Fits · 6 h 59 min spare" or "Over by N min") is in `fits-on-sky` or `over-on-sky`, with a small `star` sparkle when it fits.
   - The window and end time are in `on-sky-muted`.

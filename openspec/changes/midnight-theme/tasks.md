@@ -178,7 +178,7 @@
 
 ## 9. Integration checks
 
-- [ ] 9.1 Remove the guard test's allowlist, which should be empty by now, and run `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e` (phone and desktop projects). Verify all pass.
+- [x] 9.1 Remove the guard test's allowlist, which should be empty by now, and run `npm run lint`, `npm run typecheck`, `npm test` and `npm run e2e` (phone and desktop projects). Verify all pass.
 - [ ] 9.2 Take screenshots at 360 × 740, 390 × 844 and 1280 × 800 of:
   - the catalog list and the catalog map;
   - the Plan timeline (a two-park day) and the Plan map;
@@ -190,4 +190,4 @@
   - stars appear only in the header and the empty Plan band;
   - gold appears only on stars, stop rings and highlights;
   - the screenshots are attached to the pull request.
-- [ ] 9.3 Run `openspec validate midnight-theme --strict` and verify it reports the change as valid.
+- [x] 9.3 Run `openspec validate midnight-theme --strict` and verify it reports the change as valid.
