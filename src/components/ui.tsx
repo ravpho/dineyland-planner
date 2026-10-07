@@ -82,14 +82,14 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-sky-deep/50 sm:items-center" onClick={onClose}>
+    <div className="sheet-scrim fixed inset-0 z-40 flex items-end justify-center bg-sky-deep/50 sm:items-center" onClick={onClose}>
       <div
         ref={ref}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl bg-surface p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl outline-none sm:max-w-lg sm:rounded-2xl"
+        className="sheet-panel max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl bg-surface p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl outline-none sm:max-w-lg sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-3 flex items-start justify-between gap-2">

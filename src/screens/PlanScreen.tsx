@@ -92,12 +92,15 @@ export default function PlanScreen() {
         </div>
         {view === 'timeline' && <RouteActions day={day} />}
       </div>
-      {view === 'map' ? (
-        // Remounts per day so the map opens on the park of that day's first item (plan-ui-improvements design Decision 5).
-        <PlanMap key={day.id} day={day} schedule={schedule} />
-      ) : (
-        <DayTimeline day={day} schedule={schedule} />
-      )}
+      {/* Keyed by view, so switching Timeline and Map fades the new view in (midnight-theme design Decision 6). */}
+      <div key={view} className="view-enter">
+        {view === 'map' ? (
+          // Remounts per day so the map opens on the park of that day's first item (plan-ui-improvements design Decision 5).
+          <PlanMap key={day.id} day={day} schedule={schedule} />
+        ) : (
+          <DayTimeline day={day} schedule={schedule} />
+        )}
+      </div>
       <Breakdown schedule={schedule} />
       <FitBar schedule={schedule} />
     </section>

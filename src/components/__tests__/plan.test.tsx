@@ -156,6 +156,52 @@ describe('optimize route (route-optimization spec)', () => {
     expect(names()).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"])
   })
 
+  describe('sparkle (app-shell spec: Reduced motion)', () => {
+    afterEach(() => vi.unstubAllGlobals())
+    /** Pretends the device asks for reduced motion, or not. */
+    const reduceMotion = (reduce: boolean) =>
+      vi.stubGlobal('matchMedia', (query: string) => ({ matches: reduce && query.includes('reduce'), media: query, addEventListener() {}, removeEventListener() {} }))
+    const day = ['dlp.big-thunder-mountain', 'daw.frozen-ever-after', 'dlp.phantom-manor', 'daw.crushs-coaster']
+
+    test('sparkle after optimizing: it plays by the button, in the same update as the message', () => {
+      reduceMotion(false)
+      renderPlan(day)
+      optimize()
+      expect(screen.getByTestId('sparkle')).toBeInTheDocument()
+      expect(button().parentElement).toContainElement(screen.getByTestId('sparkle'))
+      expect(message(/^Route optimized/)).toBeInTheDocument()
+    })
+
+    test('no sparkle with reduced motion, and the message still shows', () => {
+      reduceMotion(true)
+      renderPlan(day)
+      optimize()
+      expect(screen.queryByTestId('sparkle')).toBeNull()
+      expect(message(/^Route optimized/)).toBeInTheDocument()
+    })
+
+    test('the sparkle is gone after 1 s at most', () => {
+      reduceMotion(false)
+      renderPlan(day)
+      optimize()
+      act(() => vi.advanceTimersByTime(1000))
+      expect(screen.queryByTestId('sparkle')).toBeNull()
+      expect(message(/^Route optimized/)).toBeInTheDocument()
+    })
+
+    test('no sparkle when no quicker order is found', () => {
+      reduceMotion(false)
+      renderPlan(day)
+      optimize()
+      act(() => vi.advanceTimersByTime(1000))
+      // Optimizing an optimized day finds nothing quicker.
+      fireEvent.click(button())
+      act(() => vi.advanceTimersByTime(1))
+      expect(screen.getByText('No quicker order found')).toBeInTheDocument()
+      expect(screen.queryByTestId('sparkle')).toBeNull()
+    })
+  })
+
   test('a changed show time is named in the message', () => {
     renderPlan([
       'daw.crushs-coaster', 'daw.frozen-ever-after', { itemId: 'dlp.au-chalet-de-la-marionnette', mealTime: '12:00' }, 'dlp.big-thunder-mountain',

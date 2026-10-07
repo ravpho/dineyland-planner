@@ -82,6 +82,7 @@ function SlotCard({
   const itemRef = useRef<HTMLLIElement | null>(null)
   const handleRef = useRef<HTMLButtonElement | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
+  const nodeRef = useRef<HTMLSpanElement>(null)
   const highlightTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   // Stable, so dnd-kit's nodes aren't detached and re-attached on every render during a drag.
   const setItemNode = useCallback(
@@ -106,11 +107,12 @@ function SlotCard({
     if (!focused) return
     itemRef.current?.scrollIntoView?.({ block: 'center' })
     handleRef.current?.focus({ preventScroll: true })
-    const card = cardRef.current
-    if (card) {
-      card.dataset.highlight = 'true'
+    // The stop node gets it too, so its ring pulses once (midnight-theme design Decision 6).
+    const marked = [cardRef.current, nodeRef.current].filter((el) => el !== null)
+    if (marked.length) {
+      for (const el of marked) el.dataset.highlight = 'true'
       clearTimeout(highlightTimer.current)
-      highlightTimer.current = setTimeout(() => delete card.dataset.highlight, 2000)
+      highlightTimer.current = setTimeout(() => marked.forEach((el) => delete el.dataset.highlight), 2000)
     }
     clearPlanFocus()
   }, [focused, clearPlanFocus])
@@ -174,7 +176,8 @@ function SlotCard({
             {stop !== undefined ? (
               // The same number the maps' route and the catalog's planned label use (plan-ui-improvements design Decision 3).
               <span
-                className="absolute left-1/2 top-[13px] flex h-[26px] min-w-[26px] -translate-x-1/2 items-center justify-center rounded-full bg-accent px-1 text-xs font-bold text-on-accent tabular-nums ring-[1.5px] ring-star"
+                ref={nodeRef}
+                className="stop-node absolute left-1/2 top-[13px] flex h-[26px] min-w-[26px] -translate-x-1/2 items-center justify-center rounded-full bg-accent px-1 text-xs font-bold text-on-accent tabular-nums ring-[1.5px] ring-star"
                 data-testid="slot-stop"
               >
                 <span className="sr-only">Stop </span>

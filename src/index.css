@@ -125,3 +125,93 @@
     font-family: var(--font-sans);
   }
 }
+
+/*
+ * Motion (midnight-theme design Decision 6). Everything here plays only when the device does not ask for
+ * reduced motion; otherwise elements simply appear in their final state (app-shell spec: Reduced motion).
+ * Entries animate; exits are instant, so nothing waits for an animation.
+ */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
+    .sheet-scrim {
+      transition: opacity 160ms ease-out;
+    }
+    .sheet-panel {
+      transition:
+        translate 220ms ease-out,
+        scale 220ms ease-out,
+        opacity 220ms ease-out;
+    }
+    .toast-enter {
+      transition:
+        opacity 180ms ease-out,
+        translate 180ms ease-out;
+    }
+    .view-enter {
+      transition: opacity 150ms ease-out;
+    }
+    @starting-style {
+      .sheet-scrim {
+        opacity: 0;
+      }
+      .sheet-panel {
+        translate: 0 24px;
+        opacity: 0;
+      }
+      .toast-enter {
+        translate: 0 8px;
+        opacity: 0;
+      }
+      .view-enter {
+        opacity: 0;
+      }
+    }
+    @media (min-width: 640px) {
+      @starting-style {
+        .sheet-panel {
+          translate: 0 0;
+          scale: 0.98;
+        }
+      }
+    }
+
+    .twinkle {
+      animation: twinkle 6s ease-in-out infinite;
+    }
+    .stop-node[data-highlight='true'] {
+      animation: node-pulse 600ms ease-out;
+    }
+    .sparkle-burst {
+      animation: sparkle-burst 700ms ease-out both;
+    }
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+  @keyframes node-pulse {
+    50% {
+      scale: 1.25;
+    }
+  }
+  @keyframes sparkle-burst {
+    0% {
+      opacity: 0;
+      scale: 0.2;
+    }
+    35% {
+      opacity: 1;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+      scale: 0.6;
+    }
+  }
+}

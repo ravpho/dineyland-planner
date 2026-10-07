@@ -25,7 +25,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {/* Above the fit bar at every width (midnight-theme design Decision 10). */}
       <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-50 flex justify-center px-4">
         {message && (
-          <div key={message.id} role="status" className="pointer-events-auto flex max-w-md items-center gap-3 rounded-xl bg-sky px-4 py-2 text-sm text-on-sky shadow-lg ring-1 ring-on-sky/10" data-testid="toast">
+          <div key={message.id} role="status" className="toast-enter pointer-events-auto flex max-w-md items-center gap-3 rounded-xl bg-sky px-4 py-2 text-sm text-on-sky shadow-lg ring-1 ring-on-sky/10" data-testid="toast">
             <span>{message.text}</span>
             {message.action && (
               <button

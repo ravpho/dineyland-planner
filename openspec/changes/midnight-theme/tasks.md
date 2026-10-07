@@ -147,7 +147,7 @@
 
 ## 7. Motion
 
-- [ ] 7.1 Add the motion block to `src/index.css` inside `@media (prefers-reduced-motion: no-preference)` (design Decision 6), and apply its classes:
+- [x] 7.1 Add the motion block to `src/index.css` inside `@media (prefers-reduced-motion: no-preference)` (design Decision 6), and apply its classes:
   - the sheet panel and scrim entries with `@starting-style`;
   - the toast entry;
   - a keyed view wrapper that fades in, for List/Map and Timeline/Map;
@@ -157,11 +157,11 @@
   Verify a new `e2e/motion.phone.spec.ts`:
   - with motion allowed, the `.twinkle` sparkles have running animations, and the filters sheet panel's transition lasts 0.3 s or less;
   - with `reducedMotion: 'reduce'`, after opening the filters, `document.getAnimations()` is empty and the sheet is in its final place at once.
-- [ ] 7.2 Add the `Sparkle` component and show it from `RouteActions` when optimizing changed the day. It isn't rendered when `useMediaQuery('(prefers-reduced-motion: reduce)')` is true, and it is removed on `animationend` or after 1 s (design Decision 6). Verify component tests in `plan.test.tsx`:
+- [x] 7.2 Add the `Sparkle` component and show it from `RouteActions` when optimizing changed the day. It isn't rendered when `useMediaQuery('(prefers-reduced-motion: reduce)')` is true, and it is removed on `animationend` or after 1 s (design Decision 6). Verify component tests in `plan.test.tsx`:
   - "Sparkle after optimizing": the sparkle and the result toast appear in the same update.
   - "No sparkle with reduced motion": no sparkle, and the toast still shows.
   - With fake timers, the sparkle is gone after 1 s.
-- [ ] 7.3 Add to the README feature list: "A night-sky look: navy, silver and gold stars, readable in sunlight, with animations turned off when your phone asks for reduced motion." Verify the README reads correctly.
+- [x] 7.3 Add to the README feature list: "A night-sky look: navy, silver and gold stars, readable in sunlight, with animations turned off when your phone asks for reduced motion." Verify the README reads correctly.
 
 ## 8. App icon and installed look
 

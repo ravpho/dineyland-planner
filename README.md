@@ -20,6 +20,7 @@ Plan your days at Disneyland Paris. It covers both parks: Disneyland Park and Di
 - **Meal times.** Adding a restaurant asks when you'll eat (lunch 11:30–13:30, dinner 18:00–20:00, or any time). The timeline keeps the meal within 30 minutes of that time, shows free time if you'd be early, and flags it if you'd be late. Grouping and optimizing keep meals at their time.
 - **Restaurant suggestions.** When a restaurant would be reached late, or another of the same type would end the day at least 15 minutes earlier, it suggests up to three, with the minutes each saves. One tap swaps it, keeping the meal time, with Undo.
 - See a timeline with each item's area, walking (including park changes through both entrances), typical queues and fixed show times, and whether the day **fits** your time or how far it runs **over**. Days that use both parks remind you that you need a ticket valid for both.
+- A night-sky look: navy, silver and gold stars, readable in sunlight, with animations turned off when your phone asks for reduced motion. On a phone the Plan opens on the day itself, with trip actions (new, rename, delete) under **Trip options**.
 - Works on phones, installs to the home screen and works offline. Trips stay on your device; share links move them between devices.
 
 Waits are typical values built from real [Queue-Times.com](https://queue-times.com/en-US) statistics, not live data. Live in-park updates are planned next. This is an unofficial app, not affiliated with Disney.

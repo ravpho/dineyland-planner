@@ -143,33 +143,36 @@ export function CatalogList() {
           </label>
         )}
       </div>
-      {view === 'map' ? (
-        <ParkMap listed={listed} onAdd={add} onOpen={setOpen} />
-      ) : (
-        <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface shadow-card">
-          {listed.map((l) => {
-            const mark = marks.get(l.item.id)
-            // A planned row is tinted with the accent, which wins over the unsuitable grey (plan-ui-improvements design Decision 2).
-            const planned = mark?.stops.length ? 'selected' : mark?.otherDays.length ? 'other' : undefined
-            return (
-              <li
-                key={l.item.id}
-                data-testid="catalog-row"
-                data-unsuitable={l.unsuitable ? 'true' : undefined}
-                data-planned={planned}
-                className={`flex items-center gap-1 px-2 ${planned === 'selected' ? 'bg-accent-soft shadow-[inset_4px_0_0_var(--color-accent)]' : l.unsuitable ? 'bg-surface-muted' : ''}`}
-              >
-                {wide && <DragHandle item={l.item} />}
-                <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} mark={mark} dayNumber={dayNumber} onOpen={() => setOpen(l.item)} />
-                <IconButton label={`Add ${l.item.name} to day${planned === 'selected' ? ' again' : ''}`} onClick={() => add(l.item)} className="text-accent">
-                  <PlusIcon />
-                </IconButton>
-              </li>
-            )
-          })}
-          {listed.length === 0 && <li className="p-4 text-sm text-ink-muted">Nothing matches these filters.</li>}
-        </ul>
-      )}
+      {/* Keyed by view, so switching List and Map fades the new view in (midnight-theme design Decision 6). */}
+      <div key={view} className="view-enter">
+        {view === 'map' ? (
+          <ParkMap listed={listed} onAdd={add} onOpen={setOpen} />
+        ) : (
+          <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface shadow-card">
+            {listed.map((l) => {
+              const mark = marks.get(l.item.id)
+              // A planned row is tinted with the accent, which wins over the unsuitable grey (plan-ui-improvements design Decision 2).
+              const planned = mark?.stops.length ? 'selected' : mark?.otherDays.length ? 'other' : undefined
+              return (
+                <li
+                  key={l.item.id}
+                  data-testid="catalog-row"
+                  data-unsuitable={l.unsuitable ? 'true' : undefined}
+                  data-planned={planned}
+                  className={`flex items-center gap-1 px-2 ${planned === 'selected' ? 'bg-accent-soft shadow-[inset_4px_0_0_var(--color-accent)]' : l.unsuitable ? 'bg-surface-muted' : ''}`}
+                >
+                  {wide && <DragHandle item={l.item} />}
+                  <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} mark={mark} dayNumber={dayNumber} onOpen={() => setOpen(l.item)} />
+                  <IconButton label={`Add ${l.item.name} to day${planned === 'selected' ? ' again' : ''}`} onClick={() => add(l.item)} className="text-accent">
+                    <PlusIcon />
+                  </IconButton>
+                </li>
+              )
+            })}
+            {listed.length === 0 && <li className="p-4 text-sm text-ink-muted">Nothing matches these filters.</li>}
+          </ul>
+        )}
+      </div>
       {open && (
         <ItemDetail
           item={open}
