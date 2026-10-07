@@ -89,7 +89,7 @@
 
 ## 5. Maps
 
-- [ ] 5.1 Replace `ParkMap.tsx`'s hex constants with `MAP_CLASSES` (complete `fill-*` and `stroke-*` class strings) using the map roles (design Decision 8):
+- [x] 5.1 Replace `ParkMap.tsx`'s hex constants with `MAP_CLASSES` (complete `fill-*` and `stroke-*` class strings) using the map roles (design Decision 8):
   - the mist ground;
   - zones at 16% opacity, with labels at full opacity;
   - marker colors by type, and `map-unsuitable`;
@@ -101,7 +101,7 @@
   - `map.test.tsx` passes unchanged;
   - the guard test passes, with no hex literals left;
   - `npm run e2e -- map` passes at phone and desktop sizes.
-- [ ] 5.2 Restyle `PlanMap.tsx`: the stop card, its times in `tabular-nums`, and the park switch with its "stops 1–4" text. Take it off the allowlist. Verify `planMap.test.tsx` and the guard test pass.
+- [x] 5.2 Restyle `PlanMap.tsx`: the stop card, its times in `tabular-nums`, and the park switch with its "stops 1–4" text. Take it off the allowlist. Verify `planMap.test.tsx` and the guard test pass.
 
 ## 6. Plan header
 
