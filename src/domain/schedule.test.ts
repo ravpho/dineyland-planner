@@ -90,6 +90,23 @@ describe('day schedule (day-schedule spec)', () => {
     expect(formatClock(after!.arrive)).toBe('18:01') // show ends 18:00, 1-minute walk on the spot
   })
 
+  test('late for a show: the time to be there is its start minus the early-arrival minutes (refresh-plan-layout: Late flags say why)', () => {
+    // filler reached 12:01 on the spot, ends 14:07; a 5-minute walk reaches the 14:05 show at 14:12
+    const c = catalogWith([attraction('filler', { durationMin: 126 }), show('magic-test', { times: ['14:05'] })])
+    const [filler, magic] = scheduled(scheduleDay(day('12:00', '22:00', ['dlp.filler', ['dlp.magic-test', '14:05']]), c))
+    expect(filler!.dueBy).toBeUndefined()
+    expect(formatClock(magic!.arrive)).toBe('14:12')
+    expect(magic!.lateBy).toBe(27)
+    expect(formatClock(magic!.dueBy!)).toBe('13:45')
+  })
+
+  test('a show reached in time still knows when to be there', () => {
+    const c = catalogWith([attraction('filler', { durationMin: 49 }), show('parade-test', {})])
+    const [, parade] = scheduled(scheduleDay(day('16:00', '22:00', ['dlp.filler', ['dlp.parade-test', '17:30']]), c))
+    expect(parade!.lateBy).toBe(0)
+    expect(formatClock(parade!.dueBy!)).toBe('17:10')
+  })
+
   test('table-service meal takes its wait plus meal duration', () => {
     const c = catalogWith([attraction('filler', { durationMin: 179 }), restaurant('lunch', { mealMin: 75 })])
     const [, lunch] = scheduled(scheduleDay(day('09:30', '22:00', ['dlp.filler', 'dlp.lunch']), c))
@@ -124,6 +141,7 @@ describe('day schedule (day-schedule spec)', () => {
       const [, lunch, after] = scheduled(scheduleDay(d, cat))
       expect(formatClock(lunch!.arrive)).toBe('12:45')
       expect(lunch!.lateBy).toBe(15)
+      expect(formatClock(lunch!.dueBy!)).toBe('12:30')
       expect(lunch!.freeBefore).toBe(0)
       expect(lunch!.wait).toBe(15) // lunch peak
       expect(after!.arrive).toBe(lunch!.end + 1)
@@ -141,6 +159,7 @@ describe('day schedule (day-schedule spec)', () => {
         const [, lunch] = scheduled(scheduleDay(d, cat))
         expect(lunch!.freeBefore).toBe(0)
         expect(lunch!.lateBy).toBe(0)
+        expect(lunch!.dueBy).toBeUndefined()
         expect(lunch!.start).toBe(lunch!.arrive + lunch!.wait)
       }
     })

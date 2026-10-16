@@ -148,6 +148,48 @@ describe('trips (trip-itinerary spec)', () => {
     expect(ids(day().items)).toEqual(['dlp.peter-pans-flight', 'dlp.phantom-manor', 'dlp.big-thunder-mountain'])
   })
 
+  test('a move can be undone (refresh-plan-layout: Reorder and remove items)', () => {
+    const { s, day } = setup()
+    for (const id of ['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight', 'dlp.parade']) s().addItem(day().id, id)
+    const before = ids(day().items)
+    s().moveItem(day().id, 0, 3)
+    expect(ids(day().items)).toEqual(['dlp.phantom-manor', 'dlp.peter-pans-flight', 'dlp.parade', 'dlp.big-thunder-mountain'])
+    const move = s().lastOrderChange
+    s().undoOrderChange(move)
+    expect(ids(day().items)).toEqual(before)
+    expect(s().lastOrderChange).toBeUndefined()
+  })
+
+  test('a move then another edit: undo leaves the day as it is', () => {
+    const { s, day } = setup()
+    for (const id of ['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight']) s().addItem(day().id, id)
+    s().moveItem(day().id, 2, 0)
+    s().removeItem(day().id, day().items[1]!.key)
+    const edited = ids(day().items)
+    s().undoOrderChange()
+    expect(ids(day().items)).toEqual(edited)
+  })
+
+  test('the older move’s undo does nothing after a newer move', () => {
+    const { s, day } = setup()
+    for (const id of ['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight']) s().addItem(day().id, id)
+    s().moveItem(day().id, 0, 2)
+    const first = s().lastOrderChange
+    s().moveItem(day().id, 0, 1)
+    const now = ids(day().items)
+    s().undoOrderChange(first)
+    expect(ids(day().items)).toEqual(now)
+  })
+
+  test('a move to the same place changes nothing and records nothing', () => {
+    const { s, day } = setup()
+    for (const id of ['dlp.big-thunder-mountain', 'dlp.phantom-manor']) s().addItem(day().id, id)
+    const before = day().items
+    s().moveItem(day().id, 1, 1)
+    expect(day().items).toBe(before)
+    expect(s().lastOrderChange).toBeUndefined()
+  })
+
   test('remove and undo restores the previous position', () => {
     const { s, day } = setup()
     for (const id of ['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight']) s().addItem(day().id, id)
@@ -290,16 +332,20 @@ describe('group profile and filters', () => {
   })
 })
 
-describe('map view state (park-map spec, Decision 6)', () => {
-  test('the catalog starts as a list; the view and map park are not saved', () => {
+describe('map state (park-map spec, refresh-plan-layout Decision 8)', () => {
+  test('the Map tab starts on My day; its mode and park are not saved', () => {
     const storage = new MemoryStorage()
-    const { s } = setup(storage)
-    expect(s().catalogView).toBe('list')
-    s().setCatalogView('map')
+    const { s, day } = setup(storage)
+    expect(s().mapMode).toBe('day')
+    s().setMapMode('all')
+    expect(s().mapMode).toBe('all')
     s().setMapPark('daw')
+    s().addItem(day().id, 'dlp.phantom-manor')
     const saved = storage.data.get(STORAGE_KEY) ?? ''
-    expect(saved).not.toContain('catalogView')
+    expect(saved).toContain('dlp.phantom-manor')
+    expect(saved).not.toContain('mapMode')
     expect(saved).not.toContain('mapParkId')
+    expect(createPlannerStore(sampleCatalog, storage).getState().mapMode).toBe('day')
   })
 
   test('the map shows the single-park filter, else the chosen park, else the last item’s park, else Disneyland Park', () => {
@@ -324,34 +370,22 @@ describe('map view state (park-map spec, Decision 6)', () => {
   })
 })
 
-describe('plan view state (park-map spec, plan-ui-improvements Decisions 6 and 7)', () => {
-  test('the plan starts on the timeline and can switch to the map', () => {
+describe('Show in timeline (park-map spec, refresh-plan-layout Decision 8)', () => {
+  test('remembers the entry to bring into view until cleared', () => {
     const { s } = setup()
-    expect(s().planView).toBe('timeline')
-    s().setPlanView('map')
-    expect(s().planView).toBe('map')
-  })
-
-  test('Show in timeline switches back and remembers the entry until cleared', () => {
-    const { s } = setup()
-    s().setPlanView('map')
+    s().setMapMode('day')
     s().showInTimeline('k3')
-    expect(s()).toMatchObject({ planView: 'timeline', planFocusKey: 'k3' })
+    expect(s()).toMatchObject({ planFocusKey: 'k3', mapMode: 'day' })
     s().clearPlanFocus()
     expect(s().planFocusKey).toBeUndefined()
   })
 
-  test('the plan view and focus are not saved on the device', () => {
+  test('the focus is not saved on the device', () => {
     const storage = new MemoryStorage()
     const { s, day } = setup(storage)
-    s().setPlanView('map')
     s().showInTimeline('k1')
     s().addItem(day().id, 'dlp.phantom-manor')
-    const saved = storage.data.get(STORAGE_KEY) ?? ''
-    expect(saved).toContain('dlp.phantom-manor')
-    expect(saved).not.toContain('planView')
-    expect(saved).not.toContain('planFocusKey')
-    expect(createPlannerStore(sampleCatalog, storage).getState().planView).toBe('timeline')
+    expect(storage.data.get(STORAGE_KEY) ?? '').not.toContain('planFocusKey')
   })
 })
 
@@ -387,17 +421,18 @@ describe('group by area (route-optimization spec)', () => {
   test('undo restores the order before grouping', () => {
     const { s, day } = setupZigzag()
     s().groupDayByArea(day().id)
-    s().undoRouteChange()
+    s().undoOrderChange()
     expect(ids(day().items)).toEqual(zigzag)
-    expect(s().lastRouteChange).toBeUndefined()
+    expect(s().lastOrderChange).toBeUndefined()
   })
 
-  test('undo does nothing after an item was moved', () => {
+  test('the grouping message’s undo does nothing after an item was moved', () => {
     const { s, day } = setupZigzag()
     s().groupDayByArea(day().id)
+    const grouping = s().lastOrderChange
     s().moveItem(day().id, 0, 1)
     const moved = ids(day().items)
-    s().undoRouteChange()
+    s().undoOrderChange(grouping)
     expect(ids(day().items)).toEqual(moved)
   })
 
@@ -407,7 +442,7 @@ describe('group by area (route-optimization spec)', () => {
     const parade = day().items.find((e) => e.itemId === 'dlp.parade')!
     s().setShowTime(day().id, parade.key, '17:30')
     const edited = day().items
-    s().undoRouteChange()
+    s().undoOrderChange()
     expect(day().items).toBe(edited)
     expect(ids(edited)).not.toEqual(zigzag)
   })
@@ -424,9 +459,9 @@ describe('group by area (route-optimization spec)', () => {
     const storage = new MemoryStorage()
     const { s, day } = setupZigzag(storage)
     s().groupDayByArea(day().id)
-    expect(s().lastRouteChange).toBeDefined()
-    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastRouteChange')
-    expect(createPlannerStore(sampleCatalog, storage).getState().lastRouteChange).toBeUndefined()
+    expect(s().lastOrderChange).toBeDefined()
+    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastOrderChange')
+    expect(createPlannerStore(sampleCatalog, storage).getState().lastOrderChange).toBeUndefined()
   })
 })
 
@@ -448,17 +483,18 @@ describe('switch the park order (trip-itinerary spec)', () => {
     const { s, day } = setupGrouped()
     const before = day().items
     s().switchParkOrder(day().id)
-    s().undoRouteChange()
+    s().undoOrderChange()
     expect(day().items).toEqual(before)
-    expect(s().lastRouteChange).toBeUndefined()
+    expect(s().lastOrderChange).toBeUndefined()
   })
 
-  test('edited after switching: undo leaves the day unchanged', () => {
+  test('edited after switching: the switch message’s undo leaves the day unchanged', () => {
     const { s, day } = setupGrouped()
     s().switchParkOrder(day().id)
+    const switched = s().lastOrderChange
     s().moveItem(day().id, 0, 1)
     const moved = ids(day().items)
-    s().undoRouteChange()
+    s().undoOrderChange(switched)
     expect(ids(day().items)).toEqual(moved)
   })
 
@@ -467,7 +503,7 @@ describe('switch the park order (trip-itinerary spec)', () => {
     const before = day().items
     expect(s().switchParkOrder(day().id)).toEqual({ changed: false })
     expect(day().items).toBe(before)
-    expect(s().lastRouteChange).toBeUndefined()
+    expect(s().lastOrderChange).toBeUndefined()
   })
 
   test('the switched order is saved on the device', () => {
@@ -521,10 +557,10 @@ describe('optimize the route and swap restaurants (route-optimization spec)', ()
     const before = day().items
     const result = s().optimizeDayRoute(day().id)
     expect(result.changed && result.showTimes).toEqual([{ name: 'The Lion King: Rhythms of the Pride Lands', before: '16:45', after: '13:10' }])
-    s().undoRouteChange()
+    s().undoOrderChange()
     expect(day().items).toBe(before)
     expect(day().items.find((e) => e.itemId === LION_KING)!.showTime).toBe('16:45')
-    expect(s().lastRouteChange).toBeUndefined()
+    expect(s().lastOrderChange).toBeUndefined()
   })
 
   test('an unchanged day returns changed: false and is left alone', () => {
@@ -532,7 +568,7 @@ describe('optimize the route and swap restaurants (route-optimization spec)', ()
     const items = day().items
     expect(s().optimizeDayRoute(day().id)).toEqual({ changed: false })
     expect(day().items).toBe(items)
-    expect(s().lastRouteChange).toBeUndefined()
+    expect(s().lastOrderChange).toBeUndefined()
   })
 
   test('optimize after grouping: undo returns the grouped order', () => {
@@ -540,7 +576,7 @@ describe('optimize the route and swap restaurants (route-optimization spec)', ()
     expect(s().groupDayByArea(day().id).changed).toBe(true)
     const grouped = day().items
     expect(s().optimizeDayRoute(day().id).changed).toBe(true)
-    s().undoRouteChange()
+    s().undoOrderChange()
     expect(day().items).toBe(grouped)
   })
 
@@ -553,9 +589,10 @@ describe('optimize the route and swap restaurants (route-optimization spec)', ()
     for (const edit of edits) {
       const { s, day } = setupReal(lionKingDay)
       expect(s().optimizeDayRoute(day().id).changed).toBe(true)
+      const optimizing = s().lastOrderChange
       edit(s(), day().id, day().items)
       const edited = day().items
-      s().undoRouteChange()
+      s().undoOrderChange(optimizing)
       expect(day().items).toBe(edited)
     }
   })
@@ -575,7 +612,7 @@ describe('optimize the route and swap restaurants (route-optimization spec)', ()
     expect(s().swapRestaurant(day().id, lunch.key, 'daw.stark-factory')).toBe(true)
     expect(day().items[3]).toEqual({ ...lunch, itemId: 'daw.stark-factory' })
     expect(day().items.filter((_, i) => i !== 3)).toEqual(before.filter((_, i) => i !== 3))
-    s().undoRouteChange()
+    s().undoOrderChange()
     expect(day().items).toBe(before)
     // Only restaurants swap, and only for restaurants.
     expect(s().swapRestaurant(day().id, lunch.key, 'daw.crushs-coaster')).toBe(false)
@@ -586,7 +623,7 @@ describe('optimize the route and swap restaurants (route-optimization spec)', ()
     const storage = new MemoryStorage()
     const { s, day } = setupReal(zigzag, storage)
     s().optimizeDayRoute(day().id)
-    expect(s().lastRouteChange).toBeDefined()
-    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastRouteChange')
+    expect(s().lastOrderChange).toBeDefined()
+    expect(storage.getItem(STORAGE_KEY)).not.toContain('lastOrderChange')
   })
 })

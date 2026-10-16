@@ -10,8 +10,8 @@ import { monthOf } from '../domain/time'
 import { MAX_TRIP_DAYS, addDays, newId, type Day, type PlanItem, type Trip } from '../domain/trip'
 import { loadState, saveState, type KeyValueStorage, type LoadResult, type SavedState } from './persistence'
 
-export type CatalogView = 'list' | 'map'
-export type PlanView = 'timeline' | 'map'
+/** What the Map tab shows: the selected day's route, or every place that passes Explore's filters. */
+export type MapMode = 'day' | 'all'
 
 export type AddResult = { ok: true; key: string } | { ok: false; reason: 'unknown-item' | 'no-day' }
 
@@ -33,22 +33,28 @@ export type OptimizeResult =
 /** The park now first and how many restaurants and shows the switch removed. */
 export type SwitchResult = { changed: false } | { changed: true; firstPark: ParkId; removed: number }
 
+/** One reorder of a day's items, kept for Undo. */
+export interface OrderChange {
+  dayId: string
+  previous: PlanItem[]
+  changed: PlanItem[]
+}
+
 export interface PlannerState extends SavedState {
   filters: CatalogFilters
   lastRemoved?: { tripId: string; dayId: string; entry: PlanItem; index: number }
   /**
-   * Session only (optimize-day-route design Decision 7). Written by grouping, optimizing, swapping a
-   * restaurant and switching the park order; `changed` is the day's items array right after the change.
+   * Session only (optimize-day-route design Decision 7). Written by moving an item, grouping, optimizing,
+   * swapping a restaurant and switching the park order; `changed` is the day's items array right after the
+   * change (refresh-plan-layout design Decision 7).
    */
-  lastRouteChange?: { dayId: string; previous: PlanItem[]; changed: PlanItem[] }
+  lastOrderChange?: OrderChange
   storage: LoadResult['status'] | 'ok'
-  /** Session only, not saved (design Decision 6). */
-  catalogView: CatalogView
   /** The park chosen on the map while the filter lists both parks. */
   mapParkId?: ParkId
-  /** Session only, not saved (plan-ui-improvements design Decision 6). */
-  planView: PlanView
-  /** Session only: the entry "Show in timeline" brings into view once the timeline is shown (design Decision 7). */
+  /** Session only, not saved (refresh-plan-layout design Decision 8). */
+  mapMode: MapMode
+  /** Session only: the entry "Show in timeline" brings into view once My day shows the timeline (design Decision 7). */
   planFocusKey?: string
 
   /** `dayCount` defaults to 1. */
@@ -79,18 +85,20 @@ export interface PlannerState extends SavedState {
    * park's attractions are together (plan-ui-improvements design Decision 10).
    */
   switchParkOrder(dayId: string): SwitchResult
-  /** Undoes the last grouping, optimizing, restaurant swap or park switch, unless the day's items changed since. */
-  undoRouteChange(): void
+  /**
+   * Undoes the last move, grouping, optimizing, restaurant swap or park switch, unless the day's items changed
+   * since. With `change`, only when that change is still the last one, so an older message's Undo does nothing.
+   */
+  undoOrderChange(change?: OrderChange): void
   importTrip(trip: Trip): void
   setProfile(profile: GroupProfile | undefined): void
   setFilters(filters: Partial<CatalogFilters>): void
   /** Resets park (back to both parks), area, type and search. Keeps the profile, sort and hide setting. */
   clearFilters(): void
-  setCatalogView(view: CatalogView): void
   /** Shows `parkId` on the map; a single-park filter follows it. */
   setMapPark(parkId: ParkId): void
-  setPlanView(view: PlanView): void
-  /** Shows the timeline and asks it to bring the entry with `key` into view. */
+  setMapMode(mode: MapMode): void
+  /** Asks My day's timeline to bring the entry with `key` into view; the caller opens My day. */
   showInTimeline(key: string): void
   clearPlanFocus(): void
 }
@@ -127,8 +135,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
     return {
       ...saved,
       filters: DEFAULT_FILTERS,
-      catalogView: 'list',
-      planView: 'timeline',
+      mapMode: 'day',
       storage: loaded.status === 'loaded' || loaded.status === 'empty' ? 'ok' : loaded.status,
 
       createTrip(name, startDate, dayCount = 1) {
@@ -206,13 +213,15 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         set({ lastRemoved: undefined })
       },
       moveItem(dayId, from, to) {
-        updateDay(dayId, (d) => {
-          if (from < 0 || from >= d.items.length) return d
-          const list = [...d.items]
-          const [moved] = list.splice(from, 1)
-          list.splice(clamp(to, 0, list.length), 0, moved!)
-          return { ...d, items: list }
-        })
+        const day = findDay(dayId)?.day
+        if (!day || from < 0 || from >= day.items.length) return
+        const list = [...day.items]
+        const [moved] = list.splice(from, 1)
+        const at = clamp(to, 0, list.length)
+        if (at === from) return
+        list.splice(at, 0, moved!)
+        updateDay(dayId, (d) => ({ ...d, items: list }))
+        set({ lastOrderChange: { dayId, previous: day.items, changed: list } })
       },
       setShowTime(dayId, key, time) {
         updateDay(dayId, (d) => ({ ...d, items: d.items.map((e) => (e.key === key ? { ...e, showTime: time } : e)) }))
@@ -243,7 +252,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         const grouped = groupByArea(day, catalog)
         if (grouped.every((e, i) => e === day.items[i])) return { changed: false }
         updateDay(dayId, (d) => ({ ...d, items: grouped }))
-        set({ lastRouteChange: { dayId, previous: day.items, changed: grouped } })
+        set({ lastOrderChange: { dayId, previous: day.items, changed: grouped } })
         const walking = (items: PlanItem[]) => scheduleDay({ ...day, items }, catalog).breakdown.walking
         return { changed: true, walkBefore: walking(day.items), walkAfter: walking(grouped) }
       },
@@ -253,7 +262,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         const optimized = searchRoute(day, catalog).items
         if (optimized.length === day.items.length && optimized.every((e, i) => e === day.items[i])) return { changed: false }
         updateDay(dayId, (d) => ({ ...d, items: optimized }))
-        set({ lastRouteChange: { dayId, previous: day.items, changed: optimized } })
+        set({ lastOrderChange: { dayId, previous: day.items, changed: optimized } })
         const before = scheduleDay(day, catalog)
         const after = scheduleDay({ ...day, items: optimized }, catalog)
         const previous = new Map(day.items.map((e) => [e.key, e]))
@@ -279,7 +288,7 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         if (!day || !entry || entry.itemId === itemId || items.get(itemId)?.type !== 'restaurant' || items.get(entry.itemId)?.type !== 'restaurant') return false
         const swapped = day.items.map((e) => (e === entry ? { ...e, itemId } : e))
         updateDay(dayId, (d) => ({ ...d, items: swapped }))
-        set({ lastRouteChange: { dayId, previous: day.items, changed: swapped } })
+        set({ lastOrderChange: { dayId, previous: day.items, changed: swapped } })
         return true
       },
       switchParkOrder(dayId) {
@@ -287,15 +296,15 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
         const result = day && switchParks(day, catalog)
         if (!day || !result) return { changed: false }
         updateDay(dayId, (d) => ({ ...d, items: result.items }))
-        set({ lastRouteChange: { dayId, previous: day.items, changed: result.items } })
+        set({ lastOrderChange: { dayId, previous: day.items, changed: result.items } })
         return { changed: true, firstPark: result.firstPark, removed: result.removed.length }
       },
-      undoRouteChange() {
-        const last = get().lastRouteChange
-        if (!last) return
+      undoOrderChange(change) {
+        const last = get().lastOrderChange
+        if (!last || (change && change !== last)) return
         // Any edit to the day's items replaces its array, so this only undoes an untouched change.
         if (findDay(last.dayId)?.day.items === last.changed) updateDay(last.dayId, (d) => ({ ...d, items: last.previous }))
-        set({ lastRouteChange: undefined })
+        set({ lastOrderChange: undefined })
       },
       importTrip(trip) {
         set((s) => ({ trips: [...s.trips, trip], selectedTripId: trip.id, selectedDayId: trip.days[0]?.id }))
@@ -310,14 +319,11 @@ export function createPlannerStore(catalog: Catalog, storage?: KeyValueStorage):
       clearFilters() {
         set((s) => ({ filters: { ...DEFAULT_FILTERS, sort: s.filters.sort, hideUnsuitable: s.filters.hideUnsuitable } }))
       },
-      setCatalogView(view) {
-        set({ catalogView: view })
-      },
-      setPlanView(view) {
-        set({ planView: view })
+      setMapMode(mode) {
+        set({ mapMode: mode })
       },
       showInTimeline(key) {
-        set({ planView: 'timeline', planFocusKey: key })
+        set({ planFocusKey: key })
       },
       clearPlanFocus() {
         set({ planFocusKey: undefined })

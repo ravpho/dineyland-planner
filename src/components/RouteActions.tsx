@@ -7,6 +7,7 @@ import { useMediaQuery } from '../app/hooks'
 import { Sparkle } from './Sparkle'
 import { useToast } from './Toast'
 import { Button } from './ui'
+import { useOrderUndo } from '../app/useOrderUndo'
 
 /** "Route optimized · ends 14:29 → 13:19 · queues and walking 280 → 210 min", then each changed show time. */
 export function optimizeMessage(result: Extract<OptimizeResult, { changed: true }>): string {
@@ -18,7 +19,7 @@ export function optimizeMessage(result: Extract<OptimizeResult, { changed: true 
 export function RouteActions({ day }: { day: Day }) {
   const groupDayByArea = usePlanner((s) => s.groupDayByArea)
   const optimizeDayRoute = usePlanner((s) => s.optimizeDayRoute)
-  const undoRouteChange = usePlanner((s) => s.undoRouteChange)
+  const undoFor = useOrderUndo()
   const toast = useToast()
   const [optimizing, setOptimizing] = useState(false)
   // A new key for each sparkle, so a second optimize plays it again; 0 when none is showing.
@@ -29,7 +30,7 @@ export function RouteActions({ day }: { day: Day }) {
 
   const group = () => {
     const result = groupDayByArea(day.id)
-    if (result.changed) toast(`Grouped by area · walking ${result.walkBefore} → ${result.walkAfter} min`, { label: 'Undo', run: undoRouteChange })
+    if (result.changed) toast(`Grouped by area · walking ${result.walkBefore} → ${result.walkAfter} min`, { label: 'Undo', run: undoFor() })
     else toast('Already grouped by area')
   }
 
@@ -41,7 +42,7 @@ export function RouteActions({ day }: { day: Day }) {
       setOptimizing(false)
       if (result.changed) {
         // The message and the sparkle come together: nothing waits for the animation (app-shell spec: Reduced motion).
-        toast(optimizeMessage(result), { label: 'Undo', run: undoRouteChange })
+        toast(optimizeMessage(result), { label: 'Undo', run: undoFor() })
         if (!reducedMotion) setSparkle((n) => n + 1)
       } else toast('No quicker order found')
     }, 0)

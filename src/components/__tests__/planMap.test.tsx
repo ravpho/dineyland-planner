@@ -123,17 +123,7 @@ describe('park shown on the plan map (park-map spec)', () => {
   })
 })
 
-describe('plan view kept for the session (park-map spec)', () => {
-  test('back from the catalog: the plan map is still shown', () => {
-    const { store } = renderPlan([THUNDER])
-    showMap()
-    fireEvent.click(screen.getByRole('button', { name: 'Open Catalog tab' }))
-    expect(screen.queryByTestId('plan-map')).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'Open Plan tab' }))
-    expect(planMap()).toBeInTheDocument()
-    expect(store.getState().planView).toBe('map')
-  })
-
+describe('the day map follows the selected day (park-map spec)', () => {
   test('another day: the map shows that day, on the park of its first item', () => {
     renderPlan([THUNDER], [CRUSH, MANOR])
     showMap()

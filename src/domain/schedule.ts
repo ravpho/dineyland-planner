@@ -22,6 +22,8 @@ export interface ScheduledSlot {
   freeBefore: Minutes
   /** Shows: minutes after the time the user needed to be there. Meals with a time: minutes after the window closes. */
   lateBy: Minutes
+  /** Shows: the time to be there (start minus the early-arrival minutes). Meals with a time: the latest arrival. */
+  dueBy?: Minutes
   /** Ends after the day's window. */
   afterWindow: boolean
   unsuitable?: string
@@ -69,6 +71,7 @@ export interface ItemTiming {
   end: Minutes
   freeBefore: Minutes
   lateBy: Minutes
+  dueBy?: Minutes
 }
 
 /**
@@ -86,20 +89,23 @@ export function timeItem(item: CatalogItem, entry: PlanItem, arrive: Minutes, pa
       end: Math.max(showStart + item.durationMin, arrive),
       freeBefore: Math.max(0, needBy - arrive),
       lateBy: Math.max(0, arrive - needBy),
+      dueBy: needBy,
     }
   }
   let freeBefore = 0
   let lateBy = 0
+  let dueBy: Minutes | undefined
   if (item.type === 'restaurant' && entry.mealTime) {
     const mealTime = parseClock(entry.mealTime)
+    dueBy = mealTime + MEAL_WINDOW_MIN
     freeBefore = Math.max(0, mealTime - MEAL_WINDOW_MIN - arrive)
-    lateBy = Math.max(0, arrive - (mealTime + MEAL_WINDOW_MIN))
+    lateBy = Math.max(0, arrive - dueBy)
   }
   const begin = arrive + freeBefore
   const estimate = itemWait(item, park, month, begin)
   const start = begin + estimate.minutes
   const duration = item.type === 'restaurant' ? mealMinutes(item) : item.durationMin
-  return { wait: estimate.minutes, waitIsEstimate: estimate.estimate, start, end: start + duration, freeBefore, lateBy }
+  return { wait: estimate.minutes, waitIsEstimate: estimate.estimate, start, end: start + duration, freeBefore, lateBy, ...(dueBy === undefined ? {} : { dueBy }) }
 }
 
 /** Turns a day's ordered items into a timeline (design Decision 6). */
@@ -130,7 +136,7 @@ export function scheduleDay(day: Day, catalog: Catalog, profile?: GroupProfile):
     const arrive = t + walk
     breakdown.walking += walk
 
-    const { wait, waitIsEstimate, start, end, freeBefore, lateBy } = timeItem(item, entry, arrive, park, month)
+    const { wait, waitIsEstimate, start, end, freeBefore, lateBy, dueBy } = timeItem(item, entry, arrive, park, month)
     breakdown.free += freeBefore
     breakdown.queueing += wait
     if (item.type === 'show') breakdown.shows += end - arrive - freeBefore
@@ -150,6 +156,7 @@ export function scheduleDay(day: Day, catalog: Catalog, profile?: GroupProfile):
       end,
       freeBefore,
       lateBy,
+      ...(dueBy === undefined ? {} : { dueBy }),
       afterWindow: end > windowEnd,
       unsuitable: unsuitableReason(item, profile),
     })

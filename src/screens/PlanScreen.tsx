@@ -1,9 +1,9 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { PARK_IDS, type Catalog } from '../domain/catalog'
 import { scheduleDay } from '../domain/schedule'
 import type { Day } from '../domain/trip'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
-import { selectedDay, selectedTrip, type PlanView } from '../state/store'
+import { selectedDay, selectedTrip } from '../state/store'
 import { CreateTripForm } from '../components/CreateTripForm'
 import { DayHours } from '../components/DayHours'
 import { DayTimeline } from '../components/DayTimeline'
@@ -32,8 +32,15 @@ export default function PlanScreen() {
   const day = usePlanner(selectedDay)
   const profile = usePlanner((s) => s.profile)
   const selectDay = usePlanner((s) => s.selectDay)
-  const view = usePlanner((s) => s.planView)
-  const setView = usePlanner((s) => s.setPlanView)
+  // Interim until the Map tab takes over the day's map (refresh-plan-layout task 6.1).
+  const [view, setView] = useState<'timeline' | 'map'>('timeline')
+  const focusKey = usePlanner((s) => s.planFocusKey)
+  // "Show in timeline" switches back to the timeline when it sets a new focus.
+  const [seenFocus, setSeenFocus] = useState(focusKey)
+  if (focusKey !== seenFocus) {
+    setSeenFocus(focusKey)
+    if (focusKey) setView('timeline')
+  }
   const schedule = useMemo(() => (day ? scheduleDay(day, catalog, profile) : null), [day, catalog, profile])
 
   if (!trip || !day || !schedule) {
@@ -78,7 +85,7 @@ export default function PlanScreen() {
       {/* One toolbar: the view switch, and the route actions with the timeline (midnight-theme design Decision 7). */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div role="group" aria-label="Plan view" className="flex overflow-hidden rounded-lg border border-line-strong bg-surface">
-          {(['timeline', 'map'] as PlanView[]).map((v) => (
+          {(['timeline', 'map'] as const).map((v) => (
             <button
               key={v}
               type="button"

@@ -13,6 +13,7 @@ import { useToast } from './Toast'
 import { DownIcon, GripIcon, LockIcon, TrashIcon, UnlockIcon, UpIcon, WalkIcon } from './icons'
 import { TYPE_LABELS, areaName } from './labels'
 import { Badge, IconButton, inputClass } from './ui'
+import { useOrderUndo } from '../app/useOrderUndo'
 
 export const DAY_DROP_ID = 'day-drop'
 
@@ -74,9 +75,10 @@ function SlotCard({
   windowEnd: string
   suggestions?: RestaurantSuggestion[]
 }) {
-  const { moveItem, removeItem, undoRemove, setShowTime, setMealTime, setShowLock, swapRestaurant, undoRouteChange, clearPlanFocus } = usePlanner((s) => s)
+  const { moveItem, removeItem, undoRemove, setShowTime, setMealTime, setShowLock, swapRestaurant, clearPlanFocus } = usePlanner((s) => s)
   const catalog = useCatalog()
   const toast = useToast()
+  const undoFor = useOrderUndo()
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: slot.entry.key })
   const style = { transform: CSS.Transform.toString(transform), transition }
   const itemRef = useRef<HTMLLIElement | null>(null)
@@ -127,7 +129,7 @@ function SlotCard({
     toast(`Removed ${name}`, { label: 'Undo', run: undoRemove })
   }
   const swap = (s: RestaurantSuggestion) => {
-    if (swapRestaurant(day.id, slot.entry.key, s.restaurant.id)) toast(`Swapped to ${s.restaurant.name}`, { label: 'Undo', run: undoRouteChange })
+    if (swapRestaurant(day.id, slot.entry.key, s.restaurant.id)) toast(`Swapped to ${s.restaurant.name}`, { label: 'Undo', run: undoFor() })
   }
 
   return (

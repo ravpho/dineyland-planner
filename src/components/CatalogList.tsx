@@ -5,7 +5,7 @@ import type { PlannedMark } from '../domain/stops'
 import { filterCatalog, type ListedItem, type SortOrder } from '../domain/filters'
 import { MONTH_NAMES, useIsWide, usePlannedMarks, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
-import { mapPark, type CatalogView } from '../state/store'
+import { mapPark } from '../state/store'
 import { useAddToDay } from '../app/useAddToDay'
 import { FilterPanel } from './FilterPanel'
 import { FilterIcon, GripIcon, PlusIcon } from './icons'
@@ -73,8 +73,8 @@ export function CatalogList() {
   const [picking, setPicking] = useState<Show | null>(null)
   const [pickingMeal, setPickingMeal] = useState<Restaurant | null>(null)
   const [showFilters, setShowFilters] = useState(false)
-  const view = usePlanner((s) => s.catalogView)
-  const setView = usePlanner((s) => s.setCatalogView)
+  // Interim until the Map tab takes over the catalog map (refresh-plan-layout tasks 6.1 and 7.1).
+  const [view, setView] = useState<'list' | 'map'>('list')
   const shownPark = usePlanner((s) => mapPark(s, catalog))
 
   // The map shows one park at a time with the same filters (design Decision 6).
@@ -115,7 +115,7 @@ export function CatalogList() {
       </div>
       <div className="mb-2 flex items-center gap-2">
         <div role="group" aria-label="Catalog view" className="flex shrink-0 overflow-hidden rounded-lg border border-line-strong bg-surface">
-          {(['list', 'map'] as CatalogView[]).map((v) => (
+          {(['list', 'map'] as const).map((v) => (
             <button
               key={v}
               type="button"

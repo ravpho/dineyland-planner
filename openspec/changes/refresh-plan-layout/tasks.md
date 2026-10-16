@@ -2,17 +2,17 @@
 
 ## 1. Domain and store
 
-- [ ] 1.1 Add `dueBy` to scheduled slots in `src/domain/schedule.ts` (design Decision 9): a show's start minus its `arriveEarlyMin`, and a restaurant's meal time plus 30. Leave it unset for attractions and for restaurants without a meal time. Verify with new `schedule.test.ts` cases:
+- [x] 1.1 Add `dueBy` to scheduled slots in `src/domain/schedule.ts` (design Decision 9): a show's start minus its `arriveEarlyMin`, and a restaurant's meal time plus 30. Leave it unset for attractions and for restaurants without a meal time. Verify with new `schedule.test.ts` cases:
   - a 14:05 show with 20 early minutes reached at 14:12 has `lateBy` 27 and `dueBy` 13:45;
   - lunch at 12:00 reached at 12:45 has `lateBy` 15 and `dueBy` 12:30.
-- [ ] 1.2 Rename `lastRouteChange` and `undoRouteChange` in `src/state/store.ts` to `lastOrderChange` and `undoOrderChange`, with every caller updated, and make `moveItem` record the slot too (design Decision 7). Verify with new `store.test.ts` cases:
+- [x] 1.2 Rename `lastRouteChange` and `undoRouteChange` in `src/state/store.ts` to `lastOrderChange` and `undoOrderChange`, with every caller updated, and make `moveItem` record the slot too (design Decision 7). Verify with new `store.test.ts` cases:
   - a move followed by `undoOrderChange` restores the order;
   - a move, then another edit, then `undoOrderChange` leaves the day as it is;
   - grouping, optimizing, swapping and switching parks still undo.
-- [ ] 1.3 Replace the session-only `catalogView` and `planView` with `mapMode: 'day' | 'all'` (default `'day'`), and make `showInTimeline(key)` only set `planFocusKey` (design Decision 8). Verify:
+- [x] 1.3 Replace the session-only `catalogView` and `planView` with `mapMode: 'day' | 'all'` (default `'day'`), and make `showInTimeline(key)` only set `planFocusKey` (design Decision 8). Verify:
   - `store.test.ts` checks the default and that `mapMode` is not part of what `persistence.ts` saves;
   - `npm run typecheck` reports no other users of the removed fields.
-- [ ] 1.4 Add `{ name: 'map' }` to `Route` in `src/routing.ts` for `#/map`, keeping `#/catalog` and `#/plan` (design Decision 1). Verify with a new `src/routing.test.ts` that `#/catalog`, `#/plan`, `#/map`, an empty hash and `#/about` parse as expected.
+- [x] 1.4 Add `{ name: 'map' }` to `Route` in `src/routing.ts` for `#/map`, keeping `#/catalog` and `#/plan` (design Decision 1). Verify with a new `src/routing.test.ts` that `#/catalog`, `#/plan`, `#/map`, an empty hash and `#/about` parse as expected.
 
 ## 2. App frame: header, More menu, bottom bar, messages
 
