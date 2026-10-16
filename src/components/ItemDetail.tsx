@@ -6,7 +6,7 @@ import { unsuitableReason } from '../domain/suitability'
 import { ExternalIcon } from './icons'
 import { areaName, HEIGHT_SOURCE_LABELS, heightLabel, mapsUrl, TYPE_LABELS } from './labels'
 import { PlannedLabel } from './PlannedLabel'
-import { Badge, Button, Sheet, Stars } from './ui'
+import { Badge, Button, Sheet, SheetFooter, Stars } from './ui'
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -128,9 +128,12 @@ export function ItemDetail({ item, onClose, onAdd }: { item: CatalogItem; onClos
           ))}
         </ul>
       </section>
-      <Button variant="primary" className="mt-4 w-full" onClick={onAdd}>
-        Add to day
-      </Button>
+      {/* Add stays in reach however far the details scroll. */}
+      <SheetFooter>
+        <Button variant="primary" className="w-full" onClick={onAdd}>
+          Add to day
+        </Button>
+      </SheetFooter>
     </Sheet>
   )
 }

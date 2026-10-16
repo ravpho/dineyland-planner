@@ -14,12 +14,12 @@ test('10.1 full phone journey: plan a 2-day August trip, then share it', async (
   await filters.getByLabel('Max scariness').selectOption({ label: 'Spooky' })
   await filters.getByRole('button', { name: 'Save profile' }).click()
   await filters.getByRole('button', { name: 'Attraction', exact: true }).click()
-  await filters.getByRole('button', { name: 'Show results' }).click()
+  await filters.getByRole('button', { name: /^Show \d+ results?$/ }).click()
   await expect(page.getByTestId('catalog-row').filter({ hasText: 'Restaurant' }).first()).toHaveCount(0)
   await expect(page.getByTestId('catalog-row').filter({ hasText: 'Phantom Manor' })).toContainText('Too scary (Scary)')
   await page.getByRole('button', { name: /Filters/ }).click()
   await filters.getByRole('button', { name: 'Clear filters' }).click()
-  await filters.getByRole('button', { name: 'Show results' }).click()
+  await filters.getByRole('button', { name: /^Show \d+ results?$/ }).click()
 
   // 8 items including a show and a meal
   const plan = [

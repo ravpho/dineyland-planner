@@ -62,6 +62,65 @@ describe('catalog list (park-catalog spec)', () => {
   })
 })
 
+describe('Explore: type chips and the Filters badge (refresh-plan-layout design Decision 11)', () => {
+  const chips = () => within(screen.getByRole('group', { name: 'Type' })).getAllByRole('button')
+  const chip = (name: string) => within(screen.getByRole('group', { name: 'Type' })).getByRole('button', { name })
+  const count = (type?: string) => sampleCatalog.items.filter((i) => !type || i.type === type).length
+
+  test('the chips are All, Attractions, Restaurants and Shows, with All marked at first', () => {
+    renderList()
+    expect(chips().map((c) => c.textContent)).toEqual([
+      `All${count()}`,
+      `Attractions${count('attraction')}`,
+      `Restaurants${count('restaurant')}`,
+      `Shows${count('show')}`,
+    ])
+    expect(chip('All')).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.queryByRole('group', { name: 'Catalog view' })).toBeNull()
+  })
+
+  test.each([
+    ['Attractions', 'attraction'],
+    ['Restaurants', 'restaurant'],
+    ['Shows', 'show'],
+  ] as const)('%s filters the list to that type, and the count follows', (name, type) => {
+    const { store } = renderList()
+    fireEvent.click(chip(name))
+    expect(store.getState().filters.types).toEqual([type])
+    expect(chip(name)).toHaveAttribute('aria-pressed', 'true')
+    expect(chip('All')).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getAllByTestId('catalog-row')).toHaveLength(count(type))
+    expect(screen.getByTestId('match-count')).toHaveTextContent(new RegExp(`^${count(type)} items?$`))
+    expect(screen.getAllByTestId('type-tile').every((t) => t.dataset.type === type)).toBe(true)
+    fireEvent.click(chip('All'))
+    expect(screen.getAllByTestId('catalog-row')).toHaveLength(count())
+  })
+
+  test('two types chosen in the filters: no chip is marked, and the badge shows 1', () => {
+    renderList()
+    expect(screen.getByRole('button', { name: 'Filters' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Filters' }))
+    const panel = screen.getByRole('dialog', { name: 'Filters' })
+    fireEvent.click(within(panel).getByRole('button', { name: 'Attraction' }))
+    fireEvent.click(within(panel).getByRole('button', { name: 'Show' }))
+    expect(chips().every((c) => c.getAttribute('aria-pressed') === 'false')).toBe(true)
+    expect(screen.getByRole('button', { name: 'Filters, 1 on' })).toBeInTheDocument()
+    expect(screen.getByTestId('filter-count')).toHaveTextContent('1')
+  })
+
+  test('the filters’ footer says how many results the filters give, and closes them', () => {
+    renderList()
+    fireEvent.click(screen.getByRole('button', { name: 'Filters' }))
+    const footer = within(screen.getByRole('dialog', { name: 'Filters' })).getByTestId('sheet-footer')
+    expect(within(footer).getByRole('button', { name: `Show ${count()} results` })).toBeInTheDocument()
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Restaurant' }))
+    expect(within(footer).getByRole('button', { name: `Show ${count('restaurant')} results` })).toBeInTheDocument()
+    fireEvent.click(within(footer).getByRole('button', { name: 'Clear filters' }))
+    fireEvent.click(within(footer).getByRole('button', { name: `Show ${count()} results` }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+})
+
 describe('item details (park-catalog spec)', () => {
   const open = (id: string) => renderWithPlanner(<ItemDetail item={item(id)} onClose={() => {}} onAdd={() => {}} />)
 
@@ -98,6 +157,17 @@ describe('item details (park-catalog spec)', () => {
     expect(within(d).getByText('75 min')).toBeInTheDocument()
     expect(within(d).getByText('Table-service restaurant on Main Street.')).toBeInTheDocument()
     expect(within(d).getByLabelText('Rated 4 out of 5')).toBeInTheDocument()
+  })
+
+  test('Add to day is in the details’ sticky footer, so it stays in reach after scrolling', () => {
+    renderWithPlanner(<ItemDetail item={item('dlp.big-thunder-mountain')} onClose={() => {}} onAdd={() => {}} />)
+    const d = screen.getByRole('dialog')
+    const footer = within(d).getByTestId('sheet-footer')
+    expect(footer).toHaveClass('sticky')
+    // The footer is the last thing in the sheet, so the scrolled content passes under it.
+    expect(d.lastElementChild).toBe(footer)
+    fireEvent.scroll(d, { target: { scrollTop: 400 } })
+    expect(within(footer).getByRole('button', { name: 'Add to day' })).toBeVisible()
   })
 
   test('show: start times, duration and early arrival', () => {

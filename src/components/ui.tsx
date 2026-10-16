@@ -129,6 +129,18 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
   )
 }
 
+/**
+ * A footer that stays at the bottom of a sheet while its content scrolls, for the sheet's main action
+ * (refresh-plan-layout design Decision 11). It reaches the sheet's edges and covers its bottom padding.
+ */
+export function SheetFooter({ children }: { children: ReactNode }) {
+  return (
+    <div className="sticky -bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 -mx-4 mt-4 -mb-[max(1rem,env(safe-area-inset-bottom))] flex gap-2 border-t border-line bg-surface px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3" data-testid="sheet-footer">
+      {children}
+    </div>
+  )
+}
+
 export function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <label className="flex flex-col gap-1 text-sm font-medium text-ink-soft">

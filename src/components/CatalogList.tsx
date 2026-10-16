@@ -1,52 +1,62 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useMemo, useState } from 'react'
-import type { CatalogItem } from '../domain/catalog'
+import type { CatalogItem, ItemType } from '../domain/catalog'
 import type { PlannedMark } from '../domain/stops'
 import { filterCatalog, type ListedItem, type SortOrder } from '../domain/filters'
 import { MONTH_NAMES, useIsWide, usePlannedMarks, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
-import { mapPark } from '../state/store'
 import { useAddFlow } from './AddFlow'
-import { FilterPanel } from './FilterPanel'
-import { FilterIcon, GripIcon, PlusIcon } from './icons'
-import { ParkMap } from './ParkMap'
-import { itemFacts, TYPE_LABELS } from './labels'
+import { FilterPanel, FiltersButton } from './FilterPanel'
+import { GripIcon, PlusIcon } from './icons'
+import { itemFacts } from './labels'
 import { PlannedLabel } from './PlannedLabel'
-import { Badge, IconButton, inputClass, Stars } from './ui'
+import { TypeTile } from './TypeTile'
+import { Badge, Chip, IconButton, inputClass, Stars } from './ui'
 
 export const CATALOG_DRAG_PREFIX = 'catalog:'
 
+/** A row: the type tile, name, park and area, then rating, facts and the month's wait (park-catalog spec: Catalog list summary). */
 function RowBody({ listed, month, place, mark, dayNumber, onOpen }: { listed: ListedItem; month: number; place: string; mark?: PlannedMark; dayNumber: number; onOpen: () => void }) {
   const { item, unsuitable, waitRange } = listed
   return (
-    <button type="button" onClick={onOpen} className="min-h-11 min-w-0 flex-1 py-2 text-left">
-      <span className={`block font-medium ${unsuitable ? 'text-ink-muted' : 'text-ink'}`} data-testid="row-name">
-        {item.name}
-      </span>
-      <span className="block text-xs text-ink-muted" data-testid="row-place">
-        {place}
-      </span>
-      <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-muted">
-        <Badge>{TYPE_LABELS[item.type]}</Badge>
-        <Stars rating={item.rating} />
-        {itemFacts(item).map((f) => (
-          <span key={f}>{f}</span>
-        ))}
-        {waitRange && (
-          <span className="text-ink-soft" title={`Typical wait in ${MONTH_NAMES[month - 1]}`}>
-            {waitRange[0] === waitRange[1] ? `~${waitRange[0]}` : `${waitRange[0]}–${waitRange[1]}`} min wait in {MONTH_NAMES[month - 1]!.slice(0, 3)}
+    <button type="button" onClick={onOpen} className="flex min-h-11 min-w-0 flex-1 items-start gap-3 py-2.5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">
+      <TypeTile type={item.type} muted={Boolean(unsuitable)} />
+      <span className="min-w-0 flex-1">
+        <span className={`block font-semibold leading-snug ${unsuitable ? 'text-ink-muted' : 'text-ink'}`} data-testid="row-name">
+          {item.name}
+        </span>
+        <span className="block text-[0.8rem] text-ink-soft" data-testid="row-place">
+          {place}
+        </span>
+        <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-ink-muted">
+          <Stars rating={item.rating} />
+          {itemFacts(item).map((f) => (
+            <span key={f}>{f}</span>
+          ))}
+          {waitRange && (
+            <span className="text-ink-soft" title={`Typical wait in ${MONTH_NAMES[month - 1]}`}>
+              {waitRange[0] === waitRange[1] ? `~${waitRange[0]}` : `${waitRange[0]}–${waitRange[1]}`} min wait in {MONTH_NAMES[month - 1]!.slice(0, 3)}
+            </span>
+          )}
+        </span>
+        {(unsuitable || mark) && (
+          <span className="mt-1 flex flex-wrap gap-1">
+            {unsuitable && <Badge tone="warn">{unsuitable}</Badge>}
+            <PlannedLabel mark={mark} dayNumber={dayNumber} />
           </span>
         )}
       </span>
-      {(unsuitable || mark) && (
-        <span className="mt-1 flex flex-wrap gap-1">
-          {unsuitable && <Badge tone="warn">{unsuitable}</Badge>}
-          <PlannedLabel mark={mark} dayNumber={dayNumber} />
-        </span>
-      )}
     </button>
   )
 }
+
+/** Quick type filters (refresh-plan-layout design Decision 11). They set the filters' types to none or one. */
+const TYPE_CHIPS: { label: string; type?: ItemType }[] = [
+  { label: 'All' },
+  { label: 'Attractions', type: 'attraction' },
+  { label: 'Restaurants', type: 'restaurant' },
+  { label: 'Shows', type: 'show' },
+]
 
 function DragHandle({ item }: { item: CatalogItem }) {
   const { attributes, listeners, setNodeRef } = useDraggable({ id: `${CATALOG_DRAG_PREFIX}${item.id}`, data: { item } })
@@ -67,20 +77,18 @@ export function CatalogList() {
   const { add, openDetails, sheets } = useAddFlow()
   const { marks, dayNumber } = usePlannedMarks()
   const [showFilters, setShowFilters] = useState(false)
-  // Interim until the Map tab takes over the catalog map (refresh-plan-layout tasks 6.1 and 7.1).
-  const [view, setView] = useState<'list' | 'map'>('list')
-  const shownPark = usePlanner((s) => mapPark(s, catalog))
 
-  // The map shows one park at a time with the same filters (design Decision 6).
-  const listFilters = useMemo(() => (view === 'map' ? { ...filters, parkId: shownPark } : filters), [view, filters, shownPark])
-  const listed = useMemo(() => filterCatalog(catalog, listFilters, profile, month), [catalog, listFilters, profile, month])
+  const listed = useMemo(() => filterCatalog(catalog, filters, profile, month), [catalog, filters, profile, month])
+  // Each chip's count, with every other filter applied.
+  const byType = useMemo(() => {
+    const all = filterCatalog(catalog, { ...filters, types: [] }, profile, month)
+    return new Map<ItemType | undefined, number>([[undefined, all.length], ...TYPE_CHIPS.filter((c) => c.type).map((c) => [c.type, all.filter((l) => l.item.type === c.type).length] as const)])
+  }, [catalog, filters, profile, month])
   const places = useMemo(
     () => new Map(catalog.parks.flatMap((p) => p.areas.map((a) => [`${p.id}/${a.id}`, `${p.name} · ${a.name}`] as const))),
     [catalog],
   )
-  const parkName = listFilters.parkId === 'all' ? undefined : catalog.parks.find((p) => p.id === listFilters.parkId)?.name
-  const activeFilters =
-    (filters.parkId === 'all' ? 0 : 1) + filters.areaIds.length + filters.types.length + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
+  const parkName = filters.parkId === 'all' ? undefined : catalog.parks.find((p) => p.id === filters.parkId)?.name
 
   return (
     <section aria-label="Explore" className="flex min-w-0 flex-col">
@@ -93,74 +101,66 @@ export function CatalogList() {
           value={filters.query}
           onChange={(e) => setFilters({ query: e.target.value })}
         />
-        <button
-          type="button"
-          onClick={() => setShowFilters(true)}
-          className="inline-flex min-h-11 items-center gap-1 rounded-lg border border-line-strong bg-surface px-3 text-sm font-medium text-ink hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-        >
-          <FilterIcon /> Filters{activeFilters > 0 && <span className="rounded-full bg-accent px-1.5 text-xs text-on-accent">{activeFilters}</span>}
-        </button>
+        <FiltersButton onClick={() => setShowFilters(true)} />
+      </div>
+      <div role="group" aria-label="Type" className="-mx-4 mb-2 flex gap-2 overflow-x-auto px-4 py-0.5 [scrollbar-width:none] lg:mx-0 lg:px-0.5">
+        {TYPE_CHIPS.map((c) => (
+          <Chip
+            key={c.label}
+            selected={c.type ? filters.types.length === 1 && filters.types[0] === c.type : filters.types.length === 0}
+            onClick={() => setFilters({ types: c.type ? [c.type] : [] })}
+          >
+            <span className="whitespace-nowrap font-semibold">
+              {c.label}
+              <span aria-hidden className="ml-1.5 font-normal opacity-70 tabular-nums">
+                {byType.get(c.type)}
+              </span>
+            </span>
+          </Chip>
+        ))}
       </div>
       <div className="mb-2 flex items-center gap-2">
-        <div role="group" aria-label="Catalog view" className="flex shrink-0 overflow-hidden rounded-lg border border-line-strong bg-surface">
-          {(['list', 'map'] as const).map((v) => (
-            <button
-              key={v}
-              type="button"
-              aria-pressed={view === v}
-              onClick={() => setView(v)}
-              className={`min-h-11 min-w-14 px-3 text-sm font-medium focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus ${view === v ? 'bg-accent text-on-accent' : 'text-ink-soft hover:bg-surface-muted'}`}
-            >
-              {v === 'list' ? 'List' : 'Map'}
-            </button>
-          ))}
-        </div>
         <p className="min-w-0 flex-1 text-sm text-ink-muted" aria-live="polite" data-testid="match-count">
           {listed.length} {listed.length === 1 ? 'item' : 'items'}
           {parkName ? ` in ${parkName}` : ''}
         </p>
-        {view === 'list' && (
-          <label className="flex items-center gap-2 text-sm text-ink-soft">
-            <span className="hidden sm:inline">Sort</span>
-            <select aria-label="Sort by" className={`${inputClass} text-sm`} value={filters.sort} onChange={(e) => setFilters({ sort: e.target.value as SortOrder })}>
-              <option value="name">Name</option>
-              <option value="rating">Rating</option>
-              <option value="wait">Busiest wait</option>
-              <option value="duration">Duration</option>
-            </select>
-          </label>
-        )}
+        <label className="flex items-center gap-2 text-sm text-ink-soft">
+          <span className="hidden sm:inline">Sort</span>
+          <select aria-label="Sort by" className={`${inputClass} text-sm`} value={filters.sort} onChange={(e) => setFilters({ sort: e.target.value as SortOrder })}>
+            <option value="name">Name</option>
+            <option value="rating">Rating</option>
+            <option value="wait">Busiest wait</option>
+            <option value="duration">Duration</option>
+          </select>
+        </label>
       </div>
-      {/* Keyed by view, so switching List and Map fades the new view in (midnight-theme design Decision 6). */}
-      <div key={view} className="view-enter">
-        {view === 'map' ? (
-          <ParkMap listed={listed} onAdd={add} onOpen={openDetails} />
-        ) : (
-          <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface shadow-card">
-            {listed.map((l) => {
-              const mark = marks.get(l.item.id)
-              // A planned row is tinted with the accent, which wins over the unsuitable grey (plan-ui-improvements design Decision 2).
-              const planned = mark?.stops.length ? 'selected' : mark?.otherDays.length ? 'other' : undefined
-              return (
-                <li
-                  key={l.item.id}
-                  data-testid="catalog-row"
-                  data-unsuitable={l.unsuitable ? 'true' : undefined}
-                  data-planned={planned}
-                  className={`flex items-center gap-1 px-2 ${planned === 'selected' ? 'bg-accent-soft shadow-[inset_4px_0_0_var(--color-accent)]' : l.unsuitable ? 'bg-surface-muted' : ''}`}
-                >
-                  {wide && <DragHandle item={l.item} />}
-                  <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} mark={mark} dayNumber={dayNumber} onOpen={() => openDetails(l.item)} />
-                  <IconButton label={`Add ${l.item.name} to day${planned === 'selected' ? ' again' : ''}`} onClick={() => add(l.item)} className="text-accent">
-                    <PlusIcon />
-                  </IconButton>
-                </li>
-              )
-            })}
-            {listed.length === 0 && <li className="p-4 text-sm text-ink-muted">Nothing matches these filters.</li>}
-          </ul>
-        )}
-      </div>
+      <ul className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+        {listed.map((l) => {
+          const mark = marks.get(l.item.id)
+          // A planned row is tinted with the accent, which wins over the unsuitable grey (plan-ui-improvements design Decision 2).
+          const planned = mark?.stops.length ? 'selected' : mark?.otherDays.length ? 'other' : undefined
+          return (
+            <li
+              key={l.item.id}
+              data-testid="catalog-row"
+              data-unsuitable={l.unsuitable ? 'true' : undefined}
+              data-planned={planned}
+              className={`flex items-center gap-1 pl-3 pr-1 ${planned === 'selected' ? 'bg-accent-soft shadow-[inset_4px_0_0_var(--color-accent)]' : l.unsuitable ? 'bg-surface-muted' : ''}`}
+            >
+              {wide && <DragHandle item={l.item} />}
+              <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} mark={mark} dayNumber={dayNumber} onOpen={() => openDetails(l.item)} />
+              <IconButton
+                label={`Add ${l.item.name} to day${planned === 'selected' ? ' again' : ''}`}
+                onClick={() => add(l.item)}
+                className={`rounded-full border ${planned === 'selected' ? 'border-accent bg-accent text-on-accent hover:bg-accent-hover' : 'border-line-strong bg-surface text-accent'}`}
+              >
+                <PlusIcon />
+              </IconButton>
+            </li>
+          )
+        })}
+        {listed.length === 0 && <li className="p-4 text-sm text-ink-muted">Nothing matches these filters.</li>}
+      </ul>
       {sheets}
       {showFilters && <FilterPanel onClose={() => setShowFilters(false)} />}
     </section>

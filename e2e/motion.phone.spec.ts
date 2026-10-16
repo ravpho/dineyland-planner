@@ -24,7 +24,8 @@ test.describe('motion allowed (app-shell spec: Reduced motion)', () => {
     }
     await page.getByRole('button', { name: 'Close' }).click()
 
-    await page.getByRole('button', { name: 'Map', exact: true }).click()
+    await showTab(page, 'Map')
+    await page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' }).click()
     const view = page.locator('.view-enter')
     expect(await longestTransition(view)).toBeLessThanOrEqual(0.3)
   })

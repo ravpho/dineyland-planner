@@ -123,7 +123,7 @@
 
 ## 7. Explore
 
-- [ ] 7.1 Turn `CatalogScreen` into Explore (design Decision 11):
+- [x] 7.1 Turn `CatalogScreen` into Explore (design Decision 11):
   - remove the "Catalog view" switch;
   - make Filters an icon button with a count badge;
   - add the All, Attractions, Restaurants and Shows chips writing `filters.types`.
@@ -131,10 +131,10 @@
   Verify with `catalog.test.tsx`:
   - each chip filters the list, and the count updates;
   - choosing two types in the filters leaves no chip marked and the badge shows 1.
-- [ ] 7.2 Restyle the list rows with a type tile, keeping park and area, type, rating, duration, height, thrill, the August wait range, the planned label and tint, and the unsuitable mark. Verify:
+- [x] 7.2 Restyle the list rows with a type tile, keeping park and area, type, rating, duration, height, thrill, the August wait range, the planned label and tint, and the unsuitable mark. Verify:
   - the `catalog.test.tsx` and `e2e/catalog.phone.spec.ts` checks for these facts and labels pass;
   - `row-name` is unchanged.
-- [ ] 7.3 Add the sticky "Show N results" and "Clear filters" footer to `FilterPanel`, and move `ItemDetail`'s "Add to day" into a sticky footer. Verify:
+- [x] 7.3 Add the sticky "Show N results" and "Clear filters" footer to `FilterPanel`, and move `ItemDetail`'s "Add to day" into a sticky footer. Verify:
   - unit tests check the result count in the footer;
   - unit tests check that Add stays visible after scrolling the details;
   - `about.test.tsx` and the details checks pass.

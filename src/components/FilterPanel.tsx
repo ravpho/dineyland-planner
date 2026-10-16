@@ -1,15 +1,21 @@
+import { useMemo } from 'react'
 import type { ItemType, ParkId } from '../domain/catalog'
+import { filterCatalog } from '../domain/filters'
+import { usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { FilterIcon } from './icons'
 import { ProfileEditor } from './ProfileEditor'
 import { TYPE_LABELS } from './labels'
-import { Button, Chip, Field, inputClass, Sheet } from './ui'
+import { Button, Chip, Field, inputClass, Sheet, SheetFooter } from './ui'
 
-/** How many filters are on: park, each area and type, hiding unsuitable rides, and the group profile. */
+/**
+ * How many filters are on: the park, each area, the type (one filter, however many types it holds), hiding
+ * unsuitable rides, and the group profile.
+ */
 export function useActiveFilterCount(): number {
   const filters = usePlanner((s) => s.filters)
   const profile = usePlanner((s) => s.profile)
-  return (filters.parkId === 'all' ? 0 : 1) + filters.areaIds.length + filters.types.length + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
+  return (filters.parkId === 'all' ? 0 : 1) + filters.areaIds.length + (filters.types.length ? 1 : 0) + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
 }
 
 /** Whether "Clear filters" would change anything: it resets the park, areas, types and search. */
@@ -47,7 +53,10 @@ export function FilterPanel({ onClose }: { onClose: () => void }) {
   const filters = usePlanner((s) => s.filters)
   const setFilters = usePlanner((s) => s.setFilters)
   const clearFilters = usePlanner((s) => s.clearFilters)
+  const profile = usePlanner((s) => s.profile)
+  const month = usePlanningMonth()
   const parks = filters.parkId === 'all' ? catalog.parks : catalog.parks.filter((p) => p.id === filters.parkId)
+  const results = useMemo(() => filterCatalog(catalog, filters, profile, month).length, [catalog, filters, profile, month])
 
   return (
     <Sheet title="Filters" onClose={onClose}>
@@ -89,13 +98,14 @@ export function FilterPanel({ onClose }: { onClose: () => void }) {
           Hide unsuitable
         </label>
         <ProfileEditor />
-        <div className="flex gap-2">
-          <Button onClick={() => clearFilters()}>Clear filters</Button>
-          <Button variant="primary" className="flex-1" onClick={onClose}>
-            Show results
-          </Button>
-        </div>
       </div>
+      {/* Stays in reach while the areas and the profile scroll by. */}
+      <SheetFooter>
+        <Button onClick={() => clearFilters()}>Clear filters</Button>
+        <Button variant="primary" className="flex-1" onClick={onClose}>
+          Show {results} {results === 1 ? 'result' : 'results'}
+        </Button>
+      </SheetFooter>
     </Sheet>
   )
 }

@@ -151,3 +151,24 @@ export const MapIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M9 4.5v13M15 6.5v13" />
   </svg>
 )
+/** A coaster's track: attractions. */
+export const RideIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M3 16c3-8 6-8 9 0s6 8 9 0" />
+    <path d="M3 20h18" />
+  </svg>
+)
+/** Fork and knife: restaurants. */
+export const FoodIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M7 3v7M5 3v4.5a2 2 0 0 0 4 0V3M7 10v11M17 3c-2 1.2-3 3.2-3 6v4h3v8" />
+  </svg>
+)
+/** Music notes: shows. */
+export const ShowIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M9 18V6l10-2v12" />
+    <circle cx="6.5" cy="18" r="2.5" />
+    <circle cx="16.5" cy="16" r="2.5" />
+  </svg>
+)
