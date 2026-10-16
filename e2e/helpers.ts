@@ -64,3 +64,21 @@ export async function mouseDrag(page: Page, from: Locator, to: Locator, { offset
   await page.waitForTimeout(100)
   await page.mouse.up()
 }
+
+/** Changes the selected day's hours in the day sheet, opened from the day card (app-shell spec: Day first in My day). */
+export async function setHours(page: Page, { start, end }: { start?: string; end?: string }) {
+  await page.getByRole('button', { name: 'Edit hours and park order' }).click()
+  const sheet = page.getByRole('dialog', { name: /^Day \d/ })
+  if (start) await sheet.getByLabel('Start').fill(start)
+  if (end) await sheet.getByLabel('End').fill(end)
+  await sheet.getByRole('button', { name: 'Done' }).click()
+}
+
+/** Changes the trip's number of days from the More menu, accepting the confirmation when days are removed. */
+export async function setTripDays(page: Page, days: number) {
+  await page.getByRole('banner').getByRole('button', { name: 'More' }).click()
+  await page.getByRole('dialog', { name: 'More' }).getByRole('button', { name: 'Number of days' }).click()
+  const sheet = page.getByRole('dialog', { name: 'Number of days' })
+  await sheet.getByLabel('Number of days').selectOption(String(days))
+  await sheet.getByRole('button', { name: 'Done' }).click()
+}

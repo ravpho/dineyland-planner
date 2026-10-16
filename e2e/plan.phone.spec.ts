@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { acceptDialogs, addFromCatalog, createTrip, showTab, slotNames, touchDrag } from './helpers'
+import { acceptDialogs, addFromCatalog, createTrip, setHours, setTripDays, showTab, slotNames, touchDrag } from './helpers'
 
 test.beforeEach(({ page }) => acceptDialogs(page))
 
@@ -7,9 +7,9 @@ test('7.1 a 3-day trip has the right dates, and its length can change', async ({
   await createTrip(page, { name: 'Summer trip', date: '2026-08-12', days: 3 })
   const tabs = page.getByRole('tablist', { name: 'Days' }).getByRole('tab')
   await expect(tabs).toHaveText([/Day 1 · Wed,? 12 Aug/, /Day 2 · Thu,? 13 Aug/, /Day 3 · Fri,? 14 Aug/])
-  await page.getByLabel('Number of days').selectOption('2')
+  await setTripDays(page, 2)
   await expect(tabs).toHaveCount(2)
-  await expect(page.getByLabel('Park')).toHaveCount(0) // days are not tied to a park
+  await expect(page.getByLabel('Park', { exact: true })).toHaveCount(0) // days are not tied to a park
   await addFromCatalog(page, 'Frozen Ever After')
   await addFromCatalog(page, 'Big Thunder Mountain')
   await showTab(page, 'My day')
@@ -52,8 +52,7 @@ test('7.3 reorder by touch drag on a phone', async ({ page }) => {
 test('7.5 summary turns from Over by to Fits, and stays visible while scrolling', async ({ page }) => {
   await createTrip(page)
   await showTab(page, 'My day')
-  await page.getByLabel('Start').fill('10:00')
-  await page.getByLabel('End').fill('11:00')
+  await setHours(page, { start: '10:00', end: '11:00' })
   await addFromCatalog(page, 'Big Thunder Mountain')
   await addFromCatalog(page, "Walt's – An American Restaurant", 'Any time')
   await showTab(page, 'My day')
@@ -62,7 +61,7 @@ test('7.5 summary turns from Over by to Fits, and stays visible while scrolling'
   await page.getByRole('button', { name: "Remove Walt's – An American Restaurant" }).click()
   await expect(summary).toContainText('Fits')
 
-  await page.getByLabel('End').fill('23:00')
+  await setHours(page, { end: '23:00' })
   for (let i = 0; i < 14; i++) await addFromCatalog(page, i % 2 ? 'Phantom Manor' : "Peter Pan's Flight")
   await showTab(page, 'My day')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(15)
@@ -193,19 +192,25 @@ test('switch park order: unavailable until grouped, warns about the lunch, and u
   await createTrip(page, { name: 'Two parks' })
   for (const n of ['Big Thunder Mountain', "Crush's Coaster", 'Phantom Manor']) await addFromCatalog(page, n)
   await showTab(page, 'My day')
-  const box = page.getByTestId('ticket-reminder')
+  await expect(page.getByTestId('card-park-order')).toHaveText('Disneyland Park → Disney Adventure World → Disneyland Park')
+  const edit = page.getByRole('button', { name: 'Edit hours and park order' })
+  const daySheet = page.getByRole('dialog', { name: /^Day 1/ })
+  const box = daySheet.getByTestId('two-park-note')
   const switchOrder = box.getByRole('button', { name: 'Switch order' })
+  await edit.click()
   await expect(box.getByTestId('park-order-text')).toHaveText('Disneyland Park → Disney Adventure World → Disneyland Park')
   await expect(switchOrder).toBeDisabled()
   await expect(box.getByTestId('park-order-hint')).toContainText('Group by area first')
+  await daySheet.getByRole('button', { name: 'Done' }).click()
 
   await page.getByRole('button', { name: 'Group by area' }).click()
   await addFromCatalog(page, 'Au Chalet de la Marionnette', '12:00')
   await showTab(page, 'My day')
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Crush's Coaster", 'Au Chalet de la Marionnette'])
+  await edit.click()
   await expect(switchOrder).toBeEnabled()
 
-  // The box fits a phone without horizontal page scroll.
+  // The note fits a phone without horizontal page scroll.
   const b = (await box.boundingBox())!
   expect(b.x).toBeGreaterThanOrEqual(0)
   expect(b.x + b.width).toBeLessThanOrEqual(390)

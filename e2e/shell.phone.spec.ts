@@ -21,6 +21,8 @@ test.describe('small phone 360x740', () => {
   test.use({ viewport: { width: 360, height: 740 } })
 
   test('8.1 no horizontal scroll and every control at least 44x44', async ({ page }) => {
+    // Measuring every visible control on each screen takes longer than the default 30 s.
+    test.slow()
     acceptDialogs(page)
     await createTrip(page, { days: 3 })
     await checkLayout(page)
@@ -33,11 +35,10 @@ test.describe('small phone 360x740', () => {
     await page.getByRole('button', { name: 'Close' }).click()
     await showTab(page, 'My day')
     await checkLayout(page)
-    await page.getByRole('button', { name: 'Trip options' }).click()
-    await expect(page.getByRole('dialog', { name: 'Trip options' })).toBeVisible()
+    await page.getByRole('banner').getByRole('button', { name: 'More' }).click()
+    await expect(page.getByRole('dialog', { name: 'More' })).toBeVisible()
     await checkLayout(page)
-    await page.getByRole('button', { name: 'Close' }).click()
-    await page.getByRole('link', { name: 'About' }).click()
+    await page.getByRole('dialog', { name: 'More' }).getByRole('button', { name: 'About and data sources' }).click()
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(0)
   })

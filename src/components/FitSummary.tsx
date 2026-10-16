@@ -75,7 +75,7 @@ export function Breakdown({ schedule }: { schedule: DaySchedule }) {
 export function TicketReminder({ schedule, day }: { schedule: DaySchedule; day: Day }) {
   if (schedule.parks.length < 2) return null
   return (
-    <div role="note" data-testid="ticket-reminder" className="rounded-xl bg-accent-soft px-3 py-2 text-sm text-ink">
+    <div role="note" data-testid="two-park-note" className="rounded-xl bg-accent-soft px-3 py-2 text-sm text-ink">
       <p className="flex gap-2">
         <TicketIcon width={18} height={18} className="mt-px shrink-0 text-accent" />
         <span>You need a ticket valid for Disneyland Park and Disney Adventure World on the same day.</span>

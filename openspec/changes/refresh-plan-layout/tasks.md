@@ -50,7 +50,7 @@
 
 ## 3. My day: date chips, day card and day sheet
 
-- [ ] 3.1 Replace the day tabs with date chips in `PlanScreen` (design Decision 4):
+- [x] 3.1 Replace the day tabs with date chips in `PlanScreen` (design Decision 4):
   - 60 × 64 px, weekday over date, a dot for days with items;
   - `role="tab"` names such as "Day 1 · Wed 12 Aug · DLP + DAW";
   - the row scrolls sideways inside its own container, and the selected chip scrolls into view.
@@ -59,12 +59,12 @@
   - `plan.test.tsx` selects days by chip;
   - `createTrip` in `e2e/helpers.ts` still finds "Day 1";
   - at 360 px, three chips fit without page overflow.
-- [ ] 3.2 Add the day card (design Decision 4): the date in Fraunces, the hours, the number of stops, and on a two-park day the park order and "Two-park ticket needed" (`ticket-reminder`), on `bg-sky` with `NightSky`. Verify `timeline.test.tsx` and `plan.test.tsx` find the reminder on two-park days and not on one-park days.
-- [ ] 3.3 Add the day sheet, opened from the card. It holds `DayHours` (Start and End labels unchanged) and, on two-park days, `TicketReminder` and `ParkOrder` with Switch order, its hint, its warning sheet and Undo. Verify:
+- [x] 3.2 Add the day card (design Decision 4): the date in Fraunces, the hours, the number of stops, and on a two-park day the park order and "Two-park ticket needed" (`ticket-reminder`), on `bg-sky` with `NightSky`. Verify `timeline.test.tsx` and `plan.test.tsx` find the reminder on two-park days and not on one-park days.
+- [x] 3.3 Add the day sheet, opened from the card. It holds `DayHours` (Start and End labels unchanged) and, on two-park days, `TicketReminder` and `ParkOrder` with Switch order, its hint, its warning sheet and Undo. Verify:
   - unit tests change the hours from the sheet;
   - unit tests switch the park order of a grouped day through the warning;
   - `e2e/plan.phone.spec.ts`'s hours and park-switch tests open the card first and pass.
-- [ ] 3.4 Make "Optimize route" the primary button and "Group by area" a secondary action below it, in `RouteActions` (design Decision 8; route-optimization delta). Verify:
+- [x] 3.4 Make "Optimize route" the primary button and "Group by area" a secondary action below it, in `RouteActions` (design Decision 8; route-optimization delta). Verify:
   - the `plan.test.tsx` checks for both actions, their messages and Undo pass;
   - "Group by area" is unavailable for a day with fewer than two items.
 

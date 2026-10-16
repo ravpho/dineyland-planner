@@ -172,8 +172,8 @@ describe('stop card on the plan map (park-map spec)', () => {
     expect(screen.queryByTestId('plan-map')).toBeNull()
     const sixth = screen.getAllByTestId('timeline-slot')[5]!
     expect(within(sixth).getByTestId('slot-name')).toHaveTextContent('Frozen Ever After')
-    expect(scroll).toHaveBeenCalledTimes(1)
-    expect(scroll.mock.contexts[0]).toBe(sixth)
+    // The date chips also keep the selected day in view; the timeline scrolls the stop once.
+    expect(scroll.mock.contexts.filter((c) => c === sixth)).toHaveLength(1)
     expect(within(sixth).getByTestId('slot-handle')).toHaveFocus()
     expect(sixth.querySelector('[data-highlight="true"]')).not.toBeNull()
     act(() => vi.advanceTimersByTime(2000))
