@@ -1,4 +1,5 @@
 import { expect, test, type Locator } from '@playwright/test'
+import { addFromCatalog, createTrip, showTab, slotNames, touchDrag } from './helpers'
 
 /** Longest transition on an element, in seconds. */
 const longestTransition = (l: Locator) =>
@@ -40,5 +41,18 @@ test.describe('reduced motion (app-shell spec: Reduced motion)', () => {
     expect(await page.evaluate(() => document.getAnimations().length)).toBe(0)
     expect(await longestTransition(panel)).toBe(0)
     expect(await panel.evaluate((el) => getComputedStyle(el).opacity)).toBe('1')
+  })
+
+  test('a dropped stop is in its place at once: no sliding rows and no drop animation', async ({ page }) => {
+    await createTrip(page)
+    for (const n of ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"]) await addFromCatalog(page, n)
+    await showTab(page, 'My day')
+    const handles = page.getByTestId('slot-handle')
+    await handles.nth(1).evaluate((el) => el.scrollIntoView({ block: 'center' }))
+    await touchDrag(page, handles.nth(2), handles.nth(0), { dwellMs: 50 })
+    await expect.poll(() => slotNames(page)).toEqual(["Peter Pan's Flight", 'Big Thunder Mountain', 'Phantom Manor'])
+    expect(await page.evaluate(() => document.getAnimations().length)).toBe(0)
+    await expect(page.getByTestId('drag-overlay')).toHaveCount(0)
+    expect(await page.getByTestId('timeline-slot').evaluateAll((els) => els.map((el) => getComputedStyle(el).transitionDuration))).toEqual(['0s', '0s', '0s'])
   })
 })

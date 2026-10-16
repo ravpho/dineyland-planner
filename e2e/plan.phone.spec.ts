@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { acceptDialogs, addFromCatalog, createTrip, setHours, setTripDays, showTab, slotNames, touchDrag } from './helpers'
+import { acceptDialogs, addFromCatalog, createTrip, openStop, removeStop, setHours, setTripDays, showTab, slotNames, touchDrag } from './helpers'
 
 test.beforeEach(({ page }) => acceptDialogs(page))
 
@@ -26,27 +26,91 @@ test('7.2 add from both parks, remove with undo, move up', async ({ page }) => {
   await addFromCatalog(page, 'Frozen Ever After')
   await showTab(page, 'My day')
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", 'Frozen Ever After'])
-  await page.getByRole('button', { name: 'Remove Frozen Ever After' }).click()
+  await removeStop(page, 'Frozen Ever After')
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"])
 
-  await page.getByRole('button', { name: 'Remove Phantom Manor' }).click()
+  await removeStop(page, 'Phantom Manor')
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', "Peter Pan's Flight"])
-  await page.getByRole('button', { name: 'Undo' }).click()
+  await page.getByRole('status').filter({ hasText: 'Removed Phantom Manor' }).getByRole('button', { name: 'Undo' }).click()
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"])
 
-  await page.getByRole('button', { name: "Move Peter Pan's Flight up" }).click()
+  // The stepper keeps the sheet open on the stop it moved.
+  const sheet = await openStop(page, "Peter Pan's Flight")
+  await sheet.getByRole('button', { name: "Move Peter Pan's Flight up" }).click()
+  await expect(sheet.getByTestId('stop-stepper')).toContainText('Stop 2 of 3')
+  expect(await slotNames(page)).toEqual(['Big Thunder Mountain', "Peter Pan's Flight", 'Phantom Manor'])
+  await sheet.getByRole('button', { name: 'Close' }).click()
+
+  // Move to top and Move to bottom close it.
+  await (await openStop(page, 'Phantom Manor')).getByRole('button', { name: 'Move to top' }).click()
+  expect(await slotNames(page)).toEqual(['Phantom Manor', 'Big Thunder Mountain', "Peter Pan's Flight"])
+  await expect(page.getByRole('status').filter({ hasText: 'Moved Phantom Manor to stop 1' })).toBeVisible()
+  await (await openStop(page, 'Phantom Manor')).getByRole('button', { name: 'Move to bottom' }).click()
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', "Peter Pan's Flight", 'Phantom Manor'])
 })
 
-test('7.3 reorder by touch drag on a phone', async ({ page }) => {
+test('7.3 reorder by touch drag on a phone: the drag starts on the grip at once, with no long press', async ({ page }) => {
   await createTrip(page)
   for (const n of ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"]) await addFromCatalog(page, n)
   await showTab(page, 'My day')
   const handles = page.getByTestId('slot-handle')
-  // Scroll the items clear of the fit bar pinned to the bottom of the screen.
+  // Scroll the items clear of the bottom bar.
   await handles.nth(1).evaluate((el) => el.scrollIntoView({ block: 'center' }))
-  await touchDrag(page, handles.nth(2), handles.nth(1))
+  expect(await handles.first().evaluate((el) => getComputedStyle(el).touchAction)).toBe('none')
+  await touchDrag(page, handles.nth(2), handles.nth(1), { holdMs: 0 })
   await expect.poll(() => slotNames(page)).toEqual(['Big Thunder Mountain', "Peter Pan's Flight", 'Phantom Manor'])
+})
+
+test('a swipe on the row itself scrolls the day and moves nothing', async ({ page }) => {
+  await createTrip(page)
+  for (let i = 0; i < 8; i++) await addFromCatalog(page, i % 2 ? 'Phantom Manor' : "Peter Pan's Flight")
+  await showTab(page, 'My day')
+  const before = await slotNames(page)
+  const name = page.getByTestId('slot-name').nth(2)
+  await name.scrollIntoViewIfNeeded()
+  const scrolled = await page.evaluate(() => window.scrollY)
+  const box = (await name.boundingBox())!
+  await touchDrag(page, name, { x: box.x + box.width / 2, y: box.y - 250 })
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(scrolled + 100)
+  expect(await slotNames(page)).toEqual(before)
+  await expect(page.getByTestId('drag-overlay')).toHaveCount(0)
+})
+
+test('drag the first stop to the fourth place, then Undo (trip-itinerary spec: Reorder and remove items)', async ({ page }) => {
+  await createTrip(page)
+  const names = ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", 'Autopia']
+  for (const n of names) await addFromCatalog(page, n)
+  await showTab(page, 'My day')
+  const handles = page.getByTestId('slot-handle')
+  await handles.nth(0).evaluate((el) => el.scrollIntoView({ block: 'center' }))
+  await touchDrag(page, handles.nth(0), handles.nth(3), { offsetY: 12 })
+  await expect.poll(() => slotNames(page)).toEqual(['Phantom Manor', "Peter Pan's Flight", 'Autopia', 'Big Thunder Mountain'])
+  await page.getByRole('status').filter({ hasText: 'Moved Big Thunder Mountain to stop 4' }).getByRole('button', { name: 'Undo' }).click()
+  expect(await slotNames(page)).toEqual(names)
+})
+
+test('drag into the part of the day below the screen: the day scrolls under the finger', async ({ page }) => {
+  await createTrip(page)
+  const names = [
+    'Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", 'Autopia', 'Pirates of the Caribbean',
+    "Alice's Curious Labyrinth", 'Dumbo the Flying Elephant', 'Buzz Lightyear Laser Blast', 'Star Wars Hyperspace Mountain', 'Adventure Isle',
+  ]
+  await setHours(page, { end: '23:00' })
+  for (const n of names) await addFromCatalog(page, n)
+  await showTab(page, 'My day')
+  expect(await slotNames(page)).toEqual(names)
+  const handles = page.getByTestId('slot-handle')
+  await handles.nth(0).scrollIntoViewIfNeeded()
+  const dockTop = (await page.getByTestId('dock').boundingBox())!.y
+  // The first stop that starts below the screen, above the bottom bar.
+  const tops = await page.getByTestId('timeline-slot').evaluateAll((els) => els.map((el) => el.getBoundingClientRect().top))
+  const firstHidden = tops.findIndex((top) => top > dockTop)
+  expect(firstHidden).toBeGreaterThan(0)
+
+  const box = (await handles.nth(0).boundingBox())!
+  await touchDrag(page, handles.nth(0), { x: box.x + box.width / 2, y: dockTop - 12 }, { dwellMs: 1500 })
+  await expect.poll(async () => (await slotNames(page)).indexOf('Big Thunder Mountain')).toBeGreaterThanOrEqual(firstHidden)
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
 })
 
 test('7.5 summary turns from Over by to Fits, and stays visible while scrolling', async ({ page }) => {
@@ -58,7 +122,7 @@ test('7.5 summary turns from Over by to Fits, and stays visible while scrolling'
   await showTab(page, 'My day')
   const summary = page.getByTestId('fit-summary')
   await expect(summary).toContainText('Over by')
-  await page.getByRole('button', { name: "Remove Walt's – An American Restaurant" }).click()
+  await removeStop(page, "Walt's – An American Restaurant")
   await expect(summary).toContainText('Fits')
 
   await setHours(page, { end: '23:00' })
@@ -92,7 +156,9 @@ test('7.6 share link imports an identical copy in a fresh browser', async ({ pag
   await expect(other.getByLabel('Trip', { exact: true })).toHaveValue(/.+/)
   await expect(other.getByLabel('Trip', { exact: true }).locator('option:checked')).toHaveText('Shared trip')
   expect(await slotNames(other)).toEqual(['Big Thunder Mountain', 'Disney Stars on Parade'])
-  await expect(other.getByLabel('Start time for Disney Stars on Parade')).toHaveValue('11:30')
+  const show = await openStop(other, 'Disney Stars on Parade')
+  await expect(show.getByLabel('Start time for Disney Stars on Parade')).toHaveValue('11:30')
+  await show.getByRole('button', { name: 'Close' }).click()
   await other.getByRole('tab', { name: /^Day 2/ }).click()
   expect(await slotNames(other)).toEqual(['Frozen Ever After'])
 
@@ -170,22 +236,26 @@ test('meal time and restaurant suggestion: lunch at 12:00 in the other park, swa
   await addFromCatalog(page, 'Spider-Man W.E.B. Adventure')
   await showTab(page, 'My day')
 
-  const lunch = page.getByTestId('timeline-slot').filter({ hasText: 'Au Chalet de la Marionnette' })
-  await expect(lunch.getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
-  const suggestions = lunch.getByTestId('restaurant-suggestions').getByRole('button')
+  const lunchRow = page.getByTestId('timeline-slot').filter({ hasText: 'Au Chalet de la Marionnette' })
+  await expect(lunchRow).toContainText('Lunch 12:00')
+  await expect(lunchRow).toContainText('3 quicker options')
+  const sheet = await openStop(page, 'Au Chalet de la Marionnette')
+  await expect(sheet.getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
+  const suggestions = sheet.getByTestId('restaurant-suggestions').getByRole('button')
   await expect(suggestions).toHaveCount(3)
   const names = (await suggestions.allTextContents()).map((t) => t.split(' · ')[0])
   expect(names).toEqual(['Stark Factory', 'The Hollywood Gardens Restaurant', 'Café Luminosity'])
 
+  // The sheet follows the stop, now Stark Factory, and the message sits above it.
   await suggestions.first().click()
-  const stark = page.getByTestId('timeline-slot').filter({ hasText: 'Stark Factory' })
-  await expect(stark.getByLabel('Meal time for Stark Factory')).toHaveValue('12:00')
+  await expect(sheet).toHaveAccessibleName('Stark Factory')
+  await expect(sheet.getByLabel('Meal time for Stark Factory')).toHaveValue('12:00')
   expect(await slotNames(page)).toEqual(["Crush's Coaster", 'Frozen Ever After', 'The Twilight Zone Tower of Terror', 'Stark Factory', 'Spider-Man W.E.B. Adventure'])
   await expect(page.getByTestId('park-change')).toHaveCount(0)
 
   await page.getByRole('status').filter({ hasText: 'Swapped to Stark Factory' }).getByRole('button', { name: 'Undo' }).click()
   expect(await slotNames(page)).toEqual(["Crush's Coaster", 'Frozen Ever After', 'The Twilight Zone Tower of Terror', 'Au Chalet de la Marionnette', 'Spider-Man W.E.B. Adventure'])
-  await expect(page.getByTestId('timeline-slot').filter({ hasText: 'Au Chalet de la Marionnette' }).getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
+  await expect(sheet.getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
 })
 
 test('switch park order: unavailable until grouped, warns about the lunch, and undo', async ({ page }) => {

@@ -70,14 +70,14 @@
 
 ## 4. Timeline rows and the stop sheet
 
-- [ ] 4.1 Rebuild `SlotCard` as `StopRow` in `DayTimeline` (design Decision 5). Each row has:
+- [x] 4.1 Rebuild `SlotCard` as `StopRow` in `DayTimeline` (design Decision 5). Each row has:
   - the stop node, start and end times, the name, and area with wait;
   - tags for meal time, show time with a lock icon, late with "arrives … · be there by …", unsuitable, "Ends after …" and "N quicker options";
   - the grip;
   - one open button named "Open stop N, <name>".
 
   Park sections are drawn as row classes, with the "Walk to … · N min" pill (`park-change`) and the walk line with free time (`free-time`). Missing entries keep an inline Remove. Verify `timeline.test.tsx` covers every tag, the late explanation, the section pill, free time and a missing entry. Keep the test ids listed in the design's Goals.
-- [ ] 4.2 Add `StopSheet` (design Decision 6) with:
+- [x] 4.2 Add `StopSheet` (design Decision 6) with:
   - the four time tiles (Arrive/Be there for shows) and the late explanation;
   - the meal-time or show-time select and the lock toggle, moved from the card;
   - restaurant suggestions with swap and Undo;
@@ -91,20 +91,20 @@
   - the stepper keeps the sheet open on the moved item;
   - Move to top and Move to bottom produce the expected order;
   - Remove and Undo restore the item.
-- [ ] 4.3 Update `meals.test.tsx` and the e2e meal, suggestion, move-up and remove tests in `plan.phone.spec.ts` and `journey.phone.spec.ts` to act through the stop sheet. Verify they pass.
+- [x] 4.3 Update `meals.test.tsx` and the e2e meal, suggestion, move-up and remove tests in `plan.phone.spec.ts` and `journey.phone.spec.ts` to act through the stop sheet. Verify they pass.
 
 ## 5. Drag and drop
 
-- [ ] 5.1 Change `TouchSensor` in `PlannerDnd` to `{ distance: 4 }`, and give the grip and `catalog-drag-handle` `touch-action: none` (design Decision 7). Verify:
+- [x] 5.1 Change `TouchSensor` in `PlannerDnd` to `{ distance: 4 }`, and give the grip and `catalog-drag-handle` `touch-action: none` (design Decision 7). Verify:
   - `dnd.test.ts` checks the sensor settings;
   - a new e2e touch drag in `plan.phone.spec.ts` moves without waiting first. Add a `touchDrag` option without the 350 ms hold.
-- [ ] 5.2 Show the dragged row as a lifted card in `DragOverlay`, with the original at 30% opacity. Turn off sortable transitions and the drop animation under reduced motion. Verify:
+- [x] 5.2 Show the dragged row as a lifted card in `DragOverlay`, with the original at 30% opacity. Turn off sortable transitions and the drop animation under reduced motion. Verify:
   - `e2e/motion.phone.spec.ts` (reduced motion) finds no running animations after a drop;
   - a desktop mouse drag still reorders, in `plan.desktop.spec.ts`.
-- [ ] 5.3 Report every move ("Moved <name> to stop N") with Undo through `undoOrderChange`, for drops, the stepper and Move to top/bottom. Verify:
+- [x] 5.3 Report every move ("Moved <name> to stop N") with Undo through `undoOrderChange`, for drops, the stepper and Move to top/bottom. Verify:
   - unit tests check each source's message and Undo;
   - the e2e test "drag the first stop to the fourth place, then Undo" restores the order.
-- [ ] 5.4 Verify the e2e test "drag into the part of the day below the screen" on a 390 × 844 phone with a 10-item day: dropping near the bottom auto-scrolls and lands the stop below the first screen.
+- [x] 5.4 Verify the e2e test "drag into the part of the day below the screen" on a 390 × 844 phone with a 10-item day: dropping near the bottom auto-scrolls and lands the stop below the first screen.
 
 ## 6. Map tab
 

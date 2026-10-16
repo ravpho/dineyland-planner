@@ -9,6 +9,7 @@ import { dayParksLabel } from '../DayHeader'
 import { createPlannerStore } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
+import { openStop } from '../../test/stops'
 import { CreateTripForm } from '../CreateTripForm'
 import { ToastProvider } from '../Toast'
 import { DndContext } from '@dnd-kit/core'
@@ -218,7 +219,7 @@ describe('optimize route (route-optimization spec)', () => {
     ])
     optimize()
     expect(message(/^Route optimized/)).toHaveTextContent(/ · The Lion King: Rhythms of the Pride Lands 16:45 → 13:10Undo$/)
-    expect(screen.getByRole('combobox', { name: 'Start time for The Lion King: Rhythms of the Pride Lands' })).toHaveValue('13:10')
+    expect(within(openStop('The Lion King: Rhythms of the Pride Lands')).getByRole('combobox', { name: 'Start time for The Lion King: Rhythms of the Pride Lands' })).toHaveValue('13:10')
   })
 
   test('no quicker order: says so, without Undo', () => {

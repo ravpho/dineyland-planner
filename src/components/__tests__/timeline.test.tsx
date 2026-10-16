@@ -3,11 +3,13 @@ import { act, fireEvent, screen, within } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
 import catalogJson from '../../data/catalog.json'
 import { parseCatalog } from '../../domain/catalog'
-import { scheduleDay } from '../../domain/schedule'
+import { scheduleDay, type ScheduledSlot } from '../../domain/schedule'
+import { formatClock } from '../../domain/time'
 import type { Day, PlanItem } from '../../domain/trip'
 import { createPlannerStore, selectedDay } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
+import { openStop } from '../../test/stops'
 import PlanScreen from '../../screens/PlanScreen'
 import { DayTimeline } from '../DayTimeline'
 import { Breakdown, FitBar, TicketReminder } from '../FitSummary'
@@ -35,13 +37,39 @@ const day = (items: (string | [string, string])[], start = '09:30', end = '22:00
 const slots = () => screen.getAllByTestId('timeline-slot')
 
 describe('timeline marks (day-schedule spec)', () => {
-  test('each slot shows walk, arrival, wait, start and end', () => {
-    renderDay(day(['dlp.big-thunder-mountain']))
-    const [slot] = slots()
-    expect(within(slot!).getByTestId('slot-time')).toHaveTextContent(/^\d{2}:\d{2}–\d{2}:\d{2}$/)
-    expect(within(slot!).getByText(/arrive \d{2}:\d{2}/)).toBeInTheDocument()
-    expect(within(slot!).getByText(/wait \d+ min/)).toBeInTheDocument()
-    expect(within(slot!).getByText('(typical)')).toBeInTheDocument()
+  test('each row shows its walk, wait, start and end; the arrival is in its sheet', () => {
+    const schedule = renderDay(day(['dlp.big-thunder-mountain']))
+    const slot = schedule.slots[0] as ScheduledSlot
+    const [row] = slots()
+    expect(within(row!).getByTestId('slot-time')).toHaveTextContent(`${formatClock(slot.start)}–${formatClock(slot.end)}`)
+    expect(within(row!).getByTestId('slot-walk')).toHaveTextContent(`${slot.walk} min`)
+    expect(within(row!).getByText(/from the entrance/)).toBeInTheDocument()
+    expect(within(row!).getByText(new RegExp(`wait ${slot.wait} min`))).toBeInTheDocument()
+    expect(within(row!).queryByText(/arrive/)).toBeNull()
+    expect(within(openStop('Big Thunder Mountain')).getByTestId('stop-times')).toHaveTextContent(`Arrive${formatClock(slot.arrive)}`)
+  })
+
+  test('one button opens the stop, named with its number; the grip is separate', () => {
+    renderDay(day(['dlp.big-thunder-mountain', 'dlp.phantom-manor']))
+    expect(within(slots()[1]!).getByRole('button', { name: 'Open stop 2, Phantom Manor' })).toHaveAttribute('aria-haspopup', 'dialog')
+    expect(within(slots()[1]!).getByRole('button', { name: 'Reorder Phantom Manor' })).toHaveAttribute('data-testid', 'slot-handle')
+    expect(within(slots()[1]!).queryByRole('button', { name: /Move|Remove/ })).toBeNull()
+  })
+
+  test('a restaurant with quicker options of the same kind says how many', () => {
+    const real = parseCatalog(catalogJson)
+    const d = day(['daw.crushs-coaster', 'daw.frozen-ever-after', 'daw.twilight-zone-tower-of-terror'])
+    d.items.push({ key: 'lunch', itemId: 'dlp.au-chalet-de-la-marionnette', mealTime: '12:00' })
+    renderWithPlanner(
+      <ToastProvider>
+        <DndContext>
+          <DayTimeline day={d} schedule={scheduleDay(d, real)} />
+        </DndContext>
+      </ToastProvider>,
+      { catalog: real },
+    )
+    expect(within(slots()[3]!).getByText(/^\d+ quicker options?$/)).toBeInTheDocument()
+    expect(within(slots()[0]!).queryByText(/quicker option/)).toBeNull()
   })
 
   test('unsuitable items carry their reason', () => {
@@ -49,9 +77,35 @@ describe('timeline marks (day-schedule spec)', () => {
     expect(within(slots()[0]!).getByText('Needs 120 cm')).toBeInTheDocument()
   })
 
-  test('late shows are flagged', () => {
-    renderDay(day(['dlp.walts', 'dlp.walts', 'dlp.walts', ['dlp.parade', '13:30']]))
-    expect(within(slots()[3]!).getByText(/\d+ min late/)).toBeInTheDocument()
+  test('late shows are flagged with when you arrive and when to be there (day-schedule spec: Late flags say why)', () => {
+    const schedule = renderDay(day(['dlp.walts', 'dlp.walts', 'dlp.walts', ['dlp.parade', '13:30']]))
+    const show = schedule.slots[3] as ScheduledSlot
+    expect(within(slots()[3]!).getByText(`${show.lateBy} min late`)).toBeInTheDocument()
+    expect(within(slots()[3]!).getByTestId('late-note')).toHaveTextContent(`arrives ${formatClock(show.arrive)} · be there by 13:10`)
+    expect(within(openStop('Disney Stars on Parade')).getByTestId('late-explanation')).toHaveTextContent(
+      `You’d arrive at ${formatClock(show.arrive)}, ${show.lateBy} min after the recommended 13:10.`,
+    )
+  })
+
+  test('a late meal is due 30 min after its meal time', () => {
+    const schedule = renderDay({ ...day(['dlp.walts', 'dlp.walts']), items: [...day(['dlp.walts', 'dlp.walts']).items, { key: 'm', itemId: 'dlp.cafe-hyperion', mealTime: '11:00' }] })
+    const meal = schedule.slots[2] as ScheduledSlot
+    expect(within(slots()[2]!).getByTestId('late-note')).toHaveTextContent(`arrives ${formatClock(meal.arrive)} · be there by 11:30`)
+    expect(within(openStop('Café Hyperion')).getByTestId('late-explanation')).toHaveTextContent('after the latest arrival for this meal, 11:30')
+  })
+
+  test('tags: lunch and dinner times, and the show time with its lock', () => {
+    renderDay({
+      ...day([]),
+      items: [
+        { key: 'a', itemId: 'dlp.cafe-hyperion', mealTime: '12:30' },
+        { key: 'b', itemId: 'dlp.parade', showTime: '17:30', timeLocked: true },
+        { key: 'c', itemId: 'dlp.walts', mealTime: '19:00' },
+      ],
+    })
+    expect(within(slots()[0]!).getByText('Lunch 12:30')).toBeInTheDocument()
+    expect(within(slots()[1]!).getByText(/^Show 17:30/)).toHaveTextContent('Show 17:30 (time kept when optimizing)')
+    expect(within(slots()[2]!).getByText('Dinner 19:00')).toBeInTheDocument()
   })
 
   test('free time before a show is shown', () => {
@@ -65,9 +119,12 @@ describe('timeline marks (day-schedule spec)', () => {
     expect(screen.getByTestId('fit-summary')).toHaveTextContent(/Over by \d+ min/)
   })
 
-  test('items not in the catalog show "No longer available"', () => {
+  test('items not in the catalog show "No longer available", with Remove on the row', () => {
     renderDay(day(['dlp.retired', 'dlp.peter-pans-flight']))
     expect(within(slots()[0]!).getByText('No longer available')).toBeInTheDocument()
+    expect(within(slots()[0]!).queryByRole('button', { name: /^Open stop/ })).toBeNull()
+    fireEvent.click(within(slots()[0]!).getByRole('button', { name: 'Remove No longer available' }))
+    expect(screen.getByText('Removed No longer available')).toBeInTheDocument()
   })
 
   test('fit summary and breakdown', () => {
@@ -84,6 +141,9 @@ describe('timeline marks (day-schedule spec)', () => {
     expect(changes).toHaveLength(1)
     expect(changes[0]).toHaveTextContent(/Walk to Disney Adventure World · park change · \d+ min/)
     expect(within(slots()[1]!).getByTestId('park-change')).toBeInTheDocument()
+    // The walk is in the note, so the row has no walk line of its own.
+    expect(within(slots()[1]!).queryByTestId('slot-walk')).toBeNull()
+    expect(screen.getByTestId('first-park')).toHaveTextContent('Disneyland Park')
     expect(screen.getByTestId('two-park-note')).toHaveTextContent(/ticket valid for Disneyland Park and Disney Adventure World/)
   })
 
@@ -150,7 +210,7 @@ describe('stop numbers in the timeline (day-schedule spec)', () => {
       const id = selectedDay(store.getState())!.id
       for (const item of ['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'dlp.peter-pans-flight']) store.getState().addItem(id, item)
     })
-    fireEvent.click(screen.getByRole('button', { name: "Move Peter Pan's Flight up" }))
+    fireEvent.click(within(openStop("Peter Pan's Flight")).getByRole('button', { name: "Move Peter Pan's Flight up" }))
     const byName = (name: string) => within(slots().find((s) => within(s).queryByTestId('slot-name')?.textContent === name)!).getByTestId('slot-stop')
     expect(byName("Peter Pan's Flight")).toHaveTextContent('Stop 2')
     expect(byName('Phantom Manor')).toHaveTextContent('Stop 3')

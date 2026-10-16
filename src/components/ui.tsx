@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { useEffect, useRef, type ButtonHTMLAttributes, type ComponentPropsWithRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { CloseIcon } from './icons'
 import { useRegisterSheet } from './Toast'
@@ -23,7 +23,7 @@ export function Button({ variant = 'secondary', className = '', ...props }: Butt
 }
 
 /** Square 44x44 icon button; `label` is required for screen readers. */
-export function IconButton({ label, className = '', children, ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { label: string }) {
+export function IconButton({ label, className = '', children, ...props }: ComponentPropsWithRef<'button'> & { label: string }) {
   return (
     <button
       type="button"
@@ -74,19 +74,36 @@ export function Stars({ rating }: { rating: number }) {
   )
 }
 
+/** Open sheets, oldest first. */
+const openSheets: object[] = []
+
 /**
  * Modal sheet: bottom sheet on phones, centred dialog on wide screens. Rendered into document.body, so a
  * sticky ancestor (such as the wide-screen plan column) can't trap it under other sticky content.
+ *
+ * It takes focus when it opens and gives it back to the opener when it closes. Escape closes only the top
+ * sheet, so details opened over a stop's sheet close on their own.
  */
 export function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
+  const close = useRef(onClose)
   useRegisterSheet()
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    close.current = onClose
+  })
+  useEffect(() => {
+    const token = {}
+    openSheets.push(token)
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && openSheets.at(-1) === token && close.current()
     document.addEventListener('keydown', onKey)
     ref.current?.focus()
-    return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      openSheets.splice(openSheets.indexOf(token), 1)
+      if (opener?.isConnected) opener.focus({ preventScroll: true })
+    }
+  }, [])
   return createPortal(
     // The top 5.5rem stays free for messages (refresh-plan-layout design Decision 10).
     <div className="sheet-scrim fixed inset-0 z-40 flex items-end justify-center bg-sky-deep/50 pt-[5.5rem] sm:items-center" onClick={onClose}>

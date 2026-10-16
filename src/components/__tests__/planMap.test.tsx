@@ -9,6 +9,7 @@ import { formatClock } from '../../domain/time'
 import PlanScreen from '../../screens/PlanScreen'
 import { createPlannerStore, selectedDay, selectedTrip } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
+import { openStop } from '../../test/stops'
 import { CatalogList } from '../CatalogList'
 import { ToastProvider } from '../Toast'
 
@@ -77,7 +78,7 @@ describe('map of the day in the plan (park-map spec)', () => {
 
   test('map follows the plan: an item moved up in the timeline carries its new number', () => {
     renderPlan([THUNDER, MANOR, PETER])
-    fireEvent.click(screen.getByRole('button', { name: "Move Peter Pan's Flight up" }))
+    fireEvent.click(within(openStop("Peter Pan's Flight")).getByRole('button', { name: "Move Peter Pan's Flight up" }))
     showMap()
     expect(stopNumbers()).toContainEqual([PETER, '2'])
   })

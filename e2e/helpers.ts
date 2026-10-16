@@ -34,22 +34,28 @@ export async function addFromCatalog(page: Page, name: string, time?: string) {
 
 export const slotNames = (page: Page) => page.getByTestId('slot-name').allTextContents()
 
-/** Long-press and drag with real touch events (dnd-kit TouchSensor needs a 200 ms press). */
-export async function touchDrag(page: Page, from: Locator, to: Locator, { offsetY = -8 } = {}) {
+type Point = { x: number; y: number }
+
+/**
+ * Drags with real touch events. The drag starts as soon as the finger moves (refresh-plan-layout design
+ * Decision 7), so there is no hold unless `holdMs` asks for one. `to` is a row to land on, or a point on the
+ * screen; `dwellMs` keeps the finger there before lifting it, so the list can scroll under it.
+ */
+export async function touchDrag(page: Page, from: Locator, to: Locator | Point, { offsetY = -8, holdMs = 0, dwellMs = 100 } = {}) {
   const client = await page.context().newCDPSession(page)
   const a = (await from.boundingBox())!
-  const b = (await to.boundingBox())!
+  const b = 'x' in to ? { x: to.x, y: to.y, width: 0, height: 0 } : (await to.boundingBox())!
   const start = { x: a.x + a.width / 2, y: a.y + a.height / 2 }
-  const end = { x: b.x + b.width / 2, y: b.y + b.height / 2 + offsetY }
+  const end = { x: b.x + b.width / 2, y: b.y + b.height / 2 + ('x' in to ? 0 : offsetY) }
   await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [start] })
-  await page.waitForTimeout(350)
+  if (holdMs) await page.waitForTimeout(holdMs)
   const steps = 12
   for (let i = 1; i <= steps; i++) {
     const point = { x: start.x + ((end.x - start.x) * i) / steps, y: start.y + ((end.y - start.y) * i) / steps }
     await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [point] })
     await page.waitForTimeout(25)
   }
-  await page.waitForTimeout(100)
+  await page.waitForTimeout(dwellMs)
   await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
   await client.detach()
 }
@@ -81,4 +87,19 @@ export async function setTripDays(page: Page, days: number) {
   const sheet = page.getByRole('dialog', { name: 'Number of days' })
   await sheet.getByLabel('Number of days').selectOption(String(days))
   await sheet.getByRole('button', { name: 'Done' }).click()
+}
+
+/** Opens a stop's sheet from its row in My day (day-schedule spec: Sheet for each timeline item). */
+export async function openStop(page: Page, name: string): Promise<Locator> {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  await page.getByRole('button', { name: new RegExp(`^Open stop \\d+, ${escaped}$`) }).click()
+  const sheet = page.getByRole('dialog')
+  await expect(sheet).toBeVisible()
+  return sheet
+}
+
+/** Removes a stop through its sheet's "Remove from day". */
+export async function removeStop(page: Page, name: string) {
+  await (await openStop(page, name)).getByRole('button', { name: 'Remove from day' }).click()
+  await expect(page.getByRole('dialog')).toHaveCount(0)
 }
