@@ -9,6 +9,12 @@ async function centreOf(locator: Locator) {
   return { x: b.x + b.width / 2, y: b.y + b.height / 2 }
 }
 
+/** The Map tab's "All places" view: every place that passes Explore's filters. */
+async function showAllPlaces(page: Page) {
+  await showTab(page, 'Map')
+  await page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' }).click()
+}
+
 /** One-finger drag with real touch events. */
 async function touchPan(page: Page, from: { x: number; y: number }, to: { x: number; y: number }) {
   const cdp = await page.context().newCDPSession(page)
@@ -24,10 +30,10 @@ async function touchPan(page: Page, from: { x: number; y: number }, to: { x: num
 test('6.1 plan from the map: zoom, drag, tap, add, route, area table', async ({ page }) => {
   await createTrip(page)
   await addFromCatalog(page, 'Big Thunder Mountain')
-  await showTab(page, 'Explore')
-  await page.getByRole('button', { name: 'Map', exact: true }).click()
+  await showAllPlaces(page)
   await expect(map(page)).toBeVisible()
   await expect(map(page).getByTestId('map-zone')).toHaveCount(5)
+  await expect(page.getByTestId('match-count')).toHaveText(/^\d+ places in Disneyland Park$/)
 
   await page.getByRole('button', { name: 'Zoom in' }).click()
   await expect(map(page)).toHaveAttribute('data-zoom', '1.5')
@@ -59,8 +65,8 @@ test('6.1 plan from the map: zoom, drag, tap, add, route, area table', async ({ 
 })
 
 test('6.1 pinch zooms the map', async ({ page }) => {
-  await page.goto('./#/catalog')
-  await page.getByRole('button', { name: 'Map', exact: true }).click()
+  await page.goto('./#/map')
+  await page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' }).click()
   const c = await centreOf(map(page))
   const cdp = await page.context().newCDPSession(page)
   const fingers = (gap: number) => [
@@ -82,8 +88,7 @@ test('6.1 the map works offline after the first visit', async ({ page, context }
   })
   await context.setOffline(true)
   await page.reload()
-  await showTab(page, 'Explore')
-  await page.getByRole('button', { name: 'Map', exact: true }).click()
+  await showAllPlaces(page)
   await expect(map(page).getByTestId('map-zone')).toHaveCount(5)
   await expect(map(page).getByTestId('route-stop')).toHaveText(['1'])
   await marker(page, 'Phantom Manor').tap()
@@ -91,12 +96,12 @@ test('6.1 the map works offline after the first visit', async ({ page, context }
   await context.setOffline(false)
 })
 
-test('the plan’s own map: numbered stops, park switch, fit bar, and Show in timeline', async ({ page }) => {
+test('the Map tab’s My day: numbered stops, park switch, fit bar, and Show in timeline', async ({ page }) => {
   await createTrip(page)
   const day = ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", '"it\'s a small world"', "Crush's Coaster", 'Frozen Ever After', 'Ratatouille: L’Aventure Totalement Toquée de Rémy']
   for (const n of day) await addFromCatalog(page, n)
-  await showTab(page, 'My day')
-  await page.getByRole('group', { name: 'Plan view' }).getByRole('button', { name: 'Map' }).click()
+  await showTab(page, 'Map')
+  await expect(page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'My day' })).toHaveAttribute('aria-pressed', 'true')
 
   const planMap = page.getByTestId('plan-map')
   const parks = planMap.getByRole('group', { name: 'Park on the map' })
@@ -114,9 +119,18 @@ test('the plan’s own map: numbered stops, park switch, fit bar, and Show in ti
   await expect(card.getByTestId('stop-times')).toContainText('Stop 7')
   await card.getByRole('button', { name: 'Show in timeline' }).click()
 
+  // My day opens on that stop.
+  await expect(page).toHaveURL(/#\/plan$/)
+  await expect(page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: 'My day' })).toHaveAttribute('aria-current', 'page')
   await expect(planMap).toHaveCount(0)
   const seventh = page.getByTestId('timeline-slot').nth(6)
   await expect(seventh.getByTestId('slot-name')).toHaveText('Ratatouille: L’Aventure Totalement Toquée de Rémy')
   await expect(seventh).toBeInViewport()
   await expect(seventh.getByTestId('slot-handle')).toBeFocused()
+
+  // The map choice is kept: All places is still shown after a visit to Explore.
+  await showAllPlaces(page)
+  await showTab(page, 'Explore')
+  await showTab(page, 'Map')
+  await expect(page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' })).toHaveAttribute('aria-pressed', 'true')
 })

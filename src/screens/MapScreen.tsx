@@ -1,11 +1,14 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { filterCatalog } from '../domain/filters'
-import { usePlanningMonth, useSelectedSchedule } from '../app/hooks'
+import { useIsWide, usePlanningMonth, useSelectedSchedule } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
-import { mapPark, selectedDay, type MapMode } from '../state/store'
+import { mapPark, selectedDay, selectedTrip, type MapMode } from '../state/store'
 import { useAddFlow } from '../components/AddFlow'
+import { DateChips } from '../components/DayHeader'
+import { FilterPanel, FiltersButton, useClearableFilters } from '../components/FilterPanel'
 import { ParkMap } from '../components/ParkMap'
 import { PlanMap } from '../components/PlanMap'
+import { Button } from '../components/ui'
 
 const MODES: { mode: MapMode; label: string }[] = [
   { mode: 'day', label: 'My day' },
@@ -19,12 +22,29 @@ function AllPlaces() {
   const profile = usePlanner((s) => s.profile)
   const month = usePlanningMonth()
   const shownPark = usePlanner((s) => mapPark(s, catalog))
+  const clearFilters = usePlanner((s) => s.clearFilters)
+  const clearable = useClearableFilters()
+  const [showFilters, setShowFilters] = useState(false)
   const { add, openDetails, sheets } = useAddFlow()
   const listed = useMemo(() => filterCatalog(catalog, { ...filters, parkId: shownPark }, profile, month), [catalog, filters, shownPark, profile, month])
+  const parkName = catalog.parks.find((p) => p.id === shownPark)?.name
   return (
     <>
+      <div className="mb-2 flex items-center gap-2">
+        <p className="min-w-0 flex-1 text-sm text-ink-muted" aria-live="polite" data-testid="match-count">
+          {listed.length} {listed.length === 1 ? 'place' : 'places'} in {parkName}
+          {filters.query && ` matching “${filters.query}”`}
+        </p>
+        {clearable && (
+          <Button variant="ghost" className="px-3" onClick={clearFilters}>
+            Clear filters
+          </Button>
+        )}
+        <FiltersButton onClick={() => setShowFilters(true)} />
+      </div>
       <ParkMap listed={listed} onAdd={add} onOpen={openDetails} />
       {sheets}
+      {showFilters && <FilterPanel onClose={() => setShowFilters(false)} />}
     </>
   )
 }
@@ -33,8 +53,10 @@ function AllPlaces() {
 export default function MapScreen() {
   const mode = usePlanner((s) => s.mapMode)
   const setMode = usePlanner((s) => s.setMapMode)
+  const trip = usePlanner(selectedTrip)
   const day = usePlanner(selectedDay)
   const schedule = useSelectedSchedule()
+  const wide = useIsWide()
 
   return (
     <section aria-label="Map" className="flex min-w-0 flex-col gap-2">
@@ -52,6 +74,8 @@ export default function MapScreen() {
           </button>
         ))}
       </div>
+      {/* Phones pick the day here too; wide screens have the chips in the My day column. */}
+      {mode === 'day' && !wide && trip && day && <DateChips trip={trip} day={day} />}
       {/* Keyed by mode, so switching fades the new map in (midnight-theme design Decision 6). */}
       <div key={mode} className="view-enter">
         {mode === 'all' ? (

@@ -1,8 +1,44 @@
 import type { ItemType, ParkId } from '../domain/catalog'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
+import { FilterIcon } from './icons'
 import { ProfileEditor } from './ProfileEditor'
 import { TYPE_LABELS } from './labels'
 import { Button, Chip, Field, inputClass, Sheet } from './ui'
+
+/** How many filters are on: park, each area and type, hiding unsuitable rides, and the group profile. */
+export function useActiveFilterCount(): number {
+  const filters = usePlanner((s) => s.filters)
+  const profile = usePlanner((s) => s.profile)
+  return (filters.parkId === 'all' ? 0 : 1) + filters.areaIds.length + filters.types.length + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
+}
+
+/** Whether "Clear filters" would change anything: it resets the park, areas, types and search. */
+export function useClearableFilters(): boolean {
+  const filters = usePlanner((s) => s.filters)
+  return filters.parkId !== 'all' || filters.areaIds.length > 0 || filters.types.length > 0 || filters.query !== ''
+}
+
+/** The Filters icon button, with a badge counting the filters that are on (refresh-plan-layout design Decision 11). */
+export function FiltersButton({ onClick }: { onClick: () => void }) {
+  const count = useActiveFilterCount()
+  return (
+    <button
+      type="button"
+      aria-haspopup="dialog"
+      aria-label={count ? `Filters, ${count} on` : 'Filters'}
+      title="Filters"
+      onClick={onClick}
+      className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-line-strong bg-surface text-ink hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+    >
+      <FilterIcon />
+      {count > 0 && (
+        <span aria-hidden className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-xs font-semibold text-on-accent" data-testid="filter-count">
+          {count}
+        </span>
+      )}
+    </button>
+  )
+}
 
 const toggle = <T,>(list: T[], value: T) => (list.includes(value) ? list.filter((v) => v !== value) : [...list, value])
 

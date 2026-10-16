@@ -5,7 +5,9 @@ import type { DaySchedule, ScheduledSlot } from '../domain/schedule'
 import { stopNumbers } from '../domain/stops'
 import { formatClock } from '../domain/time'
 import type { Day } from '../domain/trip'
+import { useIsWide } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
+import { navigate } from '../routing'
 import { CloseIcon } from './icons'
 import { areaName, formatStops } from './labels'
 import { MapCanvas } from './ParkMap'
@@ -15,6 +17,12 @@ import { Badge, Button, IconButton } from './ui'
 function StopCard({ day, slots, stops, onClose }: { day: Day; slots: ScheduledSlot[]; stops: Map<string, number>; onClose: () => void }) {
   const catalog = useCatalog()
   const showInTimeline = usePlanner((s) => s.showInTimeline)
+  const wide = useIsWide()
+  /** Opens My day on that stop. Wide screens already show My day beside the map, so the map stays (park-map spec: Stop card). */
+  const show = (key: string) => {
+    showInTimeline(key)
+    if (!wide) navigate({ name: 'plan' })
+  }
   const { item } = slots[0]!
   const park = catalog.parks.find((p) => p.id === item.parkId)!
   return (
@@ -46,7 +54,7 @@ function StopCard({ day, slots, stops, onClose }: { day: Day; slots: ScheduledSl
               <Button
                 className="ml-auto px-3"
                 aria-label={slots.length > 1 ? `Show stop ${stop} in timeline` : undefined}
-                onClick={() => showInTimeline(s.entry.key)}
+                onClick={() => show(s.entry.key)}
               >
                 Show in timeline
               </Button>

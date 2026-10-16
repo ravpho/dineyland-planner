@@ -125,7 +125,7 @@ See proposal.md (Why) for the motivation and the delta specs for the required be
   - **All places** renders today's `ParkMap`, with `listed` from the same `filterCatalog(filters, search)` call that Explore uses. Above it, one line says how many places match, with a Filters button that opens `FilterPanel` and "Clear filters".
 - **Store:**
   - `catalogView` and `planView` are replaced by `mapMode: 'day' | 'all'`, which is session-only and defaults to `'day'`.
-  - `showInTimeline(key)` only sets `planFocusKey`. "Show in timeline" calls it and then `navigate({ name: 'plan' })`.
+  - `showInTimeline(key)` only sets `planFocusKey`. "Show in timeline" calls it and then, on phones, `navigate({ name: 'plan' })`. Wide screens already show My day beside the map, so the map stays and the right column scrolls to the stop.
   - `DayTimeline` already scrolls to the focused key, and keeps doing so.
 - **Wide screens:** a segmented "Explore | Map" control above the left column links to `#/catalog` and `#/map`, and the right column always shows My day.
 - *Alternative:* keep the maps inside Explore and My day. Rejected in the review: it means two maps in two places.

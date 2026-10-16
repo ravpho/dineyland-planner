@@ -108,7 +108,7 @@
 
 ## 6. Map tab
 
-- [ ] 6.1 Add `MapScreen` with a "Map view" control (My day, All places) bound to `mapMode` (design Decision 8):
+- [x] 6.1 Add `MapScreen` with a "Map view" control (My day, All places) bound to `mapMode` (design Decision 8):
   - My day renders `PlanMap`, keyed by day.
   - All places renders `ParkMap` with the same filtered items as Explore, plus a line with the match count, Filters (opens `FilterPanel`) and "Clear filters".
 
@@ -116,10 +116,10 @@
   - the mode is kept across tab changes and day changes;
   - All places follows a type filter set in Explore;
   - the route is drawn in both modes.
-- [ ] 6.2 Make "Show in timeline" call `showInTimeline(key)` and navigate to `#/plan`, where the timeline scrolls the item into view. Verify:
+- [x] 6.2 Make "Show in timeline" call `showInTimeline(key)` and navigate to `#/plan`, where the timeline scrolls the item into view. Verify:
   - `planMap.test.tsx` and `store.test.ts` cover it;
   - `e2e/map.phone.spec.ts`'s Show in timeline test passes from the Map tab.
-- [ ] 6.3 Update `e2e/map.phone.spec.ts` and `e2e/map.desktop.spec.ts` to reach the maps through the Map tab or the wide "Explore | Map" control, instead of "Catalog view" and "Plan view". Verify the zoom, pinch, offline and route tests pass.
+- [x] 6.3 Update `e2e/map.phone.spec.ts` and `e2e/map.desktop.spec.ts` to reach the maps through the Map tab or the wide "Explore | Map" control, instead of "Catalog view" and "Plan view". Verify the zoom, pinch, offline and route tests pass.
 
 ## 7. Explore
 

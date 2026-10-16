@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useIsWide, useSelectedSchedule } from '../app/hooks'
 import { usePlanner } from '../app/PlannerContext'
 import { selectedDay, selectedTrip } from '../state/store'
@@ -7,7 +6,6 @@ import { DateChips, DayCard } from '../components/DayHeader'
 import { DayTimeline } from '../components/DayTimeline'
 import { Breakdown, FitBar } from '../components/FitSummary'
 import { NightSky } from '../components/NightSky'
-import { PlanMap } from '../components/PlanMap'
 import { RouteActions } from '../components/RouteActions'
 
 export default function PlanScreen() {
@@ -15,15 +13,6 @@ export default function PlanScreen() {
   const day = usePlanner(selectedDay)
   const wide = useIsWide()
   const schedule = useSelectedSchedule()
-  // Interim until the Map tab takes over the day's map (refresh-plan-layout task 6.1).
-  const [view, setView] = useState<'timeline' | 'map'>('timeline')
-  const focusKey = usePlanner((s) => s.planFocusKey)
-  // "Show in timeline" switches back to the timeline when it sets a new focus.
-  const [seenFocus, setSeenFocus] = useState(focusKey)
-  if (focusKey !== seenFocus) {
-    setSeenFocus(focusKey)
-    if (focusKey) setView('timeline')
-  }
 
   if (!trip || !day || !schedule) {
     return (
@@ -48,31 +37,10 @@ export default function PlanScreen() {
       <h2 className="sr-only">My day</h2>
       <DateChips trip={trip} day={day} />
       <DayCard day={day} number={trip.days.indexOf(day) + 1} schedule={schedule} />
-      {/* Interim until the Map tab takes over the day's map (refresh-plan-layout task 6.1). */}
-      <div role="group" aria-label="Plan view" className="flex self-start overflow-hidden rounded-lg border border-line-strong bg-surface">
-        {(['timeline', 'map'] as const).map((v) => (
-          <button
-            key={v}
-            type="button"
-            aria-pressed={view === v}
-            onClick={() => setView(v)}
-            className={`min-h-11 min-w-14 px-3 text-sm font-medium focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus ${view === v ? 'bg-accent text-on-accent' : 'text-ink-soft hover:bg-surface-muted'}`}
-          >
-            {v === 'timeline' ? 'Timeline' : 'Map'}
-          </button>
-        ))}
-      </div>
-      {/* Keyed by view, so switching Timeline and Map fades the new view in (midnight-theme design Decision 6). */}
-      <div key={view} className="view-enter">
-        {view === 'map' ? (
-          // Remounts per day so the map opens on the park of that day's first item (plan-ui-improvements design Decision 5).
-          <PlanMap key={day.id} day={day} schedule={schedule} />
-        ) : (
-          <DayTimeline day={day} schedule={schedule} />
-        )}
-      </div>
+      {/* The day's map is in the Map tab (refresh-plan-layout design Decision 8). */}
+      <DayTimeline day={day} schedule={schedule} />
       {/* One main action under the day (refresh-plan-layout design Decision 8). */}
-      {view === 'timeline' && day.items.length > 0 && <RouteActions day={day} />}
+      {day.items.length > 0 && <RouteActions day={day} />}
       <Breakdown schedule={schedule} />
       {/* On phones the fit status sits in the dock (refresh-plan-layout design Decision 2). */}
       {wide && <FitBar schedule={schedule} />}

@@ -1,12 +1,13 @@
 import { DndContext } from '@dnd-kit/core'
 import { act, fireEvent, screen, within } from '@testing-library/react'
-import { describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, test } from 'vitest'
+import App from '../../App'
 import catalogJson from '../../data/catalog.json'
 import { parseCatalog } from '../../domain/catalog'
 import { scheduleDay, type ScheduledSlot } from '../../domain/schedule'
-import { selectedDay } from '../../state/store'
+import MapScreen from '../../screens/MapScreen'
+import { createPlannerStore, selectedDay } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
-import { CatalogList } from '../CatalogList'
 import { ToastProvider } from '../Toast'
 
 const catalog = parseCatalog(catalogJson)
@@ -15,7 +16,7 @@ function renderMap({ trip = true, items = [] as string[] } = {}) {
   const r = renderWithPlanner(
     <ToastProvider>
       <DndContext>
-        <CatalogList />
+        <MapScreen />
       </DndContext>
     </ToastProvider>,
     { catalog },
@@ -27,7 +28,7 @@ function renderMap({ trip = true, items = [] as string[] } = {}) {
       for (const id of items) r.store.getState().addItem(selectedDay(r.store.getState())!.id, id)
     }
   })
-  fireEvent.click(screen.getByRole('button', { name: 'Map' }))
+  fireEvent.click(screen.getByRole('button', { name: 'All places' }))
   return r
 }
 
@@ -36,26 +37,41 @@ const marker = (name: string) => within(map()).getByRole('button', { name })
 const markers = () => within(map()).getAllByTestId('map-marker')
 const card = () => screen.getByTestId('map-card')
 
+afterEach(() => {
+  window.location.hash = ''
+})
+
 describe('catalog map view (park-map spec)', () => {
-  test('switching to Map shows the map and keeps the current filters', () => {
-    const r = renderWithPlanner(
-      <ToastProvider>
-        <DndContext>
-          <CatalogList />
-        </DndContext>
-      </ToastProvider>,
-      { catalog },
-    )
-    act(() => r.store.getState().setFilters({ types: ['attraction'], hideUnsuitable: true }))
-    expect(screen.queryByTestId('park-map')).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'Map' }))
-    expect(map()).toBeInTheDocument()
-    expect(screen.queryAllByTestId('catalog-row')).toHaveLength(0)
-    expect(r.store.getState().filters).toMatchObject({ types: ['attraction'], hideUnsuitable: true })
-    expect(screen.getByRole('button', { name: 'Map' })).toHaveAttribute('aria-pressed', 'true')
-    fireEvent.click(screen.getByRole('button', { name: 'List' }))
-    expect(screen.getAllByTestId('catalog-row').length).toBeGreaterThan(0)
-    expect(r.store.getState().filters.types).toEqual(['attraction'])
+  test('All places follows a type filter set in Explore, says how many match, and can clear it', () => {
+    const store = createPlannerStore(catalog)
+    window.location.hash = '#/catalog'
+    renderWithPlanner(<App />, { store, catalog })
+    act(() => store.getState().setFilters({ types: ['attraction'] }))
+    act(() => {
+      window.location.hash = '#/map'
+      window.dispatchEvent(new HashChangeEvent('hashchange'))
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'All places' }))
+    const attractions = catalog.items.filter((i) => i.parkId === 'dlp' && i.type === 'attraction')
+    expect(markers()).toHaveLength(attractions.length)
+    expect(screen.getByTestId('match-count')).toHaveTextContent(`${attractions.length} places in Disneyland Park`)
+    expect(screen.getByRole('button', { name: 'Filters, 1 on' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Clear filters' }))
+    expect(store.getState().filters.types).toEqual([])
+    expect(markers()).toHaveLength(catalog.items.filter((i) => i.parkId === 'dlp').length)
+    expect(screen.queryByRole('button', { name: 'Clear filters' })).toBeNull()
+  })
+
+  test('Filters opens the filters sheet over the map', () => {
+    renderMap()
+    fireEvent.click(screen.getByRole('button', { name: 'Filters' }))
+    expect(screen.getByRole('dialog', { name: 'Filters' })).toBeInTheDocument()
+  })
+
+  test('a search from Explore is named in the count', () => {
+    const r = renderMap()
+    act(() => r.store.getState().setFilters({ query: 'big thunder' }))
+    expect(screen.getByTestId('match-count')).toHaveTextContent('1 place in Disneyland Park matching “big thunder”')
   })
 
   test('each park is drawn with its five labelled area zones', () => {
