@@ -2,9 +2,9 @@
 
 Plan your days at Disneyland Paris. It covers both parks: Disneyland Park and Disney Adventure World.
 
-- Browse every attraction, restaurant and show of both parks in one list, each labelled with its park and area. Each has a description, a "worth it" rating, duration, height limit, thrill level, scariness and typical waits by month and time of day. Sort by name, rating, busiest wait or duration.
-- Switch the catalog to a **map** of either park: area zones, every item at its position, zoom and drag, the walk from your last planned stop, walking times between areas, and your day's route with numbered stops.
-- The plan has its own **map of the day**: only your stops, numbered and named, park by park. Tap a stop to see its times, or jump to it in the timeline, which numbers stops the same way.
+- Three tabs in a bar at the bottom of your phone, within thumb reach: **Explore**, **My day** and **Map**. Whether the day fits stays visible just above the bar. On a laptop, Explore (or the Map) and My day sit side by side.
+- **Explore** every attraction, restaurant and show of both parks in one list, each labelled with its park and area. Each has a description, a "worth it" rating, duration, height limit, thrill level, scariness and typical waits by month and time of day. Sort by name, rating, busiest wait or duration.
+- The **Map** tab shows **My day**: only your stops, numbered and named, park by park. Tap a stop to see its times, or jump to it in the timeline, which numbers stops the same way. Switch it to **All places** for every item that passes Explore's filters: area zones, zoom and drag, the walk from your last planned stop, walking times between areas, and your day's route.
 - Each item links to its official Disneyland Paris page (where one was found) and opens in your maps app. Heights say how they were checked: official, matching independent sources, or not yet verified.
 - Filter by height, thrill and scariness, or save a group profile so unsuitable rides are greyed out automatically.
 - Build a day (or a multi-day trip) that **combines both parks**: items from Disneyland Park and Disney Adventure World in any order, added by tap or drag and reordered by drag.
@@ -20,7 +20,7 @@ Plan your days at Disneyland Paris. It covers both parks: Disneyland Park and Di
 - **Meal times.** Adding a restaurant asks when you'll eat (lunch 11:30–13:30, dinner 18:00–20:00, or any time). The timeline keeps the meal within 30 minutes of that time, shows free time if you'd be early, and flags it if you'd be late. Grouping and optimizing keep meals at their time.
 - **Restaurant suggestions.** When a restaurant would be reached late, or another of the same type would end the day at least 15 minutes earlier, it suggests up to three, with the minutes each saves. One tap swaps it, keeping the meal time, with Undo.
 - See a timeline with each item's area, walking (including park changes through both entrances), typical queues and fixed show times, and whether the day **fits** your time or how far it runs **over**. Days that use both parks remind you that you need a ticket valid for both.
-- A night-sky look: navy, silver and gold stars, readable in sunlight, with animations turned off when your phone asks for reduced motion. On a phone the Plan opens on the day itself, with trip actions (new, rename, delete) under **Trip options**.
+- A night-sky look: navy, silver and gold stars, readable in sunlight, with animations turned off when your phone asks for reduced motion. The header shows your trip, with Share and a **More** menu for a new trip, renaming, the number of days, deleting, and About and data sources.
 - Works on phones, installs to the home screen and works offline. Trips stay on your device; share links move them between devices.
 
 Waits are typical values built from real [Queue-Times.com](https://queue-times.com/en-US) statistics, not live data. Live in-park updates are planned next. This is an unofficial app, not affiliated with Disney.

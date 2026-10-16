@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { PARK_IDS, type Catalog } from '../domain/catalog'
 import { scheduleDay } from '../domain/schedule'
 import type { Day } from '../domain/trip'
+import { useIsWide } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { selectedDay, selectedTrip } from '../state/store'
 import { CreateTripForm } from '../components/CreateTripForm'
@@ -12,7 +13,6 @@ import { SparkleIcon } from '../components/icons'
 import { NightSky } from '../components/NightSky'
 import { PlanMap } from '../components/PlanMap'
 import { RouteActions } from '../components/RouteActions'
-import { TripBar } from '../components/TripBar'
 
 const PARK_SHORT = { dlp: 'DLP', daw: 'DAW' } as const
 
@@ -31,6 +31,7 @@ export default function PlanScreen() {
   const trip = usePlanner(selectedTrip)
   const day = usePlanner(selectedDay)
   const profile = usePlanner((s) => s.profile)
+  const wide = useIsWide()
   const selectDay = usePlanner((s) => s.selectDay)
   // Interim until the Map tab takes over the day's map (refresh-plan-layout task 6.1).
   const [view, setView] = useState<'timeline' | 'map'>('timeline')
@@ -46,7 +47,7 @@ export default function PlanScreen() {
   if (!trip || !day || !schedule) {
     return (
       <section className="mx-auto max-w-md overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
-        <h2 className="sr-only">Plan</h2>
+        <h2 className="sr-only">My day</h2>
         {/* A short band of night sky over the form (midnight-theme design Decision 10). */}
         <div className="relative px-4 pb-4 pt-6">
           <NightSky variant="band" />
@@ -62,9 +63,8 @@ export default function PlanScreen() {
   }
 
   return (
-    <section aria-label="Plan" className="flex min-w-0 flex-col gap-2 pb-20 lg:pb-0">
-      <h2 className="sr-only">Plan</h2>
-      <TripBar />
+    <section aria-label="My day" className="flex min-w-0 flex-col gap-2">
+      <h2 className="sr-only">My day</h2>
       <div role="tablist" aria-label="Days" className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
         {trip.days.map((d, i) => (
           <button
@@ -109,7 +109,8 @@ export default function PlanScreen() {
         )}
       </div>
       <Breakdown schedule={schedule} />
-      <FitBar schedule={schedule} />
+      {/* On phones the fit status sits in the dock (refresh-plan-layout design Decision 2). */}
+      {wide && <FitBar schedule={schedule} />}
     </section>
   )
 }

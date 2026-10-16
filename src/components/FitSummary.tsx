@@ -9,24 +9,34 @@ export function fitText(schedule: DaySchedule): string {
 }
 
 /**
- * Pinned navy bar with the fit status. Fixed to the bottom on phones, inline on wide screens. The status
- * keeps its words, so it never relies on color alone (app-shell spec: Readable colors).
+ * The fit status on navy. On phones it is one line in the dock above the bottom bar; on wide screens it is
+ * sticky at the bottom of the plan column. The status keeps its words, so it never relies on color alone
+ * (app-shell spec: Readable colors, Always-visible fit status).
  */
-export function FitBar({ schedule }: { schedule: DaySchedule }) {
+export function FitBar({ schedule, placement = 'column' }: { schedule: DaySchedule; placement?: 'dock' | 'column' }) {
   return (
     <div
       data-testid="fit-summary"
       data-fits={schedule.fits}
       role="status"
-      className="fixed inset-x-0 bottom-0 z-30 bg-sky px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-on-sky shadow-[0_-4px_16px_rgb(6_11_31/0.25)] lg:sticky lg:bottom-0 lg:rounded-xl"
+      className={
+        placement === 'dock'
+          ? 'px-4 pb-1 pt-2.5 text-on-sky'
+          : 'sticky bottom-0 z-10 rounded-xl bg-sky px-4 py-3 text-on-sky shadow-[0_-4px_16px_rgb(6_11_31/0.25)]'
+      }
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2">
-        <strong className={`flex items-center gap-2 whitespace-nowrap text-base ${schedule.fits ? 'text-fits-on-sky' : 'text-over-on-sky'}`}>
-          {schedule.fits && <SparkleIcon width={14} height={14} className="shrink-0 text-star" />}
+        <strong className={`flex items-center gap-2 whitespace-nowrap text-[0.95rem] ${schedule.fits ? 'text-fits-on-sky' : 'text-over-on-sky'}`}>
+          {schedule.fits && <SparkleIcon width={13} height={13} className="shrink-0 text-star" />}
           {fitText(schedule)}
         </strong>
         <span className="text-right text-xs text-on-sky-muted tabular-nums sm:text-sm">
-          {formatClock(schedule.windowStart)}–{formatClock(schedule.windowEnd)} · ends {formatClock(schedule.end)}
+          {placement === 'column' && (
+            <>
+              {formatClock(schedule.windowStart)}–{formatClock(schedule.windowEnd)} ·{' '}
+            </>
+          )}
+          ends {formatClock(schedule.end)}
         </span>
       </div>
     </div>

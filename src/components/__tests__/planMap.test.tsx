@@ -90,11 +90,6 @@ describe('map of the day in the plan (park-map spec)', () => {
     expect(within(planMap()).getByTestId('route-marker')).toHaveTextContent('to Disney Adventure World')
   })
 
-  test('the fit status stays with the map', () => {
-    renderPlan([THUNDER])
-    showMap()
-    expect(screen.getByTestId('fit-summary')).toHaveTextContent(/Fits|Over by/)
-  })
 })
 
 describe('park shown on the plan map (park-map spec)', () => {

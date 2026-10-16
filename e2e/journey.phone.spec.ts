@@ -6,7 +6,7 @@ test('10.1 full phone journey: plan a 2-day August trip, then share it', async (
   await createTrip(page, { name: 'August family trip', date: '2026-08-12', days: 2 })
 
   // group profile + filter
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
   await page.getByRole('button', { name: /Filters/ }).click()
   const filters = page.getByRole('dialog', { name: 'Filters' })
   await filters.getByLabel('Shortest height (cm)').fill('110')
@@ -33,7 +33,7 @@ test('10.1 full phone journey: plan a 2-day August trip, then share it', async (
   ]
   for (const name of plan) await addFromCatalog(page, name, name.startsWith('Walt') ? 'Any time' : undefined)
   await addFromCatalog(page, 'Disney Tales of Magic', '22:00')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(8)
   await expect(page.getByTestId('timeline-slot').filter({ hasText: 'Star Wars Hyperspace Mountain' })).toContainText('Needs 120 cm')
 

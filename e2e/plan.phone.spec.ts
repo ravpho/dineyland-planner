@@ -12,7 +12,7 @@ test('7.1 a 3-day trip has the right dates, and its length can change', async ({
   await expect(page.getByLabel('Park')).toHaveCount(0) // days are not tied to a park
   await addFromCatalog(page, 'Frozen Ever After')
   await addFromCatalog(page, 'Big Thunder Mountain')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(tabs.first()).toContainText('DLP + DAW')
 })
 
@@ -24,7 +24,7 @@ test('7.2 add from both parks, remove with undo, move up', async ({ page }) => {
 
   // an item from the other park joins the same day
   await addFromCatalog(page, 'Frozen Ever After')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", 'Frozen Ever After'])
   await page.getByRole('button', { name: 'Remove Frozen Ever After' }).click()
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"])
@@ -41,7 +41,7 @@ test('7.2 add from both parks, remove with undo, move up', async ({ page }) => {
 test('7.3 reorder by touch drag on a phone', async ({ page }) => {
   await createTrip(page)
   for (const n of ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"]) await addFromCatalog(page, n)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   const handles = page.getByTestId('slot-handle')
   // Scroll the items clear of the fit bar pinned to the bottom of the screen.
   await handles.nth(1).evaluate((el) => el.scrollIntoView({ block: 'center' }))
@@ -51,12 +51,12 @@ test('7.3 reorder by touch drag on a phone', async ({ page }) => {
 
 test('7.5 summary turns from Over by to Fits, and stays visible while scrolling', async ({ page }) => {
   await createTrip(page)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await page.getByLabel('Start').fill('10:00')
   await page.getByLabel('End').fill('11:00')
   await addFromCatalog(page, 'Big Thunder Mountain')
   await addFromCatalog(page, "Walt's – An American Restaurant", 'Any time')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   const summary = page.getByTestId('fit-summary')
   await expect(summary).toContainText('Over by')
   await page.getByRole('button', { name: "Remove Walt's – An American Restaurant" }).click()
@@ -64,7 +64,7 @@ test('7.5 summary turns from Over by to Fits, and stays visible while scrolling'
 
   await page.getByLabel('End').fill('23:00')
   for (let i = 0; i < 14; i++) await addFromCatalog(page, i % 2 ? 'Phantom Manor' : "Peter Pan's Flight")
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(15)
   await page.mouse.wheel(0, 4000)
   await page.waitForTimeout(200)
@@ -77,10 +77,10 @@ test('7.6 share link imports an identical copy in a fresh browser', async ({ pag
   await createTrip(page, { name: 'Shared trip', days: 2 })
   await addFromCatalog(page, 'Big Thunder Mountain')
   await addFromCatalog(page, 'Disney Stars on Parade', '11:30')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await page.getByRole('tab', { name: /^Day 2/ }).click()
   await addFromCatalog(page, 'Frozen Ever After')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await page.getByRole('button', { name: 'Share' }).click()
   const url = await page.getByLabel('Share link').inputValue()
   expect(url).toMatch(/#\/import\//)
@@ -105,7 +105,7 @@ test('7.6 share link imports an identical copy in a fresh browser', async ({ pag
 test('park-hopping day: two park changes, ticket reminder, and a share round trip', async ({ page, browser }) => {
   await createTrip(page, { name: 'Hopper day' })
   for (const n of ['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor']) await addFromCatalog(page, n)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor'])
   const changes = page.getByTestId('park-change')
   await expect(changes).toHaveCount(2)
@@ -127,7 +127,7 @@ test('park-hopping day: two park changes, ticket reminder, and a share round tri
 test('group by area: one park change, areas shown, and undo', async ({ page }) => {
   await createTrip(page, { name: 'Zig-zag day' })
   for (const n of ['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"]) await addFromCatalog(page, n)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(page.getByTestId('park-change')).toHaveCount(3)
 
   await page.getByRole('button', { name: 'Group by area' }).click()
@@ -144,7 +144,7 @@ test('group by area: one park change, areas shown, and undo', async ({ page }) =
 test('optimize route: the other park first, one park change, the message and undo', async ({ page }) => {
   await createTrip(page, { name: 'Queue day' })
   for (const n of ['Big Thunder Mountain', 'Frozen Ever After', 'Phantom Manor', "Crush's Coaster"]) await addFromCatalog(page, n)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
 
   // Both route buttons fit on a phone without horizontal page scroll.
   for (const name of ['Group by area', 'Optimize route']) {
@@ -169,7 +169,7 @@ test('meal time and restaurant suggestion: lunch at 12:00 in the other park, swa
   for (const n of ["Crush's Coaster", 'Frozen Ever After', 'The Twilight Zone Tower of Terror']) await addFromCatalog(page, n)
   await addFromCatalog(page, 'Au Chalet de la Marionnette', '12:00')
   await addFromCatalog(page, 'Spider-Man W.E.B. Adventure')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
 
   const lunch = page.getByTestId('timeline-slot').filter({ hasText: 'Au Chalet de la Marionnette' })
   await expect(lunch.getByLabel('Meal time for Au Chalet de la Marionnette')).toHaveValue('12:00')
@@ -192,7 +192,7 @@ test('meal time and restaurant suggestion: lunch at 12:00 in the other park, swa
 test('switch park order: unavailable until grouped, warns about the lunch, and undo', async ({ page }) => {
   await createTrip(page, { name: 'Two parks' })
   for (const n of ['Big Thunder Mountain', "Crush's Coaster", 'Phantom Manor']) await addFromCatalog(page, n)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   const box = page.getByTestId('ticket-reminder')
   const switchOrder = box.getByRole('button', { name: 'Switch order' })
   await expect(box.getByTestId('park-order-text')).toHaveText('Disneyland Park → Disney Adventure World → Disneyland Park')
@@ -201,7 +201,7 @@ test('switch park order: unavailable until grouped, warns about the lunch, and u
 
   await page.getByRole('button', { name: 'Group by area' }).click()
   await addFromCatalog(page, 'Au Chalet de la Marionnette', '12:00')
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Crush's Coaster", 'Au Chalet de la Marionnette'])
   await expect(switchOrder).toBeEnabled()
 
@@ -225,7 +225,7 @@ test('switch park order: unavailable until grouped, warns about the lunch, and u
 test('day first: on a 390x844 phone the first two items of a two-park day show without scrolling (app-shell spec)', async ({ page }) => {
   await createTrip(page)
   for (const n of ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", "Crush's Coaster", 'Frozen Ever After', 'RC Racer']) await addFromCatalog(page, n)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(6)
   await expect(page.getByTestId('ticket-reminder')).toBeVisible()
   await page.evaluate(() => window.scrollTo(0, 0))

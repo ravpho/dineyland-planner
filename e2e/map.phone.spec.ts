@@ -24,7 +24,7 @@ async function touchPan(page: Page, from: { x: number; y: number }, to: { x: num
 test('6.1 plan from the map: zoom, drag, tap, add, route, area table', async ({ page }) => {
   await createTrip(page)
   await addFromCatalog(page, 'Big Thunder Mountain')
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
   await page.getByRole('button', { name: 'Map', exact: true }).click()
   await expect(map(page)).toBeVisible()
   await expect(map(page).getByTestId('map-zone')).toHaveCount(5)
@@ -53,7 +53,7 @@ test('6.1 plan from the map: zoom, drag, tap, add, route, area table', async ({ 
   await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click()
 
   // The timeline shows the same walk the card showed.
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(page.getByTestId('slot-name')).toHaveText(['Big Thunder Mountain', 'Phantom Manor'])
   await expect(page.getByTestId('slot-walk').nth(1)).toHaveText(`${minutes} min`)
 })
@@ -82,7 +82,7 @@ test('6.1 the map works offline after the first visit', async ({ page, context }
   })
   await context.setOffline(true)
   await page.reload()
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
   await page.getByRole('button', { name: 'Map', exact: true }).click()
   await expect(map(page).getByTestId('map-zone')).toHaveCount(5)
   await expect(map(page).getByTestId('route-stop')).toHaveText(['1'])
@@ -95,7 +95,7 @@ test('the plan’s own map: numbered stops, park switch, fit bar, and Show in ti
   await createTrip(page)
   const day = ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", '"it\'s a small world"', "Crush's Coaster", 'Frozen Ever After', 'Ratatouille: L’Aventure Totalement Toquée de Rémy']
   for (const n of day) await addFromCatalog(page, n)
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await page.getByRole('group', { name: 'Plan view' }).getByRole('button', { name: 'Map' }).click()
 
   const planMap = page.getByTestId('plan-map')

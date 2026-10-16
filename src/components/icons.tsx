@@ -132,3 +132,22 @@ export const PencilIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="m13.5 6.5 4 4" />
   </svg>
 )
+/** Bottom bar: Explore, My day and Map (refresh-plan-layout design Decision 2). */
+export const CompassIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="m15.5 8.5-2 5-5 2 2-5z" />
+  </svg>
+)
+export const DayIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="3.5" y="5" width="17" height="15.5" rx="3" />
+    <path d="M8 3v4M16 3v4M3.5 10h17M9 15l2 2 4-4" />
+  </svg>
+)
+export const MapIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M9 4.5 3.5 6.5v13l5.5-2 6 2 5.5-2v-13l-5.5 2z" />
+    <path d="M9 4.5v13M15 6.5v13" />
+  </svg>
+)

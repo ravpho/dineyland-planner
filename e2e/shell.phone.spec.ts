@@ -26,12 +26,12 @@ test.describe('small phone 360x740', () => {
     await checkLayout(page)
     await addFromCatalog(page, 'Big Thunder Mountain')
     await addFromCatalog(page, 'Disney Stars on Parade', '11:30')
-    await showTab(page, 'Catalog')
+    await showTab(page, 'Explore')
     await checkLayout(page)
     await page.getByRole('button', { name: /Filters/ }).click()
     await checkLayout(page)
     await page.getByRole('button', { name: 'Close' }).click()
-    await showTab(page, 'Plan')
+    await showTab(page, 'My day')
     await checkLayout(page)
     await page.getByRole('button', { name: 'Trip options' }).click()
     await expect(page.getByRole('dialog', { name: 'Trip options' })).toBeVisible()
@@ -59,7 +59,7 @@ test('8.2 works offline after the first visit and passes the installability chec
 
   await context.setOffline(true)
   await page.reload()
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(page.getByLabel('Trip', { exact: true }).locator('option:checked')).toHaveText('Offline trip')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(1)
   // The theme's fonts come from the precache: load() rejects if a face can't be fetched, and check() then
@@ -73,7 +73,7 @@ test('8.2 works offline after the first visit and passes the installability chec
     }
   })
   expect(fonts).toEqual({ inter: ['loaded'], fraunces: ['loaded'], checked: true })
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
   await expect(page.getByTestId('catalog-row').first()).toBeVisible()
   await context.setOffline(false)
 })

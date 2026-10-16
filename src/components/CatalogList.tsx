@@ -1,20 +1,17 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useMemo, useState } from 'react'
-import type { CatalogItem, Restaurant, Show } from '../domain/catalog'
+import type { CatalogItem } from '../domain/catalog'
 import type { PlannedMark } from '../domain/stops'
 import { filterCatalog, type ListedItem, type SortOrder } from '../domain/filters'
 import { MONTH_NAMES, useIsWide, usePlannedMarks, usePlanningMonth } from '../app/hooks'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { mapPark } from '../state/store'
-import { useAddToDay } from '../app/useAddToDay'
+import { useAddFlow } from './AddFlow'
 import { FilterPanel } from './FilterPanel'
 import { FilterIcon, GripIcon, PlusIcon } from './icons'
-import { ItemDetail } from './ItemDetail'
 import { ParkMap } from './ParkMap'
 import { itemFacts, TYPE_LABELS } from './labels'
-import { MealTimePicker } from './MealTimePicker'
 import { PlannedLabel } from './PlannedLabel'
-import { ShowTimePicker } from './ShowTimePicker'
 import { Badge, IconButton, inputClass, Stars } from './ui'
 
 export const CATALOG_DRAG_PREFIX = 'catalog:'
@@ -67,11 +64,8 @@ export function CatalogList() {
   const profile = usePlanner((s) => s.profile)
   const month = usePlanningMonth()
   const wide = useIsWide()
-  const addToDay = useAddToDay()
+  const { add, openDetails, sheets } = useAddFlow()
   const { marks, dayNumber } = usePlannedMarks()
-  const [open, setOpen] = useState<CatalogItem | null>(null)
-  const [picking, setPicking] = useState<Show | null>(null)
-  const [pickingMeal, setPickingMeal] = useState<Restaurant | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   // Interim until the Map tab takes over the catalog map (refresh-plan-layout tasks 6.1 and 7.1).
   const [view, setView] = useState<'list' | 'map'>('list')
@@ -88,14 +82,8 @@ export function CatalogList() {
   const activeFilters =
     (filters.parkId === 'all' ? 0 : 1) + filters.areaIds.length + filters.types.length + (filters.hideUnsuitable ? 1 : 0) + (profile ? 1 : 0)
 
-  const add = (item: CatalogItem) => {
-    if (item.type === 'show') setPicking(item)
-    else if (item.type === 'restaurant') setPickingMeal(item)
-    else addToDay(item)
-  }
-
   return (
-    <section aria-label="Catalog" className="flex min-w-0 flex-col">
+    <section aria-label="Explore" className="flex min-w-0 flex-col">
       <div className="sticky top-0 z-10 flex gap-2 bg-page pb-2 pt-1">
         <input
           type="search"
@@ -146,7 +134,7 @@ export function CatalogList() {
       {/* Keyed by view, so switching List and Map fades the new view in (midnight-theme design Decision 6). */}
       <div key={view} className="view-enter">
         {view === 'map' ? (
-          <ParkMap listed={listed} onAdd={add} onOpen={setOpen} />
+          <ParkMap listed={listed} onAdd={add} onOpen={openDetails} />
         ) : (
           <ul className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface shadow-card">
             {listed.map((l) => {
@@ -162,7 +150,7 @@ export function CatalogList() {
                   className={`flex items-center gap-1 px-2 ${planned === 'selected' ? 'bg-accent-soft shadow-[inset_4px_0_0_var(--color-accent)]' : l.unsuitable ? 'bg-surface-muted' : ''}`}
                 >
                   {wide && <DragHandle item={l.item} />}
-                  <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} mark={mark} dayNumber={dayNumber} onOpen={() => setOpen(l.item)} />
+                  <RowBody listed={l} month={month} place={places.get(`${l.item.parkId}/${l.item.areaId}`) ?? ''} mark={mark} dayNumber={dayNumber} onOpen={() => openDetails(l.item)} />
                   <IconButton label={`Add ${l.item.name} to day${planned === 'selected' ? ' again' : ''}`} onClick={() => add(l.item)} className="text-accent">
                     <PlusIcon />
                   </IconButton>
@@ -173,37 +161,7 @@ export function CatalogList() {
           </ul>
         )}
       </div>
-      {open && (
-        <ItemDetail
-          item={open}
-          onClose={() => setOpen(null)}
-          onAdd={() => {
-            const item = open
-            setOpen(null)
-            add(item)
-          }}
-        />
-      )}
-      {picking && (
-        <ShowTimePicker
-          show={picking}
-          onClose={() => setPicking(null)}
-          onPick={(time) => {
-            addToDay(picking, { showTime: time })
-            setPicking(null)
-          }}
-        />
-      )}
-      {pickingMeal && (
-        <MealTimePicker
-          restaurant={pickingMeal}
-          onClose={() => setPickingMeal(null)}
-          onPick={(time) => {
-            addToDay(pickingMeal, time ? { mealTime: time } : {})
-            setPickingMeal(null)
-          }}
-        />
-      )}
+      {sheets}
       {showFilters && <FilterPanel onClose={() => setShowFilters(false)} />}
     </section>
   )

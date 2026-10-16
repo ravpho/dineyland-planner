@@ -3,7 +3,7 @@ import { addFromCatalog, createTrip, showTab } from './helpers'
 
 test.beforeEach(async ({ page }) => {
   await createTrip(page)
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
 })
 
 test('6.1 typing "thunder" filters the list', async ({ page }) => {
@@ -36,7 +36,7 @@ test('6.2 a 110 cm profile greys out a 120 cm ride, then hides it', async ({ pag
 
   // the profile survives a reload
   await page.reload()
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
   await page.getByLabel('Search by name').fill('hyperspace')
   await expect(page.getByTestId('catalog-row').first()).toContainText('Needs 120 cm')
 })

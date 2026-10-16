@@ -16,18 +16,18 @@
 
 ## 2. App frame: header, More menu, bottom bar, messages
 
-- [ ] 2.1 Rebuild the header in `src/App.tsx` as one row on every screen, with the `NightSky` `row` variant (design Decision 3):
+- [x] 2.1 Rebuild the header in `src/App.tsx` as one row on every screen, with the `NightSky` `row` variant (design Decision 3):
   - with a trip: the trip select (label "Trip"), Share and a "More" `IconButton`;
   - with no trip: the wordmark;
   - on wide screens: the wordmark on the left and the trip controls on the right.
 
   Remove the header's About link and the two-row `header` variant of `NightSky`, updating `nightSky.test.tsx`. Verify `App.test.tsx` covers both header states, and `npm test` passes.
-- [ ] 2.2 Add the More sheet (design Decision 3) with New trip, Rename, Number of days, Delete trip, a divider, and About and data sources:
+- [x] 2.2 Add the More sheet (design Decision 3) with New trip, Rename, Number of days, Delete trip, a divider, and About and data sources:
   - New trip, Rename and Delete keep today's flows, including the confirmation before deleting.
   - Number of days opens a sheet with today's days select and its confirm-before-removing flow, moved out of `TripBar`.
 
   Verify with unit tests for each action and for closing without choosing. Update `e2e/trip-options.phone.spec.ts` to open "More", and confirm it passes.
-- [ ] 2.3 Add the `Dock` below 1024 px (design Decision 2):
+- [x] 2.3 Add the `Dock` below 1024 px (design Decision 2):
   - the one-line `FitBar` (`fit-summary`) when a trip exists, and the three-link tab bar (Explore, My day, Map) with icons and `aria-current="page"`;
   - `bg-sky`, with the current tab in `star` on a `star/15` pill and the others `on-sky-muted`;
   - the safe-area padding, and `--dock-h` set from the dock's measured height and used as bottom padding for the main content.
@@ -36,8 +36,8 @@
   - `App.test.tsx` finds the three links and the current one;
   - `e2e/helpers.ts` `showTab` uses `getByRole('link', …)` with the new names;
   - `contrast.test.ts` and `guard.test.ts` pass unchanged.
-- [ ] 2.4 Add the wide-screen "Explore | Map" control above the left column, linking to `#/catalog` and `#/map`, with My day always in the right column (`plan-column`). Verify an `App.test.tsx` case at the wide query shows the Map in the left column and the plan on the right, with no bottom bar.
-- [ ] 2.5 Add the open-sheet counter to `Sheet` and use it in `ToastProvider` (design Decision 10):
+- [x] 2.4 Add the wide-screen "Explore | Map" control above the left column, linking to `#/catalog` and `#/map`, with My day always in the right column (`plan-column`). Verify an `App.test.tsx` case at the wide query shows the Map in the left column and the plan on the right, with no bottom bar.
+- [x] 2.5 Add the open-sheet counter to `Sheet` and use it in `ToastProvider` (design Decision 10):
   - with no sheet open, the toast sits above the dock on phones and above the sticky fit bar on wide screens;
   - with a sheet open, it sits at the top, under the safe-area inset;
   - sheets get `max-h-[calc(100dvh-5.5rem)]`.
@@ -46,7 +46,7 @@
   - a unit test checks the toast's placement with and without an open sheet;
   - a new e2e check shows that a toast raised with the filters sheet open does not overlap any of the sheet's controls;
   - `e2e/plan.desktop.spec.ts`'s toast-above-fit-bar check still passes.
-- [ ] 2.6 Update the README's feature list for the bottom bar, the More menu and the Map tab. Verify the list names Explore, My day, Map and More, and no longer says "Trip options" or "Switch the catalog to a map".
+- [x] 2.6 Update the README's feature list for the bottom bar, the More menu and the Map tab. Verify the list names Explore, My day, Map and More, and no longer says "Trip options" or "Switch the catalog to a map".
 
 ## 3. My day: date chips, day card and day sheet
 

@@ -14,15 +14,16 @@ export async function createTrip(page: Page, { name = 'Test trip', date = '2026-
   await expect(page.getByRole('tab', { name: /^Day 1/ })).toBeVisible()
 }
 
-/** Phone layout: switch tabs. No-op on wide screens where both panes are visible. */
-export async function showTab(page: Page, tab: 'Catalog' | 'Plan') {
-  const link = page.getByRole('tab', { name: tab, exact: true })
-  if (await link.isVisible()) await link.click()
+/** Phones: a tab in the bottom bar. Wide screens: Explore or Map in the left column; My day is always shown. */
+export async function showTab(page: Page, tab: 'Explore' | 'My day' | 'Map') {
+  const bar = page.getByRole('navigation', { name: 'Sections' }).getByRole('link', { name: tab, exact: true })
+  if (await bar.isVisible()) return bar.click()
+  if (tab !== 'My day') await page.getByRole('navigation', { name: 'Left column' }).getByRole('link', { name: tab, exact: true }).click()
 }
 
 /** `time` picks a button in the sheet that opens for shows (a start time) and restaurants (a meal time or "Any time"). */
 export async function addFromCatalog(page: Page, name: string, time?: string) {
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
   await page.getByLabel('Search by name').fill(name)
   // A planned item's button reads "… to day again" (park-catalog spec: the add button stays).
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
