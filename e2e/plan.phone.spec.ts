@@ -297,7 +297,7 @@ test('switch park order: unavailable until grouped, warns about the lunch, and u
   expect(await slotNames(page)).toEqual(['Big Thunder Mountain', 'Phantom Manor', "Crush's Coaster", 'Au Chalet de la Marionnette'])
 })
 
-test('day first: on a 390x844 phone the first two items of a two-park day show without scrolling (app-shell spec)', async ({ page }) => {
+test('day first: on a 390x844 phone the first three stops of a two-park day show above the fit strip (app-shell spec)', async ({ page }) => {
   await createTrip(page)
   for (const n of ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight", "Crush's Coaster", 'Frozen Ever After', 'RC Racer']) await addFromCatalog(page, n)
   await showTab(page, 'My day')
@@ -305,8 +305,23 @@ test('day first: on a 390x844 phone the first two items of a two-park day show w
   await expect(page.getByTestId('ticket-reminder')).toBeVisible()
   await page.evaluate(() => window.scrollTo(0, 0))
   expect(page.viewportSize()).toEqual({ width: 390, height: 844 })
-  const second = (await page.getByTestId('timeline-slot').nth(1).boundingBox())!
+  const third = (await page.getByTestId('timeline-slot').nth(2).boundingBox())!
   const fit = (await page.getByTestId('fit-summary').boundingBox())!
-  expect(second.y, 'second item starts on screen').toBeGreaterThanOrEqual(0)
-  expect(second.y + second.height, `second item ends at ${second.y + second.height}, fit bar starts at ${fit.y}`).toBeLessThanOrEqual(fit.y)
+  expect(third.y, 'third stop starts on screen').toBeGreaterThanOrEqual(0)
+  expect(third.y + third.height, `third stop ends at ${third.y + third.height}, fit strip starts at ${fit.y}`).toBeLessThanOrEqual(fit.y)
+
+  // The block positions recorded in design Decision 12.
+  const span = async (l: ReturnType<typeof page.getByTestId>) => {
+    const b = (await l.boundingBox())!
+    return `${Math.round(b.y)}–${Math.round(b.y + b.height)}`
+  }
+  const blocks = {
+    header: await span(page.getByRole('banner')),
+    chips: await span(page.getByRole('tablist', { name: 'Days' })),
+    card: await span(page.getByTestId('day-card')),
+    parkLabel: await span(page.getByTestId('first-park')),
+    stops: `${await span(page.getByTestId('timeline-slot').nth(0))} / ${await span(page.getByTestId('timeline-slot').nth(1))} / ${await span(page.getByTestId('timeline-slot').nth(2))}`,
+    dock: await span(page.getByTestId('dock')),
+  }
+  console.log(`fold blocks ${JSON.stringify(blocks)}`)
 })

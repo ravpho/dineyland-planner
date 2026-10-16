@@ -10,9 +10,10 @@ test('6.1 typing "thunder" filters the list', async ({ page }) => {
   const rows = page.getByTestId('catalog-row')
   const before = await rows.count()
   await page.getByLabel('Search by name').fill('thunder')
+  // Wait for the list to follow the search: one Big Thunder Mountain row is there before it too.
+  await expect.poll(async () => (await rows.getByTestId('row-name').allTextContents()).every((n) => n.toLowerCase().includes('thunder'))).toBe(true)
   await expect(rows.filter({ hasText: 'Big Thunder Mountain' })).toHaveCount(1)
   const names = await rows.getByTestId('row-name').allTextContents()
-  expect(names.every((n) => n.toLowerCase().includes('thunder'))).toBe(true)
   await expect(page.getByTestId('match-count')).toHaveText(`${names.length} items`)
   expect(before).toBeGreaterThan(50)
 })

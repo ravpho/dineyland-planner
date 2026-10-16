@@ -153,18 +153,18 @@ See proposal.md (Why) for the motivation and the delta specs for the required be
 - **`ItemDetail`** is unchanged inside. Its "Add to day" button moves into a sticky footer.
 
 ### 12. Fold budget at 390 × 844 for three stops
-Estimate for a two-park day of six items, measured by the e2e check after implementation:
+Estimate for a two-park day of six items, and the positions the e2e check measured after implementation:
 
-| Block | Top–bottom (px) |
-|---|---|
-| Header (one row) | 0–56 |
-| Date chips | 64–128 |
-| Day card (three lines) | 140–270 |
-| Park label | 282–302 |
-| Stops 1–3 (about 76 px each, with two 20 px walk lines; +26 px if one has a tag row) | 310–574 (600 with a tag) |
-| Fit strip and bottom bar | 740–844 |
+| Block | Estimate (px) | Measured (px) |
+|---|---|---|
+| Header (one row) | 0–56 | 0–56 |
+| Date chips | 64–128 | 68–136 |
+| Day card (three lines) | 140–270 | 144–308 (with the ticket line) |
+| Park label | 282–302 | 316–332 (inside the first stop's list item) |
+| Stops 1–3 (about 76 px each, with two 20 px walk lines; +26 px if one has a tag row) | 310–574 (600 with a tag) | 316–430 / 430–515 / 515–610 |
+| Fit strip and bottom bar | 740–844 | 745–844 |
 
-That leaves about 140 px of slack. The e2e check measures the third `timeline-slot` against the top of `fit-summary`.
+The third stop ends 135 px above the fit strip. The e2e check measures the third `timeline-slot` against the top of `fit-summary`.
 
 ## Risks / Trade-offs
 

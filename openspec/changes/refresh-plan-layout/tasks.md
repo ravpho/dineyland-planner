@@ -141,7 +141,7 @@
 
 ## 8. Integration checks
 
-- [ ] 8.1 Update the fold check in `e2e/plan.phone.spec.ts` to three items. On 390 × 844, with a six-item two-park day, the third `timeline-slot`'s bottom must be at or above the `fit-summary`'s top. Verify it passes, and record the measured block positions in design Decision 12's table.
-- [ ] 8.2 Extend `e2e/shell.phone.spec.ts` 8.1 at 360 × 740 to cover the bottom bar, the date chips, the day card, the stop sheet, the More sheet and the Map tab: no horizontal overflow, and every control at least 44 × 44 px. Verify it passes.
-- [ ] 8.3 Run `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` and `npm run e2e`. Verify all pass, including 8.2 offline and installability and the motion checks.
-- [ ] 8.4 Take phone (390 × 844) and desktop (1280 × 800) screenshots of My day, the stop sheet, the day sheet, Explore, item details, the filters, both Map modes, the More menu and About. Store them in the change's `screenshots/` folder and review them against the mockup. Verify each screen matches the Midnight look and that nothing is cut off or overlapping.
+- [x] 8.1 Update the fold check in `e2e/plan.phone.spec.ts` to three items. On 390 × 844, with a six-item two-park day, the third `timeline-slot`'s bottom must be at or above the `fit-summary`'s top. Verify it passes, and record the measured block positions in design Decision 12's table.
+- [x] 8.2 Extend `e2e/shell.phone.spec.ts` 8.1 at 360 × 740 to cover the bottom bar, the date chips, the day card, the stop sheet, the More sheet and the Map tab: no horizontal overflow, and every control at least 44 × 44 px. Verify it passes.
+- [x] 8.3 Run `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` and `npm run e2e`. Verify all pass, including 8.2 offline and installability and the motion checks.
+- [x] 8.4 Take phone (390 × 844) and desktop (1280 × 800) screenshots of My day, the stop sheet, the day sheet, Explore, item details, the filters, both Map modes, the More menu and About. Store them in the change's `screenshots/` folder and review them against the mockup. Verify each screen matches the Midnight look and that nothing is cut off or overlapping.

@@ -153,7 +153,8 @@ function StopRow({
   // A park change carries its walk in the "Walk to …" note; the walk line then only shows free time.
   const walkLine = scheduled && (!scheduled.parkChange || scheduled.freeBefore > 0)
   const nodeY = (walkLine ? WALK_LINE_PX : 0) + NODE_CENTRE_PX
-  const card = `relative border-x border-line bg-surface ${sectionStart ? 'rounded-t-2xl border-t pt-1' : ''} ${sectionEnd ? 'mb-1 rounded-b-2xl border-b pb-1 shadow-card' : ''}`
+  // Rows of one card overlap by a pixel, so no hairline of the page shows between them at fractional heights.
+  const card = `relative border-x border-line bg-surface ${sectionStart ? 'rounded-t-2xl border-t pt-1' : '-mt-px'} ${sectionEnd ? 'mb-1 rounded-b-2xl border-b pb-1 shadow-card' : ''}`
 
   return (
     <li
@@ -482,8 +483,10 @@ function StopSheet({ day, schedule, entryKey, onClose }: { day: Day; schedule: D
           </IconButton>
         </div>
         <p className="-mt-1 text-xs text-ink-muted">Or drag the handle in the day to put it anywhere.</p>
-        <div className="grid grid-cols-2 gap-2 border-t border-line pt-3">
-          <Button onClick={() => openDetails(slot.item)}>Details</Button>
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-2 border-t border-line pt-3">
+          <Button className="px-5" onClick={() => openDetails(slot.item)}>
+            Details
+          </Button>
           <Button variant="danger" onClick={remove}>
             <TrashIcon width={18} height={18} /> Remove from day
           </Button>

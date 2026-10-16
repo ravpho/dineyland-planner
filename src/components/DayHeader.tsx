@@ -49,7 +49,8 @@ export function DateChips({ trip, day }: { trip: Trip; day: Day }) {
             role="tab"
             aria-selected={active}
             onClick={() => selectDay(d.id)}
-            className={`flex h-16 w-15 shrink-0 flex-col items-center justify-center rounded-2xl border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${active ? 'border-accent bg-accent text-on-accent shadow-card' : 'border-line bg-surface text-ink hover:bg-surface-muted'}`}
+            // Relative, so the screen-reader name stays inside the scrolling row instead of widening the page.
+            className={`relative flex h-16 w-15 shrink-0 flex-col items-center justify-center rounded-2xl border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${active ? 'border-accent bg-accent text-on-accent shadow-card' : 'border-line bg-surface text-ink hover:bg-surface-muted'}`}
           >
             <span className="sr-only">
               Day {i + 1} · {dayLabel(d.date)}

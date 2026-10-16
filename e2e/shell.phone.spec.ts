@@ -1,10 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
-import { acceptDialogs, addFromCatalog, createTrip, showTab } from './helpers'
+import { acceptDialogs, addFromCatalog, createTrip, openStop, showTab } from './helpers'
 
 async function checkLayout(page: Page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   expect(overflow, 'horizontal scroll').toBeLessThanOrEqual(0)
-  const controls = page.locator('button:visible, select:visible, input:visible, a[role="tab"]:visible, header a:visible')
+  const controls = page.locator('button:visible, select:visible, input:visible, a[role="tab"]:visible, header a:visible, nav a:visible')
   const small: string[] = []
   for (const control of await controls.all()) {
     // A checkbox inside a <label> is toggled by tapping anywhere on the label, so measure that.
@@ -24,16 +24,31 @@ test.describe('small phone 360x740', () => {
     // Measuring every visible control on each screen takes longer than the default 30 s.
     test.slow()
     acceptDialogs(page)
-    await createTrip(page, { days: 3 })
+    // My day before any stop: the bottom bar, the date chips and the day card.
+    await createTrip(page, { days: 7 })
+    await expect(page.getByTestId('dock')).toBeVisible()
     await checkLayout(page)
     await addFromCatalog(page, 'Big Thunder Mountain')
     await addFromCatalog(page, 'Disney Stars on Parade', '11:30')
+    await addFromCatalog(page, 'Frozen Ever After')
     await showTab(page, 'Explore')
     await checkLayout(page)
-    await page.getByRole('button', { name: /Filters/ }).click()
+    await page.getByRole('button', { name: /^Filters/ }).click()
     await checkLayout(page)
     await page.getByRole('button', { name: 'Close' }).click()
     await showTab(page, 'My day')
+    await checkLayout(page)
+    // The day card's sheet and a stop's sheet.
+    await page.getByRole('button', { name: 'Edit hours and park order' }).click()
+    await checkLayout(page)
+    await page.getByRole('dialog').getByRole('button', { name: 'Done' }).click()
+    await openStop(page, 'Disney Stars on Parade')
+    await checkLayout(page)
+    await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click()
+    // Both views of the Map tab.
+    await showTab(page, 'Map')
+    await checkLayout(page)
+    await page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' }).click()
     await checkLayout(page)
     await page.getByRole('banner').getByRole('button', { name: 'More' }).click()
     await expect(page.getByRole('dialog', { name: 'More' })).toBeVisible()

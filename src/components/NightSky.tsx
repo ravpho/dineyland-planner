@@ -37,12 +37,13 @@ const SPARKLES: Record<SkyVariant, SparkleSpot[]> = {
     { x: '47%', y: '90%', size: 2.5, twinkle: '4.1s' },
     { x: '98%', y: '50%', size: 2.5 },
   ],
+  // Right of the title and below the day card's Edit button, which sits in the top right corner.
   band: [
-    { x: '72%', y: '22%', size: 5, twinkle: '0s' },
-    { x: '88%', y: '40%', size: 3.5, twinkle: '2.3s' },
-    { x: '81%', y: '12%', size: 3 },
-    { x: '94%', y: '18%', size: 4, twinkle: '4.1s' },
-    { x: '63%', y: '40%', size: 2.5 },
+    { x: '70%', y: '42%', size: 5, twinkle: '0s' },
+    { x: '86%', y: '52%', size: 3.5, twinkle: '2.3s' },
+    { x: '78%', y: '62%', size: 2.5 },
+    { x: '94%', y: '40%', size: 3, twinkle: '4.1s' },
+    { x: '61%', y: '36%', size: 2.5 },
   ],
 }
 

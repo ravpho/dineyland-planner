@@ -152,7 +152,7 @@ export function CatalogList() {
               <IconButton
                 label={`Add ${l.item.name} to day${planned === 'selected' ? ' again' : ''}`}
                 onClick={() => add(l.item)}
-                className={`rounded-full border ${planned === 'selected' ? 'border-accent bg-accent text-on-accent hover:bg-accent-hover' : 'border-line-strong bg-surface text-accent'}`}
+                className={`rounded-full! border ${planned === 'selected' ? 'border-accent bg-accent text-on-accent hover:bg-accent-hover' : 'border-line-strong bg-surface text-accent'}`}
               >
                 <PlusIcon />
               </IconButton>
