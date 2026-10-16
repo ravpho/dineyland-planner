@@ -1,10 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
-import { acceptDialogs, addFromCatalog, createTrip, showTab } from './helpers'
+import { acceptDialogs, addFromCatalog, createTrip, openStop, showTab } from './helpers'
 
 async function checkLayout(page: Page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   expect(overflow, 'horizontal scroll').toBeLessThanOrEqual(0)
-  const controls = page.locator('button:visible, select:visible, input:visible, a[role="tab"]:visible, header a:visible')
+  const controls = page.locator('button:visible, select:visible, input:visible, a[role="tab"]:visible, header a:visible, nav a:visible')
   const small: string[] = []
   for (const control of await controls.all()) {
     // A checkbox inside a <label> is toggled by tapping anywhere on the label, so measure that.
@@ -21,23 +21,39 @@ test.describe('small phone 360x740', () => {
   test.use({ viewport: { width: 360, height: 740 } })
 
   test('8.1 no horizontal scroll and every control at least 44x44', async ({ page }) => {
+    // Measuring every visible control on each screen takes longer than the default 30 s.
+    test.slow()
     acceptDialogs(page)
-    await createTrip(page, { days: 3 })
+    // My day before any stop: the bottom bar, the date chips and the day card.
+    await createTrip(page, { days: 7 })
+    await expect(page.getByTestId('dock')).toBeVisible()
     await checkLayout(page)
     await addFromCatalog(page, 'Big Thunder Mountain')
     await addFromCatalog(page, 'Disney Stars on Parade', '11:30')
-    await showTab(page, 'Catalog')
+    await addFromCatalog(page, 'Frozen Ever After')
+    await showTab(page, 'Explore')
     await checkLayout(page)
-    await page.getByRole('button', { name: /Filters/ }).click()
-    await checkLayout(page)
-    await page.getByRole('button', { name: 'Close' }).click()
-    await showTab(page, 'Plan')
-    await checkLayout(page)
-    await page.getByRole('button', { name: 'Trip options' }).click()
-    await expect(page.getByRole('dialog', { name: 'Trip options' })).toBeVisible()
+    await page.getByRole('button', { name: /^Filters/ }).click()
     await checkLayout(page)
     await page.getByRole('button', { name: 'Close' }).click()
-    await page.getByRole('link', { name: 'About' }).click()
+    await showTab(page, 'My day')
+    await checkLayout(page)
+    // The day card's sheet and a stop's sheet.
+    await page.getByRole('button', { name: 'Edit hours and park order' }).click()
+    await checkLayout(page)
+    await page.getByRole('dialog').getByRole('button', { name: 'Done' }).click()
+    await openStop(page, 'Disney Stars on Parade')
+    await checkLayout(page)
+    await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click()
+    // Both views of the Map tab.
+    await showTab(page, 'Map')
+    await checkLayout(page)
+    await page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' }).click()
+    await checkLayout(page)
+    await page.getByRole('banner').getByRole('button', { name: 'More' }).click()
+    await expect(page.getByRole('dialog', { name: 'More' })).toBeVisible()
+    await checkLayout(page)
+    await page.getByRole('dialog', { name: 'More' }).getByRole('button', { name: 'About and data sources' }).click()
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(0)
   })
@@ -59,7 +75,7 @@ test('8.2 works offline after the first visit and passes the installability chec
 
   await context.setOffline(true)
   await page.reload()
-  await showTab(page, 'Plan')
+  await showTab(page, 'My day')
   await expect(page.getByLabel('Trip', { exact: true }).locator('option:checked')).toHaveText('Offline trip')
   await expect(page.getByTestId('timeline-slot')).toHaveCount(1)
   // The theme's fonts come from the precache: load() rejects if a face can't be fetched, and check() then
@@ -73,7 +89,7 @@ test('8.2 works offline after the first visit and passes the installability chec
     }
   })
   expect(fonts).toEqual({ inter: ['loaded'], fraunces: ['loaded'], checked: true })
-  await showTab(page, 'Catalog')
+  await showTab(page, 'Explore')
   await expect(page.getByTestId('catalog-row').first()).toBeVisible()
   await context.setOffline(false)
 })

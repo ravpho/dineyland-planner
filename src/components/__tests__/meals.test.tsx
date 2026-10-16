@@ -9,6 +9,7 @@ import PlanScreen from '../../screens/PlanScreen'
 import { createPlannerStore, selectedDay } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
+import { openStop } from '../../test/stops'
 import { CatalogList } from '../CatalogList'
 import { DayTimeline } from '../DayTimeline'
 import { ToastProvider } from '../Toast'
@@ -90,10 +91,10 @@ describe('meal time when adding a restaurant (trip-itinerary spec)', () => {
   })
 })
 
-describe('meal time and show lock on the timeline', () => {
+describe('meal time and show lock in the stop sheet', () => {
   test('change it in the plan: the meal time can be changed and cleared', () => {
     const { items } = renderPlan([{ itemId: 'dlp.cafe-hyperion', mealTime: '12:00' }])
-    const select = screen.getByRole('combobox', { name: 'Meal time for Café Hyperion' })
+    const select = within(openStop('Café Hyperion')).getByRole('combobox', { name: 'Meal time for Café Hyperion' })
     expect(select).toHaveValue('12:00')
     fireEvent.change(select, { target: { value: '12:30' } })
     expect(items()[0]!.mealTime).toBe('12:30')
@@ -104,7 +105,7 @@ describe('meal time and show lock on the timeline', () => {
 
   test('the meal time select spans the day window in half hours and keeps an odd current value', () => {
     renderPlan([{ itemId: 'dlp.cafe-hyperion', mealTime: '12:15' }])
-    const options = within(screen.getByRole('combobox', { name: 'Meal time for Café Hyperion' })).getAllByRole('option').map((o) => o.textContent)
+    const options = within(within(openStop('Café Hyperion')).getByRole('combobox', { name: 'Meal time for Café Hyperion' })).getAllByRole('option').map((o) => o.textContent)
     expect(options[0]).toBe('Any time')
     expect(options).toContain('09:30')
     expect(options).toContain('12:15')
@@ -113,12 +114,12 @@ describe('meal time and show lock on the timeline', () => {
 
   test('lock a show time: the toggle shows the locked state', () => {
     const { items } = renderPlan([{ itemId: 'dlp.parade', showTime: '17:30' }])
-    const lock = screen.getByRole('button', { name: 'Keep Disney Stars on Parade at 17:30 when optimizing' })
+    const lock = within(openStop('Disney Stars on Parade')).getByRole('button', { name: 'Keep Disney Stars on Parade at 17:30 when optimizing' })
     expect(lock).toHaveAttribute('aria-pressed', 'false')
     fireEvent.click(lock)
     expect(items()[0]!.timeLocked).toBe(true)
     expect(lock).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByText('Time kept when optimizing')).toBeInTheDocument()
+    expect(screen.getByText('Time kept when optimizing.')).toBeInTheDocument()
     fireEvent.click(lock)
     expect(items()[0]!.timeLocked).toBeUndefined()
   })
@@ -141,7 +142,7 @@ describe('meal time and show lock on the timeline', () => {
   })
 })
 
-describe('restaurant suggestions on the timeline (route-optimization spec)', () => {
+describe('restaurant suggestions in the stop sheet (route-optimization spec)', () => {
   function renderReal(entries: Omit<PlanItem, 'key'>[]) {
     const store = createPlannerStore(real)
     store.getState().createTrip('Trip', '2026-08-12')
@@ -164,7 +165,8 @@ describe('restaurant suggestions on the timeline (route-optimization spec)', () 
 
   test('swap and undo: a suggestion replaces the restaurant at its meal time, and Undo restores it', () => {
     const { items } = renderReal(dawDay({ itemId: 'dlp.au-chalet-de-la-marionnette', mealTime: '12:00' }))
-    const box = within(slotOf('Au Chalet de la Marionnette')).getByTestId('restaurant-suggestions')
+    expect(within(slotOf('Au Chalet de la Marionnette')).getByText('3 quicker options')).toBeInTheDocument()
+    const box = within(openStop('Au Chalet de la Marionnette')).getByTestId('restaurant-suggestions')
     const buttons = within(box).getAllByRole('button')
     expect(buttons).toHaveLength(3)
     for (const b of buttons) expect(b).toHaveTextContent(/ · saves \d+ min$/)
@@ -179,12 +181,13 @@ describe('restaurant suggestions on the timeline (route-optimization spec)', () 
 
   test('a restaurant that fits shows no suggestions', () => {
     renderReal(dawDay({ itemId: 'daw.stark-factory', mealTime: '12:00' }))
-    expect(within(slotOf('Stark Factory')).queryByTestId('restaurant-suggestions')).toBeNull()
+    expect(within(slotOf('Stark Factory')).queryByText(/quicker option/)).toBeNull()
+    expect(within(openStop('Stark Factory')).queryByTestId('restaurant-suggestions')).toBeNull()
   })
 
   test('table-service suggestions say a booking is usually needed', () => {
     renderReal(dawDay({ itemId: 'dlp.auberge-de-cendrillon', mealTime: '12:30' }))
-    const buttons = within(within(slotOf('Auberge de Cendrillon')).getByTestId('restaurant-suggestions')).getAllByRole('button')
+    const buttons = within(within(openStop('Auberge de Cendrillon')).getByTestId('restaurant-suggestions')).getAllByRole('button')
     expect(buttons.length).toBeGreaterThan(0)
     for (const b of buttons) expect(b).toHaveTextContent(/ · booking usually needed$/)
   })

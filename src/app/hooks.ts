@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { selectedDay, selectedTrip } from '../state/store'
+import { scheduleDay, type DaySchedule } from '../domain/schedule'
 import { plannedMarks, type PlannedMark } from '../domain/stops'
 import { monthOf } from '../domain/time'
 import { useCatalog, usePlanner } from './PlannerContext'
@@ -36,6 +37,14 @@ export function usePlannedMarks(): { marks: Map<string, PlannedMark>; dayNumber:
   const trip = usePlanner(selectedTrip)
   const day = usePlanner(selectedDay)
   return useMemo(() => ({ marks: plannedMarks(trip, day?.id, catalog), dayNumber: trip && day ? trip.days.indexOf(day) + 1 : 0 }), [trip, day, catalog])
+}
+
+/** The selected day's timeline, shared by My day and the dock's fit status. */
+export function useSelectedSchedule(): DaySchedule | null {
+  const catalog = useCatalog()
+  const day = usePlanner(selectedDay)
+  const profile = usePlanner((s) => s.profile)
+  return useMemo(() => (day ? scheduleDay(day, catalog, profile) : null), [day, catalog, profile])
 }
 
 export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']

@@ -1,16 +1,14 @@
-import { DndContext } from '@dnd-kit/core'
 import { act, fireEvent, screen, within } from '@testing-library/react'
-import { useState } from 'react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
+import App from '../../App'
+import { WIDE_QUERY } from '../../app/hooks'
 import catalogJson from '../../data/catalog.json'
 import { parseCatalog } from '../../domain/catalog'
 import { scheduleDay, type ScheduledSlot } from '../../domain/schedule'
 import { formatClock } from '../../domain/time'
-import PlanScreen from '../../screens/PlanScreen'
 import { createPlannerStore, selectedDay, selectedTrip } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
-import { CatalogList } from '../CatalogList'
-import { ToastProvider } from '../Toast'
+import { openStop } from '../../test/stops'
 
 const real = parseCatalog(catalogJson)
 const THUNDER = 'dlp.big-thunder-mountain'
@@ -19,45 +17,40 @@ const PETER = 'dlp.peter-pans-flight'
 const CRUSH = 'daw.crushs-coaster'
 const FROZEN = 'daw.frozen-ever-after'
 
-const wrap = (ui: React.ReactElement) => (
-  <ToastProvider>
-    <DndContext>{ui}</DndContext>
-  </ToastProvider>
-)
+afterEach(() => {
+  window.location.hash = ''
+})
 
-/** Stands in for the phone's Catalog and Plan tabs. */
-function Tabs() {
-  const [tab, setTab] = useState<'Catalog' | 'Plan'>('Plan')
-  return (
-    <>
-      <button type="button" onClick={() => setTab(tab === 'Plan' ? 'Catalog' : 'Plan')}>
-        Open {tab === 'Plan' ? 'Catalog' : 'Plan'} tab
-      </button>
-      {tab === 'Plan' ? <PlanScreen /> : <CatalogList />}
-    </>
-  )
-}
-
-/** The Plan of a trip whose days hold `days` (item ids), with Day 1 selected. */
+/** The phone app on My day, for a trip whose days hold `days` (item ids), with Day 1 selected. */
 function renderPlan(...days: string[][]) {
   const store = createPlannerStore(real)
   store.getState().createTrip('Trip', '2026-08-12', Math.max(1, days.length))
   const trip = selectedTrip(store.getState())!
   days.forEach((ids, i) => ids.forEach((id) => store.getState().addItem(trip.days[i]!.id, id)))
-  const r = renderWithPlanner(wrap(<Tabs />), { store, catalog: real })
+  window.location.hash = '#/plan'
+  const r = renderWithPlanner(<App />, { store, catalog: real })
   return { ...r, store, day: () => selectedDay(store.getState())! }
 }
 
-const showMap = () => fireEvent.click(screen.getByRole('button', { name: 'Map' }))
+/** Follows a link, as the bottom bar's do. */
+const go = (hash: string) =>
+  act(() => {
+    window.location.hash = hash
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+  })
+const showMap = () => go('#/map')
+const mapMode = (name: 'My day' | 'All places') => within(screen.getByRole('group', { name: 'Map view' })).getByRole('button', { name })
 const planMap = () => screen.getByTestId('plan-map')
 const parkButton = (name: string) => within(within(planMap()).getByRole('group', { name: 'Park on the map' })).getByRole('button', { name: new RegExp(`^${name}`) })
 const stopNumbers = () => within(planMap()).getAllByTestId('route-stop').map((s) => [s.getAttribute('data-item'), s.textContent])
 
 describe('map of the day in the plan (park-map spec)', () => {
-  test('switch to the map: the day’s stops, numbered and named, and nothing else from the catalog', () => {
+  test('switch to the map: the Map tab opens on My day, with the day’s stops numbered and named, and nothing else', () => {
     renderPlan([THUNDER, MANOR, PETER])
     expect(screen.queryByTestId('plan-map')).toBeNull()
+    expect(screen.queryByRole('group', { name: 'Plan view' })).toBeNull()
     showMap()
+    expect(mapMode('My day')).toHaveAttribute('aria-pressed', 'true')
     expect(screen.queryByTestId('timeline-slot')).toBeNull()
     expect(within(planMap()).getAllByTestId('map-marker').map((m) => m.getAttribute('aria-label'))).toEqual(["Big Thunder Mountain", 'Phantom Manor', "Peter Pan's Flight"])
     expect(stopNumbers()).toEqual([
@@ -75,9 +68,24 @@ describe('map of the day in the plan (park-map spec)', () => {
     expect(within(planMap()).queryByRole('button', { name: /Move|Remove|Reorder/ })).toBeNull()
   })
 
+  test('the route is drawn in both modes', () => {
+    renderPlan([THUNDER, MANOR, PETER])
+    showMap()
+    expect(within(planMap()).getAllByTestId('route-stop')).toHaveLength(3)
+    fireEvent.click(mapMode('All places'))
+    expect(screen.queryByTestId('plan-map')).toBeNull()
+    expect(within(screen.getByTestId('park-map')).getAllByTestId('route-stop').map((s) => s.textContent)).toEqual(['1', '2', '3'])
+  })
+
+  test('the fit status stays in the bottom bar with the map', () => {
+    renderPlan([THUNDER])
+    showMap()
+    expect(within(screen.getByTestId('dock')).getByTestId('fit-summary')).toHaveTextContent(/^Fits/)
+  })
+
   test('map follows the plan: an item moved up in the timeline carries its new number', () => {
     renderPlan([THUNDER, MANOR, PETER])
-    fireEvent.click(screen.getByRole('button', { name: "Move Peter Pan's Flight up" }))
+    fireEvent.click(within(openStop("Peter Pan's Flight")).getByRole('button', { name: "Move Peter Pan's Flight up" }))
     showMap()
     expect(stopNumbers()).toContainEqual([PETER, '2'])
   })
@@ -90,11 +98,6 @@ describe('map of the day in the plan (park-map spec)', () => {
     expect(within(planMap()).getByTestId('route-marker')).toHaveTextContent('to Disney Adventure World')
   })
 
-  test('the fit status stays with the map', () => {
-    renderPlan([THUNDER])
-    showMap()
-    expect(screen.getByTestId('fit-summary')).toHaveTextContent(/Fits|Over by/)
-  })
 })
 
 describe('park shown on the plan map (park-map spec)', () => {
@@ -123,24 +126,44 @@ describe('park shown on the plan map (park-map spec)', () => {
   })
 })
 
-describe('plan view kept for the session (park-map spec)', () => {
-  test('back from the catalog: the plan map is still shown', () => {
-    const { store } = renderPlan([THUNDER])
-    showMap()
-    fireEvent.click(screen.getByRole('button', { name: 'Open Catalog tab' }))
-    expect(screen.queryByTestId('plan-map')).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'Open Plan tab' }))
-    expect(planMap()).toBeInTheDocument()
-    expect(store.getState().planView).toBe('map')
-  })
-
+describe('the day map follows the selected day (park-map spec)', () => {
   test('another day: the map shows that day, on the park of its first item', () => {
     renderPlan([THUNDER], [CRUSH, MANOR])
     showMap()
     expect(parkButton('Disneyland Park')).toHaveAttribute('aria-pressed', 'true')
+    // Phones pick the day on the Map tab too.
     fireEvent.click(screen.getByRole('tab', { name: /^Day 2/ }))
     expect(parkButton('Disney Adventure World')).toHaveAttribute('aria-pressed', 'true')
     expect(within(planMap()).getAllByTestId('map-marker').map((m) => m.getAttribute('aria-label'))).toEqual(["Crush's Coaster"])
+  })
+})
+
+describe('map choice kept for the session (park-map spec)', () => {
+  test('back from Explore: All places is still shown', () => {
+    renderPlan([THUNDER])
+    showMap()
+    fireEvent.click(mapMode('All places'))
+    go('#/catalog')
+    expect(screen.queryByRole('group', { name: 'Map view' })).toBeNull()
+    showMap()
+    expect(mapMode('All places')).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByTestId('park-map')).toBeInTheDocument()
+  })
+
+  test('another day keeps the choice, and My day has no date chips on All places', () => {
+    const { store } = renderPlan([THUNDER], [CRUSH])
+    showMap()
+    fireEvent.click(mapMode('All places'))
+    expect(screen.queryByRole('tablist', { name: 'Days' })).toBeNull()
+    act(() => store.getState().selectDay(selectedTrip(store.getState())!.days[1]!.id))
+    expect(mapMode('All places')).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  test('a new session starts on My day', () => {
+    renderPlan([THUNDER])
+    showMap()
+    fireEvent.click(mapMode('All places'))
+    expect(createPlannerStore(real).getState().mapMode).toBe('day')
   })
 })
 
@@ -183,16 +206,35 @@ describe('stop card on the plan map (park-map spec)', () => {
     fireEvent.click(parkButton('Disney Adventure World'))
     fireEvent.click(within(planMap()).getByRole('button', { name: 'Frozen Ever After' }))
     fireEvent.click(within(card()).getByRole('button', { name: 'Show in timeline' }))
+    // It opens My day; jsdom's own hashchange waits on the fake timers.
+    expect(window.location.hash).toBe('#/plan')
+    act(() => window.dispatchEvent(new HashChangeEvent('hashchange')))
 
     expect(screen.queryByTestId('plan-map')).toBeNull()
     const sixth = screen.getAllByTestId('timeline-slot')[5]!
     expect(within(sixth).getByTestId('slot-name')).toHaveTextContent('Frozen Ever After')
-    expect(scroll).toHaveBeenCalledTimes(1)
-    expect(scroll.mock.contexts[0]).toBe(sixth)
+    // The date chips also keep the selected day in view; the timeline scrolls the stop once.
+    expect(scroll.mock.contexts.filter((c) => c === sixth)).toHaveLength(1)
     expect(within(sixth).getByTestId('slot-handle')).toHaveFocus()
     expect(sixth.querySelector('[data-highlight="true"]')).not.toBeNull()
     act(() => vi.advanceTimersByTime(2000))
     expect(sixth.querySelector('[data-highlight]')).toBeNull()
+  })
+
+  test('Show in timeline on a wide screen: the map stays, and My day beside it brings the stop into view', () => {
+    const scroll = vi.fn()
+    Element.prototype.scrollIntoView = scroll
+    vi.stubGlobal('matchMedia', (query: string) => ({ matches: query === WIDE_QUERY, media: query, addEventListener() {}, removeEventListener() {} }))
+    renderPlan([THUNDER, MANOR, PETER])
+    showMap()
+    fireEvent.click(within(planMap()).getByRole('button', { name: "Peter Pan's Flight" }))
+    fireEvent.click(within(card()).getByRole('button', { name: 'Show in timeline' }))
+    expect(window.location.hash).toBe('#/map')
+    expect(planMap()).toBeInTheDocument()
+    const third = within(screen.getByTestId('plan-column')).getAllByTestId('timeline-slot')[2]!
+    expect(scroll.mock.contexts.filter((c) => c === third)).toHaveLength(1)
+    expect(within(third).getByTestId('slot-handle')).toHaveFocus()
+    vi.unstubAllGlobals()
   })
 
   test('closing the card', () => {

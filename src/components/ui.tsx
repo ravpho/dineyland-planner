@@ -1,6 +1,7 @@
-import { useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { useEffect, useRef, type ButtonHTMLAttributes, type ComponentPropsWithRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { CloseIcon } from './icons'
+import { useRegisterSheet } from './Toast'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 
@@ -22,7 +23,7 @@ export function Button({ variant = 'secondary', className = '', ...props }: Butt
 }
 
 /** Square 44x44 icon button; `label` is required for screen readers. */
-export function IconButton({ label, className = '', children, ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { label: string }) {
+export function IconButton({ label, className = '', children, ...props }: ComponentPropsWithRef<'button'> & { label: string }) {
   return (
     <button
       type="button"
@@ -73,27 +74,46 @@ export function Stars({ rating }: { rating: number }) {
   )
 }
 
+/** Open sheets, oldest first. */
+const openSheets: object[] = []
+
 /**
  * Modal sheet: bottom sheet on phones, centred dialog on wide screens. Rendered into document.body, so a
  * sticky ancestor (such as the wide-screen plan column) can't trap it under other sticky content.
+ *
+ * It takes focus when it opens and gives it back to the opener when it closes. Escape closes only the top
+ * sheet, so details opened over a stop's sheet close on their own.
  */
 export function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
+  const close = useRef(onClose)
+  useRegisterSheet()
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    close.current = onClose
+  })
+  useEffect(() => {
+    const token = {}
+    openSheets.push(token)
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && openSheets.at(-1) === token && close.current()
     document.addEventListener('keydown', onKey)
     ref.current?.focus()
-    return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      openSheets.splice(openSheets.indexOf(token), 1)
+      if (opener?.isConnected) opener.focus({ preventScroll: true })
+    }
+  }, [])
   return createPortal(
-    <div className="sheet-scrim fixed inset-0 z-40 flex items-end justify-center bg-sky-deep/50 sm:items-center" onClick={onClose}>
+    // The top 5.5rem stays free for messages (refresh-plan-layout design Decision 10).
+    <div className="sheet-scrim fixed inset-0 z-40 flex items-end justify-center bg-sky-deep/50 pt-[5.5rem] sm:items-center" onClick={onClose}>
       <div
         ref={ref}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="sheet-panel max-h-[90dvh] w-full overflow-y-auto rounded-t-2xl bg-surface p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl outline-none sm:max-w-lg sm:rounded-2xl"
+        className="sheet-panel max-h-[calc(100dvh-5.5rem)] w-full overflow-y-auto rounded-t-2xl bg-surface p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl outline-none sm:max-w-lg sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-3 flex items-start justify-between gap-2">
@@ -106,6 +126,18 @@ export function Sheet({ title, onClose, children }: { title: string; onClose: ()
       </div>
     </div>,
     document.body,
+  )
+}
+
+/**
+ * A footer that stays at the bottom of a sheet while its content scrolls, for the sheet's main action
+ * (refresh-plan-layout design Decision 11). It reaches the sheet's edges and covers its bottom padding.
+ */
+export function SheetFooter({ children }: { children: ReactNode }) {
+  return (
+    <div className="sticky -bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 -mx-4 mt-4 -mb-[max(1rem,env(safe-area-inset-bottom))] flex gap-2 border-t border-line bg-surface px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3" data-testid="sheet-footer">
+      {children}
+    </div>
   )
 }
 

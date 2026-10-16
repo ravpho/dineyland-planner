@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test'
-import { addFromCatalog, createTrip } from './helpers'
+import { addFromCatalog, createTrip, showTab } from './helpers'
 
-test('6.1 the map renders beside the plan on a wide screen and zooms with the wheel', async ({ page }) => {
+test('6.1 the map renders beside My day on a wide screen and zooms with the wheel', async ({ page }) => {
   await createTrip(page)
   await addFromCatalog(page, 'Big Thunder Mountain')
-  // The plan column has its own Timeline | Map switch, so pick the catalog's.
-  await page.getByRole('group', { name: 'Catalog view' }).getByRole('button', { name: 'Map' }).click()
+  // The left column's Explore | Map control.
+  await showTab(page, 'Map')
+  await page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' }).click()
   const map = page.getByTestId('park-map')
   await expect(map).toBeVisible()
   await expect(page.getByTestId('plan-column')).toBeVisible()
@@ -20,15 +21,31 @@ test('6.1 the map renders beside the plan on a wide screen and zooms with the wh
   await expect(page.getByTestId('slot-name')).toHaveText(['Big Thunder Mountain'])
 })
 
-test('the plan map shows beside the catalog map, each with its own markers', async ({ page }) => {
+test('the Map column: My day’s stops or all places, with the route in both, beside the timeline', async ({ page }) => {
   await createTrip(page)
   for (const n of ['Big Thunder Mountain', 'Phantom Manor']) await addFromCatalog(page, n)
-  await page.getByRole('group', { name: 'Catalog view' }).getByRole('button', { name: 'Map' }).click()
-  await page.getByRole('group', { name: 'Plan view' }).getByRole('button', { name: 'Map' }).click()
+  await showTab(page, 'Map')
+  const column = page.getByRole('navigation', { name: 'Left column' })
+  await expect(column.getByRole('link', { name: 'Map' })).toHaveAttribute('aria-current', 'page')
   const planMap = page.getByTestId('plan-map')
-  await expect(page.getByTestId('park-map')).toHaveCount(2)
   await expect(planMap.getByTestId('map-marker')).toHaveCount(2)
   await expect(planMap.getByTestId('route-stop')).toHaveText(['1', '2'])
+  await expect(page.getByTestId('plan-column').getByTestId('timeline-slot')).toHaveCount(2)
+
+  await page.getByRole('group', { name: 'Map view' }).getByRole('button', { name: 'All places' }).click()
+  await expect(planMap).toHaveCount(0)
+  await expect(page.getByTestId('park-map').getByTestId('route-stop')).toHaveText(['1', '2'])
   expect(await page.getByTestId('map-view').getByTestId('map-marker').count()).toBeGreaterThan(10)
   await expect(page.getByTestId('fit-summary')).toBeVisible()
+})
+
+test('Show in timeline on a wide screen keeps the map and brings the stop into view beside it', async ({ page }) => {
+  await createTrip(page)
+  for (const n of ['Big Thunder Mountain', 'Phantom Manor', "Peter Pan's Flight"]) await addFromCatalog(page, n)
+  await showTab(page, 'Map')
+  await page.getByTestId('plan-map').getByRole('button', { name: "Peter Pan's Flight", exact: true }).click()
+  await page.getByTestId('stop-card').getByRole('button', { name: 'Show in timeline' }).click()
+  await expect(page).toHaveURL(/#\/map$/)
+  await expect(page.getByTestId('plan-map')).toBeVisible()
+  await expect(page.getByTestId('timeline-slot').nth(2).getByTestId('slot-handle')).toBeFocused()
 })

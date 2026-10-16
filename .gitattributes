@@ -1,0 +1,3 @@
+# Claude Code skills come from elsewhere (OpenSpec and the UI/UX Pro Max skill set): leave them out of the
+# language statistics, and collapse them in pull request diffs.
+.claude/skills/** linguist-vendored linguist-generated

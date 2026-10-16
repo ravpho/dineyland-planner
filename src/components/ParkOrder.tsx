@@ -5,6 +5,7 @@ import type { Day } from '../domain/trip'
 import { useCatalog, usePlanner } from '../app/PlannerContext'
 import { useToast } from './Toast'
 import { Button, Sheet } from './ui'
+import { useOrderUndo } from '../app/useOrderUndo'
 
 /**
  * The order in which the day's attractions visit the parks, with "Switch order" when each park's
@@ -13,7 +14,7 @@ import { Button, Sheet } from './ui'
 export function ParkOrder({ day }: { day: Day }) {
   const catalog = useCatalog()
   const switchParkOrder = usePlanner((s) => s.switchParkOrder)
-  const undoRouteChange = usePlanner((s) => s.undoRouteChange)
+  const undoFor = useOrderUndo()
   const toast = useToast()
   const hintId = useId()
   const [confirming, setConfirming] = useState(false)
@@ -31,7 +32,7 @@ export function ParkOrder({ day }: { day: Day }) {
   const switchOrder = () => {
     setConfirming(false)
     const result = switchParkOrder(day.id)
-    if (result.changed) toast(`${parkName(result.firstPark)} first${result.removed ? ` · ${result.removed} removed` : ''}`, { label: 'Undo', run: undoRouteChange })
+    if (result.changed) toast(`${parkName(result.firstPark)} first${result.removed ? ` · ${result.removed} removed` : ''}`, { label: 'Undo', run: undoFor() })
   }
 
   return (

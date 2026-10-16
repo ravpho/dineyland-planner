@@ -2,7 +2,7 @@ import type { ClientRect, Collision, DroppableContainer } from '@dnd-kit/core'
 import { describe, expect, test } from 'vitest'
 import { CATALOG_DRAG_PREFIX } from '../CatalogList'
 import { DAY_DROP_ID } from '../DayTimeline'
-import { plannerCollision } from '../PlannerDnd'
+import { plannerCollision, SENSOR_OPTIONS } from '../PlannerDnd'
 
 const rect = (top: number, height: number): ClientRect => ({ top, height, bottom: top + height, left: 0, width: 300, right: 300 })
 
@@ -34,5 +34,16 @@ describe('drop target while dragging', () => {
 
   test('a catalog item can still land on the whole-day target', () => {
     expect(collide(`${CATALOG_DRAG_PREFIX}x`).map((h) => h.id)).toContain(DAY_DROP_ID)
+  })
+})
+
+describe('sensors (refresh-plan-layout design Decision 7)', () => {
+  test('a touch drag starts after 4 px of movement on the grip, with no long press', () => {
+    expect(SENSOR_OPTIONS.touch).toEqual({ activationConstraint: { distance: 4 } })
+    expect(SENSOR_OPTIONS.touch.activationConstraint).not.toHaveProperty('delay')
+  })
+
+  test('a mouse drag starts after 5 px', () => {
+    expect(SENSOR_OPTIONS.mouse).toEqual({ activationConstraint: { distance: 5 } })
   })
 })

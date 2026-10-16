@@ -4,10 +4,12 @@ import catalogJson from '../../data/catalog.json'
 import { parseCatalog } from '../../domain/catalog'
 import type { PlanItem } from '../../domain/trip'
 import type { Day } from '../../domain/trip'
-import PlanScreen, { dayParksLabel } from '../../screens/PlanScreen'
+import PlanScreen from '../../screens/PlanScreen'
+import { dayParksLabel } from '../DayHeader'
 import { createPlannerStore } from '../../state/store'
 import { renderWithPlanner } from '../../test/render'
 import { sampleCatalog } from '../../test/sampleCatalog'
+import { openStop } from '../../test/stops'
 import { CreateTripForm } from '../CreateTripForm'
 import { ToastProvider } from '../Toast'
 import { DndContext } from '@dnd-kit/core'
@@ -37,12 +39,13 @@ describe('plan screens (trip-itinerary spec)', () => {
     )
     fireEvent.click(screen.getByRole('button', { name: 'Create trip' }))
     expect(store.getState().trips[0]!.days).toHaveLength(1)
+    fireEvent.click(screen.getByRole('button', { name: 'Edit hours and park order' }))
     expect(screen.getByLabelText('Start')).toBeInTheDocument()
     expect(screen.getByLabelText('End')).toBeInTheDocument()
     expect(screen.queryByLabelText('Park')).toBeNull()
   })
 
-  test('change the hours in place (app-shell spec: Day first on the Plan)', () => {
+  test('change the hours from the day card (app-shell spec: Day first in My day)', () => {
     const store = createPlannerStore(sampleCatalog)
     store.getState().createTrip('Trip', '2026-08-12')
     renderWithPlanner(
@@ -53,12 +56,19 @@ describe('plan screens (trip-itinerary spec)', () => {
       </ToastProvider>,
       { store },
     )
-    const hours = screen.getByRole('group', { name: 'Day hours' })
+    expect(screen.queryByRole('group', { name: 'Day hours' })).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Edit hours and park order' }))
+    const sheet = screen.getByRole('dialog', { name: 'Day 1 · Wednesday 12 August' })
+    const hours = within(sheet).getByRole('group', { name: 'Day hours' })
     fireEvent.change(within(hours).getByLabelText('Start'), { target: { value: '10:00' } })
     expect(store.getState().trips[0]!.days[0]!.start).toBe('10:00')
     fireEvent.change(within(hours).getByLabelText('End'), { target: { value: '18:00' } })
     expect(store.getState().trips[0]!.days[0]!.end).toBe('18:00')
+    // The card behind the sheet updates at once, and the user is still in My day.
+    expect(screen.getByTestId('day-card')).toHaveTextContent('10:00–18:00')
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Done' }))
     expect(screen.queryByRole('dialog')).toBeNull()
+    expect(screen.getByRole('heading', { name: 'My day' })).toBeInTheDocument()
   })
 })
 
@@ -83,7 +93,7 @@ describe('group by area (route-optimization spec)', () => {
 
   test('nothing to group with fewer than two items', () => {
     const { store } = renderPlan([])
-    expect(button()).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'Group by area' })).toBeNull()
     act(() => void store.getState().addItem(store.getState().trips[0]!.days[0]!.id, 'dlp.big-thunder-mountain'))
     expect(names()).toEqual(['Big Thunder Mountain'])
     expect(button()).toBeDisabled()
@@ -141,7 +151,7 @@ describe('optimize route (route-optimization spec)', () => {
 
   test('nothing to optimize with fewer than two items', () => {
     const store = renderPlan([])
-    expect(button()).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'Optimize route' })).toBeNull()
     act(() => void store.getState().addItem(store.getState().trips[0]!.days[0]!.id, 'dlp.big-thunder-mountain'))
     expect(button()).toBeDisabled()
   })
@@ -209,7 +219,7 @@ describe('optimize route (route-optimization spec)', () => {
     ])
     optimize()
     expect(message(/^Route optimized/)).toHaveTextContent(/ · The Lion King: Rhythms of the Pride Lands 16:45 → 13:10Undo$/)
-    expect(screen.getByRole('combobox', { name: 'Start time for The Lion King: Rhythms of the Pride Lands' })).toHaveValue('13:10')
+    expect(within(openStop('The Lion King: Rhythms of the Pride Lands')).getByRole('combobox', { name: 'Start time for The Lion King: Rhythms of the Pride Lands' })).toHaveValue('13:10')
   })
 
   test('no quicker order: says so, without Undo', () => {
@@ -232,13 +242,12 @@ describe('optimize route (route-optimization spec)', () => {
   })
 })
 
-describe('trip options (app-shell spec: Trip actions in a trip menu)', () => {
-  afterEach(() => vi.restoreAllMocks())
-
-  function renderTrip() {
+describe('date chips and the day card (app-shell spec: Day first in My day)', () => {
+  function renderTrip(days: number, items: string[][] = []) {
     const store = createPlannerStore(sampleCatalog)
-    store.getState().createTrip('Summer trip', '2026-08-12', 2)
-    const view = renderWithPlanner(
+    store.getState().createTrip('Trip', '2026-08-12', days)
+    items.forEach((ids, i) => ids.forEach((id) => store.getState().addItem(store.getState().trips[0]!.days[i]!.id, id)))
+    renderWithPlanner(
       <ToastProvider>
         <DndContext>
           <PlanScreen />
@@ -246,67 +255,46 @@ describe('trip options (app-shell spec: Trip actions in a trip menu)', () => {
       </ToastProvider>,
       { store },
     )
-    return { ...view, store }
+    return store
   }
-  const options = () => screen.getByRole('dialog', { name: 'Trip options' })
+  const chips = () => within(screen.getByRole('tablist', { name: 'Days' })).getAllByRole('tab')
 
-  test('open the menu: it offers New trip, Rename and Delete', () => {
-    renderTrip()
-    expect(screen.queryByRole('button', { name: /Rename/ })).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
-    expect(within(options()).getByRole('button', { name: /New trip/ })).toBeInTheDocument()
-    expect(within(options()).getByRole('button', { name: /Rename/ })).toBeInTheDocument()
-    expect(within(options()).getByRole('button', { name: /Delete/ })).toBeInTheDocument()
+  test('one chip per day, named in full and showing the weekday and date', () => {
+    renderTrip(3, [['dlp.big-thunder-mountain', 'daw.avengers-flight-force']])
+    // Node writes "Wed 12 Aug" and browsers "Wed, 12 Aug".
+    expect(chips().map((c) => c.getAttribute('aria-selected'))).toEqual(['true', 'false', 'false'])
+    expect(chips()[0]).toHaveAccessibleName(/^Day 1 · Wed,? 12 Aug · DLP \+ DAW$/)
+    expect(chips()[1]).toHaveAccessibleName(/^Day 2 · Thu,? 13 Aug$/)
+    expect(chips()[2]).toHaveAccessibleName(/^Day 3 · Fri,? 14 Aug$/)
+    expect([...chips()[1]!.querySelectorAll('[aria-hidden]')].map((e) => e.textContent)).toEqual(['Thu', '13', ''])
+    expect(chips()[0]).toHaveAttribute('aria-selected', 'true')
   })
 
-  test('share in one tap: the share sheet opens from the trip row', () => {
-    renderTrip()
-    fireEvent.click(screen.getByRole('button', { name: 'Share' }))
-    expect(screen.getByRole('dialog', { name: 'Share this trip' })).toBeInTheDocument()
+  test('selecting a chip shows that day', () => {
+    const store = renderTrip(2)
+    fireEvent.click(screen.getByRole('tab', { name: /^Day 2/ }))
+    expect(store.getState().selectedDayId).toBe(store.getState().trips[0]!.days[1]!.id)
+    expect(screen.getByRole('tab', { name: /^Day 2/ })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByTestId('day-card')).toHaveTextContent('Day 2 · Thursday')
+    expect(screen.getByTestId('day-card')).toHaveTextContent('13 August')
   })
 
-  test('delete from the menu: the menu closes, then the app asks to confirm', () => {
-    const { store } = renderTrip()
-    let sheetOpenWhenAsked: boolean | undefined
-    const confirm = vi.spyOn(window, 'confirm').mockImplementation(() => {
-      sheetOpenWhenAsked = screen.queryByRole('dialog', { name: 'Trip options' }) !== null
-      return false
-    })
-    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
-    fireEvent.click(within(options()).getByRole('button', { name: /Delete/ }))
-    expect(confirm).toHaveBeenCalledOnce()
-    expect(sheetOpenWhenAsked).toBe(false)
-    expect(store.getState().trips).toHaveLength(1)
-
-    confirm.mockReturnValue(true)
-    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
-    fireEvent.click(within(options()).getByRole('button', { name: /Delete/ }))
-    expect(store.getState().trips).toHaveLength(0)
+  test('the card shows the date, hours and stops, and the ticket reminder on a two-park day', () => {
+    renderTrip(1, [['dlp.big-thunder-mountain', 'dlp.phantom-manor', 'daw.avengers-flight-force']])
+    const card = screen.getByTestId('day-card')
+    expect(card).toHaveTextContent('Day 1 · Wednesday')
+    expect(card).toHaveTextContent('12 August')
+    expect(within(card).getByTestId('day-card-stops')).toHaveTextContent('3 stops')
+    expect(within(card).getByTestId('ticket-reminder')).toHaveTextContent('Ticket valid for both parks · Disneyland Park → Disney Adventure World')
   })
 
-  test('rename from the menu', () => {
-    const { store } = renderTrip()
-    vi.spyOn(window, 'prompt').mockReturnValue('Winter trip')
-    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
-    fireEvent.click(within(options()).getByRole('button', { name: /Rename/ }))
-    expect(store.getState().trips[0]!.name).toBe('Winter trip')
-    expect(screen.queryByRole('dialog')).toBeNull()
+  test('a one-park day has no ticket reminder', () => {
+    renderTrip(1, [['dlp.big-thunder-mountain', 'dlp.phantom-manor']])
+    expect(screen.queryByTestId('ticket-reminder')).toBeNull()
   })
 
-  test('new trip from the menu opens the new-trip form', () => {
-    renderTrip()
-    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
-    fireEvent.click(within(options()).getByRole('button', { name: /New trip/ }))
-    expect(screen.queryByRole('dialog', { name: 'Trip options' })).toBeNull()
-    expect(screen.getByRole('dialog', { name: 'New trip' })).toBeInTheDocument()
-  })
-
-  test('close without choosing: the trip is unchanged', () => {
-    const { store } = renderTrip()
-    const before = store.getState().trips
-    fireEvent.click(screen.getByRole('button', { name: 'Trip options' }))
-    fireEvent.click(within(options()).getByRole('button', { name: 'Close' }))
-    expect(screen.queryByRole('dialog')).toBeNull()
-    expect(store.getState().trips).toBe(before)
+  test('an empty day says it has no stops yet', () => {
+    renderTrip(1)
+    expect(screen.getByTestId('day-card-stops')).toHaveTextContent('No stops yet')
   })
 })

@@ -25,19 +25,11 @@ type SparkleSpot = { x: string; y: string; size: number; twinkle?: string }
 
 /**
  * Gold sparkles placed by share of the width and height, sized in px; three twinkle, each with its own delay.
- * They sit in gaps that stay free of text: in the two-row phone header, between and beside the tabs; in a
- * one-row header (wide screens, About, Import), in the strips above and below the letters; in the empty
- * Plan band, top right of its title.
+ * They sit in gaps that stay free of text: in the one-row header, in the strips above and below the letters;
+ * in the empty Plan band and the day card, top right of the title.
  */
-export type SkyVariant = 'header' | 'row' | 'band'
+export type SkyVariant = 'row' | 'band'
 const SPARKLES: Record<SkyVariant, SparkleSpot[]> = {
-  header: [
-    { x: '40%', y: '70%', size: 5, twinkle: '0s' },
-    { x: '57%', y: '84%', size: 3.5, twinkle: '2.3s' },
-    { x: '85%', y: '62%', size: 4 },
-    { x: '65%', y: '58%', size: 3, twinkle: '4.1s' },
-    { x: '97%', y: '80%', size: 2.5 },
-  ],
   row: [
     { x: '31%', y: '16%', size: 4, twinkle: '0s' },
     { x: '66%', y: '90%', size: 3, twinkle: '2.3s' },
@@ -45,12 +37,13 @@ const SPARKLES: Record<SkyVariant, SparkleSpot[]> = {
     { x: '47%', y: '90%', size: 2.5, twinkle: '4.1s' },
     { x: '98%', y: '50%', size: 2.5 },
   ],
+  // Right of the title and below the day card's Edit button, which sits in the top right corner.
   band: [
-    { x: '72%', y: '22%', size: 5, twinkle: '0s' },
-    { x: '88%', y: '40%', size: 3.5, twinkle: '2.3s' },
-    { x: '81%', y: '12%', size: 3 },
-    { x: '94%', y: '18%', size: 4, twinkle: '4.1s' },
-    { x: '63%', y: '40%', size: 2.5 },
+    { x: '70%', y: '42%', size: 5, twinkle: '0s' },
+    { x: '86%', y: '52%', size: 3.5, twinkle: '2.3s' },
+    { x: '78%', y: '62%', size: 2.5 },
+    { x: '94%', y: '40%', size: 3, twinkle: '4.1s' },
+    { x: '61%', y: '36%', size: 2.5 },
   ],
 }
 
@@ -58,7 +51,7 @@ const SPARKLES: Record<SkyVariant, SparkleSpot[]> = {
  * Night sky drawn behind the header and the empty Plan band (midnight-theme design Decision 4).
  * Decorative: hidden from assistive technology and from pointer events.
  */
-export function NightSky({ variant = 'header', className = '' }: { variant?: SkyVariant; className?: string }) {
+export function NightSky({ variant = 'row', className = '' }: { variant?: SkyVariant; className?: string }) {
   const id = useId()
   return (
     <div aria-hidden className={`pointer-events-none absolute inset-0 overflow-hidden bg-linear-to-b from-sky-deep to-sky ${className}`} data-testid="night-sky">
